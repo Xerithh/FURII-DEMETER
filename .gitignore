@@ -1,33 +1,43 @@
-HELP.md
-target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
 
-### IntelliJ IDEA ###
+/cypress/videos/
+/cypress/screenshots/
+
+# 👉 Custom Git ignores
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/*.code-snippets
+!.vscode/tours
 .idea
-*.iws
-*.iml
-*.ipr
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.yarn
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# iconify dist files
+src/plugins/iconify/icons.css
 
-### VS Code ###
-.vscode/
+# Ignore MSW script
+public/mockServiceWorker.js
+
+# Env files
+.env*
+!.env.example
