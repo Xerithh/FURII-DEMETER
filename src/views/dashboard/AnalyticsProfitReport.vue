@@ -1,21 +1,21 @@
 <script setup>
-import {
-  useDisplay,
-  useTheme,
-} from 'vuetify'
 import { hexToRgb } from '@core/utils/colorConverter'
+import {
+    useDisplay,
+    useTheme,
+} from 'vuetify'
 
 const vuetifyTheme = useTheme()
 const display = useDisplay()
 
 const series = [{
   data: [
-    30,
-    58,
-    35,
-    53,
-    50,
-    68,
+    4,
+    5,
+    3,
+    6,
+    5,
+    4,
   ],
 }]
 
@@ -86,13 +86,13 @@ const chartOptions = computed(() => {
       <div class="d-flex flex-column justify-space-between gap-y-4">
         <div>
           <h5 class="text-h5 mb-1">
-            Profile Report
+            Rapport de Compétences
           </h5>
           <VChip
             color="warning"
             size="small"
           >
-            Year 2022
+            Semestre 2026
           </VChip>
         </div>
 
@@ -102,11 +102,11 @@ const chartOptions = computed(() => {
               icon="bx-up-arrow-alt"
               size="20"
             />
-            <span class="text-base d-inline-block">68.2%</span>
+            <span class="text-base d-inline-block">+12%</span>
           </div>
 
           <h4 class="text-h4">
-            $84,686k
+            15.1/20 Moyenne
           </h4>
         </div>
       </div>

@@ -12,7 +12,7 @@ const isOpen = ref(false)
 <template>
   <li
     class="nav-group"
-    :class="isOpen && 'open'"
+    :class="[isOpen && 'open', item.neutral && 'nav-group-neutral']"
   >
     <div
       class="nav-group-label"
@@ -65,6 +65,11 @@ const isOpen = ref(false)
       .nav-group-children-wrapper {
         grid-template-rows: 1fr;
       }
+    }
+
+    // Neutral style: disable primary background when open
+    &.nav-group-neutral.open .nav-group-label::after {
+      background-color: transparent !important;
     }
   }
 }

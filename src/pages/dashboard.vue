@@ -1,21 +1,39 @@
 <script setup>
 import AnalyticsCongratulations from '@/views/dashboard/AnalyticsCongratulations.vue'
 import AnalyticsFinanceTabs from '@/views/dashboard/AnalyticsFinanceTab.vue'
+import AnalyticsISISCompetencies from '@/views/dashboard/AnalyticsISISCompetencies.vue'
 import AnalyticsOrderStatistics from '@/views/dashboard/AnalyticsOrderStatistics.vue'
 import AnalyticsProfitReport from '@/views/dashboard/AnalyticsProfitReport.vue'
-import AnalyticsTotalRevenue from '@/views/dashboard/AnalyticsTotalRevenue.vue'
 import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
 
-// 👉 Images
-import chart from '@images/cards/chart-success.png'
-import card from '@images/cards/credit-card-primary.png'
-import paypal from '@images/cards/paypal-error.png'
-import wallet from '@images/cards/wallet-info.png'
+const modulesMoreList = [
+  { title: 'Voir les modules', value: 'ViewModules' },
+  { title: 'Actualiser', value: 'Refresh' },
+  { title: 'Télécharger', value: 'Download' },
+]
+
+const progressMoreList = [
+  { title: 'Détails du parcours', value: 'Details' },
+  { title: 'Historique', value: 'History' },
+  { title: 'Objectifs', value: 'Goals' },
+]
+
+const recommendationsMoreList = [
+  { title: 'Voir toutes', value: 'ViewAll' },
+  { title: 'Filtrer', value: 'Filter' },
+  { title: 'Actualiser', value: 'Refresh' },
+]
+
+const scoreMoreList = [
+  { title: 'Analyser', value: 'Analyze' },
+  { title: 'Comparer', value: 'Compare' },
+  { title: 'Détails', value: 'Details' },
+]
 </script>
 
 <template>
   <VRow>
-    <!-- 👉 Congratulations -->
+    <!-- 👉 Congratulations + Rapport de Compétences -->
     <VCol
       cols="12"
       md="8"
@@ -25,129 +43,156 @@ import wallet from '@images/cards/wallet-info.png'
 
     <VCol
       cols="12"
-      sm="4"
+      md="4"
     >
-      <VRow>
-        <!-- 👉 Profit -->
-        <VCol
-          cols="12"
-          md="6"
-        >
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'Profit',
-              image: chart,
-              stats: '$12,628',
-              change: 72.80,
-            }"
-          />
-        </VCol>
-
-        <!-- 👉 Sales -->
-        <VCol
-          cols="12"
-          md="6"
-        >
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'Sales',
-              image: wallet,
-              stats: '$4,679',
-              change: 28.42,
-            }"
-          />
-        </VCol>
-      </VRow>
+      <AnalyticsProfitReport />
     </VCol>
 
-    <!-- 👉 Total Revenue -->
+    <!-- 👉 Activités d'Apprentissage -->
+    <VCol
+      cols="12"
+      md="4"
+    >
+      <AnalyticsTransactions />
+    </VCol>
+
+    <!-- 👉 Compétences ISIS -->
     <VCol
       cols="12"
       md="8"
-      order="2"
-      order-md="1"
     >
-      <AnalyticsTotalRevenue />
+      <AnalyticsISISCompetencies />
     </VCol>
 
-    <VCol
-      cols="12"
-      sm="8"
-      md="4"
-      order="1"
-      order-md="2"
-    >
-      <VRow>
-        <!-- 👉 Payments -->
-        <VCol
-          cols="12"
-          sm="6"
-        >
-          <CardStatisticsVertical
-            v-bind=" {
-              title: 'Payments',
-              image: paypal,
-              stats: '$2,468',
-              change: -14.82,
-            }"
-          />
-        </VCol>
-
-        <!-- 👉 Revenue -->
-        <VCol
-          cols="12"
-          sm="6"
-        >
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'Transactions',
-              image: card,
-              stats: '$14,857',
-              change: 28.14,
-            }"
-          />
-        </VCol>
-      </VRow>
-
-      <VRow>
-        <!-- 👉 Profit Report -->
-        <VCol
-          cols="12"
-          sm="12"
-        >
-          <AnalyticsProfitReport />
-        </VCol>
-      </VRow>
-    </VCol>
-
-    <!-- 👉 Order Statistics -->
+    <!-- 👉 Répartition des Modules -->
     <VCol
       cols="12"
       md="4"
       sm="6"
-      order="3"
     >
       <AnalyticsOrderStatistics />
     </VCol>
 
-    <!-- 👉 Tabs chart -->
+    <!-- 👉 Analyse de Performance -->
     <VCol
       cols="12"
       md="4"
       sm="6"
-      order="3"
     >
       <AnalyticsFinanceTabs />
     </VCol>
 
-    <!-- 👉 Transactions -->
+    <!-- 👉 Statistiques -->
     <VCol
       cols="12"
       md="4"
       sm="6"
-      order="3"
     >
-      <AnalyticsTransactions />
+      <VRow>
+        <!-- 👉 Modules Complétés -->
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VCard class="text-start">
+            <VCardItem>
+              <div class="d-flex align-center justify-space-between">
+                <VAvatar
+                  icon="bx-book"
+                  color="primary"
+                  size="48"
+                  rounded
+                  variant="tonal"
+                />
+                <MoreBtn :menu-list="modulesMoreList" />
+              </div>
+            </VCardItem>
+            <VCardText class="text-start">
+              <p class="text-sm text-medium-emphasis mb-1">Modules Complétés</p>
+              <h5 class="text-h5 mb-1">12/18</h5>
+              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />25.4%</span>
+            </VCardText>
+          </VCard>
+        </VCol>
+
+        <!-- 👉 Progression Totale -->
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VCard class="text-start">
+            <VCardItem>
+              <div class="d-flex align-center justify-space-between">
+                <VAvatar
+                  icon="bx-trending-up"
+                  color="info"
+                  size="48"
+                  rounded
+                  variant="tonal"
+                />
+                <MoreBtn :menu-list="progressMoreList" />
+              </div>
+            </VCardItem>
+            <VCardText class="text-start">
+              <p class="text-sm text-medium-emphasis mb-1">Progression Totale</p>
+              <h5 class="text-h5 mb-1">67%</h5>
+              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />15.8%</span>
+            </VCardText>
+          </VCard>
+        </VCol>
+
+        <!-- 👉 Heures d'étude (semaine) -->
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VCard class="text-start">
+            <VCardItem>
+              <div class="d-flex align-center justify-space-between">
+                <VAvatar
+                  icon="bx-stopwatch"
+                  color="primary"
+                  size="48"
+                  rounded
+                  variant="tonal"
+                />
+                <MoreBtn :menu-list="recommendationsMoreList" />
+              </div>
+            </VCardItem>
+            <VCardText class="text-start">
+              <p class="text-sm text-medium-emphasis mb-1">Heures d'étude (semaine)</p>
+              <h5 class="text-h5 mb-1">12h</h5>
+              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />10%</span>
+            </VCardText>
+          </VCard>
+        </VCol>
+
+        <!-- 👉 Score Moyen -->
+        <VCol
+          cols="12"
+          md="6"
+        >
+          <VCard class="text-start">
+            <VCardItem>
+              <div class="d-flex align-center justify-space-between">
+                <VAvatar
+                  icon="bx-medal"
+                  color="success"
+                  size="48"
+                  rounded
+                  variant="tonal"
+                />
+                <MoreBtn :menu-list="scoreMoreList" />
+              </div>
+            </VCardItem>
+            <VCardText class="text-start">
+              <p class="text-sm text-medium-emphasis mb-1">Score Moyen</p>
+              <h5 class="text-h5 mb-1">14.8/20</h5>
+              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />8.2%</span>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
     </VCol>
   </VRow>
 </template>

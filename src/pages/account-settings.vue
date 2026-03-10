@@ -4,17 +4,31 @@ import AccountSettingsNotification from '@/views/pages/account-settings/AccountS
 import AccountSettingsSecurity from '@/views/pages/account-settings/AccountSettingsSecurity.vue'
 
 const route = useRoute()
-const activeTab = ref(route.params.tab)
+const activeTab = ref(route.query.tab || route.params.tab || 'account')
+
+// Keep activeTab in sync with route query/params (so links like ?tab=settings work)
+watch(
+  () => route.query.tab,
+  (val) => {
+    if (val) activeTab.value = val
+  }
+)
+watch(
+  () => route.params.tab,
+  (val) => {
+    if (val) activeTab.value = val
+  }
+)
 
 // tabs
 const tabs = [
   {
-    title: 'Account',
+    title: 'Profil',
     icon: 'bx-user',
     tab: 'account',
   },
   {
-    title: 'Security',
+    title: 'Sécurité',
     icon: 'bx-lock-open',
     tab: 'security',
   },
@@ -22,6 +36,11 @@ const tabs = [
     title: 'Notifications',
     icon: 'bx-bell',
     tab: 'notification',
+  },
+  {
+    title: 'Paramètres',
+    icon: 'bx-cog',
+    tab: 'settings',
   },
 ]
 </script>
@@ -64,6 +83,25 @@ const tabs = [
       <!-- Notification -->
       <VWindowItem value="notification">
         <AccountSettingsNotification />
+      </VWindowItem>
+
+      <!-- Settings -->
+      <VWindowItem value="settings">
+        <VCard title="Paramètres Généraux">
+          <VCardText>
+            <VForm>
+              <VRow>
+                <VCol cols="12">
+                  <VSwitch label="Mode sombre automatique" />
+                </VCol>
+              </VRow>
+              <div class="d-flex flex-wrap gap-4 mt-4">
+                <VBtn type="submit">Enregistrer</VBtn>
+                <VBtn color="secondary" variant="tonal" type="reset">Réinitialiser</VBtn>
+              </div>
+            </VForm>
+          </VCardText>
+        </VCard>
       </VWindowItem>
     </VWindow>
   </div>

@@ -1,285 +1,220 @@
 <script setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue';
+import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue';
+import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+
+const handleLogout = () => {
+  // clear session/local storage if needed
+  try { localStorage.removeItem('authToken') } catch (e) {}
+  router.push('/login')
+}
 </script>
 
 <template>
-  <!-- 👉 Dashboards -->
-  <VerticalNavGroup
+  <!-- 👉 Tableau de Bord -->
+  <VerticalNavLink
     :item="{
-      title: 'Dashboards',
-      badgeContent: '5',
-      badgeClass: 'bg-error',
+      title: 'Mon Tableau de Bord',
       icon: 'bx-home-smile',
+      to: '/dashboard',
     }"
-  >
-    <VerticalNavLink
-      :item="{
-        title: 'Analytics',
-        to: '/dashboard',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'CRM',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/dashboards/crm',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'ECommerce',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/dashboards/ecommerce',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Academy',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/dashboards/academy',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Logistics',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/dashboards/logistics',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-  </VerticalNavGroup>
+  />
 
-  <!-- 👉 Front Pages -->
+  <!-- 👉 Quiz (remonté en haut) -->
   <VerticalNavGroup
     :item="{
-      title: 'Front Pages',
-      icon: 'bx-file',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
+      title: 'Quiz',
+      icon: 'bx-brain',
+      neutral: true,
     }"
   >
     <VerticalNavLink
       :item="{
-        title: 'Landing',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/front-pages/landing-page',
-        target: '_blank',
+        title: 'Quiz sur une UE',
+        to: '/tables',
       }"
     />
     <VerticalNavLink
       :item="{
-        title: 'Pricing',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/front-pages/pricing',
-        target: '_blank',
+        title: 'Quiz sur une matière',
+        to: '/icons',
       }"
     />
     <VerticalNavLink
       :item="{
-        title: 'Payment',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/front-pages/payment',
-        target: '_blank',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Checkout',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/front-pages/checkout',
-        target: '_blank',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Help Center',
-        href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/front-pages/help-center',
-        target: '_blank',
+        title: 'Quiz Aléatoire',
+        to: '/icons',
       }"
     />
   </VerticalNavGroup>
 
-  <!-- 👉 Apps & Pages -->
+  <!-- 👉 Recommandations -->
+  <VerticalNavGroup
+    :item="{
+      title: 'Recommandations',
+      icon: 'bx-brain',
+      badgeContent: '3',
+      badgeClass: 'bg-success',
+      neutral: true,
+    }"
+  >
+    <VerticalNavLink
+      :item="{
+        title: 'Modules Suggérés',
+        to: '/modules-suggeres',
+      }"
+    />
+    <VerticalNavLink
+      :item="{
+        title: 'Parcours Personnalisés',
+        to: '/parcours-personnalises',
+      }"
+    />
+    <VerticalNavLink
+      :item="{
+        title: 'Ressources Complémentaires',
+        to: '/ressources-complementaires',
+      }"
+    />
+  </VerticalNavGroup>
+
+  <!-- 👉 Mon Apprentissage -->
   <VerticalNavSectionTitle
     :item="{
-      heading: 'Apps & Pages',
+      heading: 'Mon Apprentissage',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Email',
-      icon: 'bx-envelope',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/apps/email',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
+      title: 'Mes Modules',
+      icon: 'bx-book-open',
+      to: '/mes-modules',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Chat',
-      icon: 'bx-chat',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/apps/chat',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
+      title: 'Mon Parcours',
+      icon: 'bx-trending-up',
+      to: '/mon-parcours',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Calendar',
-      icon: 'bx-calendar',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/apps/calendar',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
+      title: 'Mes Évaluations',
+      icon: 'bx-medal',
+      to: '/mes-evaluations',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Kanban',
-      icon: 'bx-grid',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/apps/kanban',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
+      title: 'Historique',
+      icon: 'bx-history',
+      to: '/historique',
     }"
   />
 
   <VerticalNavLink
     :item="{
-      title: 'Account Settings',
+      title: 'Mon Profil',
       icon: 'bx-user',
       to: '/account-settings',
     }"
   />
 
-  <VerticalNavLink
+  <!-- 👉 Ressources -->
+  <VerticalNavSectionTitle
     :item="{
-      title: 'Login',
-      icon: 'bx-log-in',
-      to: '/login',
+      heading: 'Ressources',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Register',
-      icon: 'bx-user-plus',
-      to: '/register',
+      title: 'Bibliothèque',
+      icon: 'bx-library',
+      to: '/cards',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Error',
-      icon: 'bx-info-circle',
-      to: '/no-existence',
+      title: 'Exercices',
+      icon: 'bx-edit',
+      to: '/form-layouts',
+    }"
+  />
+  
+  
+
+  <!-- 👉 Communauté -->
+  <VerticalNavSectionTitle
+    :item="{
+      heading: 'Communauté',
+    }"
+  />
+  <VerticalNavLink
+    :item="{
+      title: 'Forum',
+      icon: 'bx-message-square-dots',
+      to: '/tables',
+    }"
+  />
+  <VerticalNavLink
+    :item="{
+      title: 'Groupes d\'étude',
+      icon: 'bx-group',
+      to: '/cards',
     }"
   />
 
-  <!-- 👉 User Interface -->
+  <!-- 👉 Aide -->
   <VerticalNavSectionTitle
     :item="{
-      heading: 'User Interface',
+      heading: 'Aide & Support',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Typography',
-      icon: 'bx-text',
+      title: 'Centre d\'aide',
+      icon: 'bx-help-circle',
       to: '/typography',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Icons',
-      icon: 'bx-package',
+      title: 'Tutoriels',
+      icon: 'bx-video',
       to: '/icons',
     }"
   />
   <VerticalNavLink
     :item="{
-      title: 'Cards',
-      icon: 'bx-credit-card',
-      to: '/cards',
+      title: 'Contacter un Tuteur',
+      icon: 'bx-message',
+      to: '/dashboard',
+    }"
+  />
+  
+  <!-- 👉 Compte -->
+  <VerticalNavSectionTitle
+    :item="{
+      heading: 'Compte',
     }"
   />
 
-  <!-- 👉 Forms & Tables -->
-  <VerticalNavSectionTitle
-    :item="{
-      heading: 'Forms & Tables',
-    }"
-  />
   <VerticalNavLink
     :item="{
-      title: 'Form Layouts',
-      icon: 'bx-layout',
-      to: '/form-layouts',
+      title: 'Déconnexion',
+      icon: 'bx-log-out',
     }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Form Validation',
-      icon: 'bx-check-circle',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/forms/form-validation',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Form Wizard',
-      icon: 'bx-align-middle',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/forms/form-wizard-numbered',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Tables',
-      icon: 'bx-table',
-      to: '/tables',
-    }"
-  />
-
-  <!-- 👉 Others -->
-  <VerticalNavSectionTitle
-    :item="{
-      heading: 'Others',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Access Control',
-      icon: 'bx-command',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/demo-1/access-control',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Documentation',
-      icon: 'bx-file',
-      href: 'https://demos.themeselection.com/sneat-vuetify-vuejs-admin-template/documentation/',
-      target: '_blank',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Raise Support',
-      href: 'https://github.com/themeselection/sneat-vuetify-vuejs-admin-template-free/issues',
-      icon: 'bx-phone',
-      target: '_blank',
-    }"
+    @click="handleLogout"
+    class="mb-logout"
   />
 </template>
+
+<style scoped lang="scss">
+::v-deep .mb-logout {
+  margin-bottom: 3rem;
+}
+</style>

@@ -1,5 +1,8 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
+import avatar1 from '@images/avatars/avatar-1.png';
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
 </script>
 
 <template>
@@ -48,14 +51,18 @@ import avatar1 from '@images/avatars/avatar-1.png'
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              Sophie Martin
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle>Étudiante</VListItemSubtitle>
           </VListItem>
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <VListItem link>
+          <VListItem
+            :to="{ path: '/account-settings', query: { tab: 'account' } }"
+            :class="{ 'router-link-exact-active': route.path === '/account-settings' && route.query.tab === 'account' }"
+            link
+          >
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -64,11 +71,15 @@ import avatar1 from '@images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>Profile</VListItemTitle>
+            <VListItemTitle>Mon Profil</VListItemTitle>
           </VListItem>
 
           <!-- 👉 Settings -->
-          <VListItem link>
+          <VListItem
+            :to="{ path: '/account-settings', query: { tab: 'settings' } }"
+            :class="{ 'router-link-exact-active': route.path === '/account-settings' && route.query.tab === 'settings' }"
+            link
+          >
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -77,24 +88,24 @@ import avatar1 from '@images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>Settings</VListItemTitle>
+            <VListItemTitle>Paramètres</VListItemTitle>
           </VListItem>
 
-          <!-- 👉 Pricing -->
-          <VListItem link>
+          <!-- 👉 Mon Parcours -->
+          <VListItem to="/cards" link>
             <template #prepend>
               <VIcon
                 class="me-2"
-                icon="bx-dollar"
+                icon="bx-trending-up"
                 size="22"
               />
             </template>
 
-            <VListItemTitle>Pricing</VListItemTitle>
+            <VListItemTitle>Mon Parcours</VListItemTitle>
           </VListItem>
 
           <!-- 👉 FAQ -->
-          <VListItem link>
+          <VListItem to="/typography" link>
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -103,7 +114,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>FAQ</VListItemTitle>
+            <VListItemTitle>Aide</VListItemTitle>
           </VListItem>
 
           <!-- Divider -->
@@ -119,7 +130,7 @@ import avatar1 from '@images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>Logout</VListItemTitle>
+            <VListItemTitle>Déconnexion</VListItemTitle>
           </VListItem>
         </VList>
       </VMenu>

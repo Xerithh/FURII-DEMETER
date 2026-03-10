@@ -1,78 +1,76 @@
 <script setup>
-import { useTheme } from 'vuetify'
-import statsVerticalChart from '@images/cards/chart-success.png'
-import statsVerticalPaypal from '@images/cards/paypal-error.png'
-import statsVerticalWallet from '@images/cards/wallet-primary.png'
+// Using Boxicons names for avatars instead of image assets
 import { hexToRgb } from '@layouts/utils'
+import { useTheme } from 'vuetify'
 
 const vuetifyTheme = useTheme()
 
 const series = {
-  income: [{
+  comprehension: [{
     data: [
-      24,
-      21,
-      30,
-      22,
-      42,
-      26,
-      35,
-      29,
+      14,
+      15,
+      13,
+      16,
+      15,
+      17,
+      16,
+      15,
     ],
   }],
-  expenses: [{
+  pratique: [{
     data: [
-      24,
-      21,
-      30,
-      25,
-      42,
-      26,
-      35,
-      29,
+      13,
+      14,
+      15,
+      14,
+      16,
+      15,
+      17,
+      16,
     ],
   }],
-  profit: [{
+  engagement: [{
     data: [
-      24,
-      21,
-      30,
-      22,
-      42,
-      26,
-      35,
-      35,
+      16,
+      15,
+      16,
+      17,
+      15,
+      16,
+      14,
+      15,
     ],
   }],
 }
 
-const currentTab = ref('income')
+const currentTab = ref('comprehension')
 
 const tabData = computed(() => {
   const data = {
-    income: {
-      avatar: statsVerticalWallet,
-      title: 'Total Income',
-      stats: '$459.1k',
-      profitLoss: 65,
-      profitLossAmount: '6.5',
-      compareToLastWeek: '$39k',
+    comprehension: {
+      avatar: 'bx-book-open',
+      title: 'Compréhension',
+      stats: '15.1/20',
+      profitLoss: 12,
+      profitLossAmount: '15.1',
+      compareToLastWeek: '+8%',
     },
-    expenses: {
-      avatar: statsVerticalPaypal,
-      title: 'Total Expenses',
-      stats: '$316.5k',
-      profitLoss: 27.8,
-      profitLossAmount: '7.2',
-      compareToLastWeek: '$16k',
+    pratique: {
+      avatar: 'bx-wrench',
+      title: 'Pratique',
+      stats: '14.9/20',
+      profitLoss: 15,
+      profitLossAmount: '14.9',
+      compareToLastWeek: '+12%',
     },
-    profit: {
-      avatar: statsVerticalChart,
-      title: 'Total Profit',
-      stats: '$147.9k',
-      profitLoss: 35.1,
-      profitLossAmount: '4.5',
-      compareToLastWeek: '$28k',
+    engagement: {
+      avatar: 'bx-group',
+      title: 'Engagement',
+      stats: '15.6/20',
+      profitLoss: 8,
+      profitLossAmount: '15.6',
+      compareToLastWeek: '+5%',
     },
   }
   
@@ -194,14 +192,17 @@ const chartConfig = computed(() => {
         v-model="currentTab"
         class="v-tabs-pill"
       >
-        <VTab value="income">
-          Income
+        <VTab value="comprehension">
+          Ingénierie numérique
         </VTab>
-        <VTab value="expenses">
-          Expenses
+        <VTab value="pratique">
+          Ingénierie de données
         </VTab>
-        <VTab value="profit">
-          Profit
+        <VTab value="engagement">
+          Ingénierie et Santé
+        </VTab>
+        <VTab value="engagement">
+          Ingénierie et Santé
         </VTab>
       </VTabs>
     </VCardText>
@@ -210,7 +211,7 @@ const chartConfig = computed(() => {
       <VAvatar
         size="48"
         rounded
-        :image="tabData.avatar"
+        :icon="tabData.avatar"
       />
 
       <div>
@@ -255,9 +256,9 @@ const chartConfig = computed(() => {
 
       <div>
         <h6 class="text-base font-weight-regular">
-          <span class="text-capitalize d-inline-block">{{ currentTab }} this week</span>
+          <span class="text-capitalize d-inline-block">Cette semaine — {{ tabData.title }}</span>
         </h6>
-        <span class="text-sm d-inline-block">{{ tabData.compareToLastWeek }} less than last week</span>
+        <span class="text-sm d-inline-block">{{ tabData.compareToLastWeek }} par rapport à la semaine dernière</span>
       </div>
     </VCardText>
   </VCard>

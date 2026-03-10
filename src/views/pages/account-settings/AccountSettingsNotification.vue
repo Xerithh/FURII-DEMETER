@@ -1,39 +1,45 @@
 <script setup>
-const recentDevices = ref([
+const notifications = ref([
   {
-    type: 'New for you',
+    type: 'Nouveaux modules recommandés',
     email: true,
     browser: true,
     app: true,
   },
   {
-    type: 'Account activity',
+    type: 'Rappels d\'évaluations',
     email: true,
     browser: true,
     app: true,
   },
   {
-    type: 'A new browser used to sign in',
+    type: 'Progression et badges',
     email: true,
     browser: true,
     app: false,
   },
   {
-    type: 'A new device is linked',
-    email: true,
-    browser: false,
+    type: 'Nouveaux messages du forum',
+    email: false,
+    browser: true,
     app: false,
+  },
+  {
+    type: 'Mises à jour du parcours',
+    email: true,
+    browser: true,
+    app: true,
   },
 ])
 
-const selectedNotification = ref('Only when I\'m online')
+const selectedNotification = ref('Uniquement quand je suis en ligne')
 </script>
 
 <template>
-  <VCard title="Recent Devices">
+  <VCard title="Préférences de Notifications">
     <VCardText>
-      We need permission from your browser to show notifications.
-      <a href="javascript:void(0)">Request Permission</a>
+      Activez les permissions de votre navigateur pour recevoir les notifications.
+      <a href="javascript:void(0)">Demander l'autorisation</a>
     </VCardText>
 
     <VTable class="text-no-wrap">
@@ -46,68 +52,33 @@ const selectedNotification = ref('Only when I\'m online')
             EMAIL
           </th>
           <th scope="col">
-            BROWSER
+            NAVIGATEUR
           </th>
           <th scope="col">
-            App
+            APP
           </th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="device in recentDevices"
-          :key="device.type"
+          v-for="notif in notifications"
+          :key="notif.type"
         >
           <td>
-            {{ device.type }}
+            {{ notif.type }}
           </td>
           <td>
-            <VCheckbox v-model="device.email" />
+            <VCheckbox v-model="notif.email" />
           </td>
           <td>
-            <VCheckbox v-model="device.browser" />
+            <VCheckbox v-model="notif.browser" />
           </td>
           <td>
-            <VCheckbox v-model="device.app" />
+            <VCheckbox v-model="notif.app" />
           </td>
         </tr>
       </tbody>
     </VTable>
-    <VDivider />
-
-    <VCardText>
-      <VForm @submit.prevent="() => {}">
-        <p class="text-base font-weight-medium">
-          When should we send you notifications?
-        </p>
-
-        <VRow>
-          <VCol
-            cols="12"
-            sm="6"
-          >
-            <VSelect
-              v-model="selectedNotification"
-              mandatory
-              :items="['Only when I\'m online', 'Anytime']"
-            />
-          </VCol>
-        </VRow>
-
-        <div class="d-flex flex-wrap gap-4 mt-4">
-          <VBtn type="submit">
-            Save Changes
-          </VBtn>
-          <VBtn
-            color="secondary"
-            variant="tonal"
-            type="reset"
-          >
-            Reset
-          </VBtn>
-        </div>
-      </VForm>
-    </VCardText>
   </VCard>
 </template>
 

@@ -1,73 +1,68 @@
 <script setup>
-import chartInfo from '@images/cards/chart-info.png'
-import creditCardSuccess from '@images/cards/credit-card-success.png'
-import creditCardWarning from '@images/cards/credit-card-warning.png'
-import paypalError from '@images/cards/paypal-error.png'
-import walletPrimary from '@images/cards/wallet-primary.png'
 
 const transactions = [
   {
-    amount: +82.6,
-    paymentMethod: 'PayPal',
-    description: 'Send money',
-    icon: paypalError,
-    color: 'error',
-  },
-  {
-    paymentMethod: 'Wallet',
-    amount: +270.69,
-    description: 'Mac\'D',
-    icon: walletPrimary,
-    color: 'primary',
-  },
-  {
-    amount: +637.91,
-    paymentMethod: 'Transfer',
-    description: 'Refund',
-    icon: chartInfo,
-    color: 'info',
-  },
-  {
-    paymentMethod: 'Credit Card',
-    amount: -838.71,
-    description: 'Ordered Food',
-    icon: creditCardSuccess,
+    amount: 'Complété',
+    paymentMethod: 'Algorithmes',
+    description: 'Module sur les structures de données',
+    icon: 'bx-check-circle',
     color: 'success',
   },
   {
-    paymentMethod: 'Wallet',
-    amount: +203.33,
-    description: 'Starbucks',
-    icon: walletPrimary,
+    paymentMethod: 'Web Dev',
+    amount: 'En cours',
+    description: 'Framework Vue.js - 75% complété',
+    icon: 'bx-code-alt',
     color: 'primary',
   },
   {
-    paymentMethod: 'Mastercard',
-    amount: -92.45,
-    description: 'Ordered Food',
-    icon: creditCardWarning,
+    amount: 'Recommandé',
+    paymentMethod: 'Base de Données',
+    description: 'SQL Avancé et optimisation',
+    icon: 'bx-data',
+    color: 'info',
+  },
+  {
+    paymentMethod: 'DevOps',
+    amount: 'Recommandé',
+    description: 'CI/CD et déploiement cloud',
+    icon: 'bx-cloud',
+    color: 'warning',
+  },
+  {
+    paymentMethod: 'Machine Learning',
+    amount: 'En cours',
+    description: 'Introduction au Deep Learning',
+    icon: 'bx-brain',
+    color: 'primary',
+  },
+  {
+    paymentMethod: 'Sécurité',
+    amount: 'Recommandé',
+    description: 'Cybersécurité et bonnes pratiques',
+    icon: 'bx-shield',
     color: 'warning',
   },
 ]
 
 const moreList = [
   {
-    title: 'Share',
-    value: 'Share',
+    title: 'Voir Tout',
+    value: 'ViewAll',
   },
   {
-    title: 'Refresh',
+    title: 'Actualiser',
     value: 'Refresh',
   },
   {
-    title: 'Update',
-    value: 'Update',
+    title: 'Filtrer',
+    value: 'Filter',
   },
 ]
 </script>
 
 <template>
-  <VCard title="Transactions">
+  <VCard title="Activités d'Apprentissage">
     <template #append>
       <MoreBtn :menu-list="moreList" />
     </template>
@@ -83,7 +78,7 @@ const moreList = [
               rounded
               variant="tonal"
               :color="item.color"
-              :image="item.icon"
+              :icon="item.icon"
               size="40"
             />
           </template>
@@ -97,8 +92,13 @@ const moreList = [
 
           <template #append>
             <VListItemAction>
-              <span class="me-2">{{ item.amount > 0 ? `+$${Math.abs(item.amount)}` : `-$${Math.abs(item.amount)}` }}</span>
-              <span class="text-disabled">USD</span>
+              <VChip
+                :color="item.color"
+                size="small"
+                variant="tonal"
+              >
+                {{ item.amount }}
+              </VChip>
             </VListItemAction>
           </template>
         </VListItem>

@@ -1,7 +1,7 @@
 <script setup>
-import { useTheme } from 'vuetify'
 import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
 import illustrationJohnLight from '@images/cards/illustration-john-light.png'
+import { useTheme } from 'vuetify'
 
 const { global } = useTheme()
 const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight)
@@ -12,28 +12,40 @@ const illustrationJohn = computed(() => global.name.value === 'dark' ? illustrat
     <VRow no-gutters>
       <VCol
         cols="12"
-        sm="8"
+        sm="6"
         order="2"
         order-sm="1"
       >
         <VCardItem class="pb-3">
           <VCardTitle class="text-primary">
-            Congratulations John! 🎉
+            Bonjour ! Prêt à apprendre aujourd'hui ? 📚
           </VCardTitle>
         </VCardItem>
 
         <VCardText>
-          You have done 72% more sales today.
+          Vous avez complété 12 modules sur 18 ce semestre !
           <br>
-          Check your new raising badge in your profile.
+          8 nouvelles recommandations personnalisées vous attendent.
           <br>
-          <VBtn
-            variant="tonal"
-            class="mt-6"
-            size="small"
-          >
-            View Badges
-          </VBtn>
+          <div class="d-flex flex-wrap gap-3 mt-6">
+            <VBtn
+              variant="tonal"
+              size="small"
+            >
+              Voir les Recommandations
+            </VBtn>
+            <VBtn
+              variant="outlined"
+              size="small"
+              color="primary"
+            >
+              <VIcon
+                icon="bx-brain"
+                start
+              />
+              Lancer un Quiz Global
+            </VBtn>
+          </div>
         </VCardText>
       </VCol>
 

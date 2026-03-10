@@ -1,14 +1,14 @@
 <script setup>
-import { useTheme } from 'vuetify'
 import { hexToRgb } from '@core/utils/colorConverter'
+import { useTheme } from 'vuetify'
 
 const vuetifyTheme = useTheme()
 
 const series = [
-  45,
-  80,
-  20,
-  40,
+  12,
+  4,
+  2,
+  0,
 ]
 
 const chartOptions = computed(() => {
@@ -30,16 +30,16 @@ const chartOptions = computed(() => {
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
     labels: [
-      'Fashion',
-      'Electronic',
-      'Sports',
-      'Decor',
+      'Complétés',
+      'En Cours',
+      'Recommandés',
+      'Bloqués',
     ],
     colors: [
       currentTheme.success,
       currentTheme.primary,
-      currentTheme.secondary,
-      currentTheme.info,
+      currentTheme.warning,
+      currentTheme.error,
     ],
     grid: {
       padding: {
@@ -73,10 +73,10 @@ const chartOptions = computed(() => {
             },
             total: {
               show: true,
-              label: 'Weekly',
+              label: 'Total',
               fontSize: '13px',
               lineHeight: '18px',
-              formatter: () => '38%',
+              formatter: () => '18',
               color: secondaryTextColor,
               fontFamily: 'Public Sans',
             },
@@ -89,47 +89,47 @@ const chartOptions = computed(() => {
 
 const orders = [
   {
-    amount: '82.5k',
-    title: 'Electronic',
-    avatarColor: 'primary',
-    subtitle: 'Mobile, Earbuds, TV',
-    avatarIcon: 'bx-mobile-alt',
-  },
-  {
-    amount: '23.8k',
-    title: 'Fashion',
+    amount: '12',
+    title: 'Modules Complétés',
     avatarColor: 'success',
-    subtitle: 'Tshirt, Jeans, Shoes',
-    avatarIcon: 'bx-closet',
+    subtitle: 'Validés avec succès',
+    avatarIcon: 'bx-check-circle',
   },
   {
-    amount: 849,
-    title: 'Decor',
-    avatarColor: 'info',
-    subtitle: 'Fine Art, Dining',
-    avatarIcon: 'bx-home',
+    amount: '4',
+    title: 'Modules En Cours',
+    avatarColor: 'primary',
+    subtitle: 'Apprentissage actif',
+    avatarIcon: 'bx-book-open',
   },
   {
-    amount: 99,
-    title: 'Sports',
-    avatarColor: 'secondary',
-    subtitle: 'Football, Cricket Kit',
-    avatarIcon: 'bx-football',
+    amount: '2',
+    title: 'Recommandés',
+    avatarColor: 'warning',
+    subtitle: 'Suggestions personnalisées',
+    avatarIcon: 'bx-bulb',
+  },
+  {
+    amount: '0',
+    title: 'Modules Bloqués',
+    avatarColor: 'error',
+    subtitle: 'Prérequis manquants',
+    avatarIcon: 'bx-lock-alt',
   },
 ]
 
 const moreList = [
   {
-    title: 'Share',
-    value: 'Share',
+    title: 'Voir Détails',
+    value: 'Details',
   },
   {
-    title: 'Refresh',
+    title: 'Actualiser',
     value: 'Refresh',
   },
   {
-    title: 'Update',
-    value: 'Update',
+    title: 'Télécharger',
+    value: 'Download',
   },
 ]
 </script>
@@ -138,9 +138,9 @@ const moreList = [
   <VCard>
     <VCardItem>
       <VCardTitle>
-        Order Statistics
+        Répartition des Modules
       </VCardTitle>
-      <VCardSubtitle>42.82k Total Sales</VCardSubtitle>
+      <VCardSubtitle>18 Modules Total</VCardSubtitle>
 
       <template #append>
         <MoreBtn :menu-list="moreList" />
@@ -151,10 +151,10 @@ const moreList = [
       <div class="d-flex align-center justify-space-between mb-6">
         <div class="">
           <h3 class="text-h3 mb-1">
-            8,258
+            18
           </h3>
           <div class="text-caption text-medium-emphasis">
-            Total Orders
+            Total Modules
           </div>
         </div>
 
