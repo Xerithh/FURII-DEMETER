@@ -1,6 +1,6 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png';
-import { useRoute } from 'vue-router';
+import avatar1 from '@images/avatars/avatar-1.png'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 </script>
@@ -92,7 +92,10 @@ const route = useRoute()
           </VListItem>
 
           <!-- 👉 Mon Parcours -->
-          <VListItem to="/cards" link>
+          <VListItem
+            to="/cards"
+            link
+          >
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -105,7 +108,10 @@ const route = useRoute()
           </VListItem>
 
           <!-- 👉 FAQ -->
-          <VListItem to="/typography" link>
+          <VListItem
+            to="/typography"
+            link
+          >
             <template #prepend>
               <VIcon
                 class="me-2"

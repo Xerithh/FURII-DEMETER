@@ -105,22 +105,12 @@ const historique = [
   },
 ]
 
-const badges = [
-  { titre: 'Expert Frontend', date: '15 Déc 2025', icon: 'bx-trophy', color: 'warning' },
-  { titre: 'Développeur Full-Stack', date: '10 Nov 2025', icon: 'bx-award', color: 'primary' },
-  { titre: 'Maître SQL', date: '1 Déc 2025', icon: 'bx-data', color: 'info' },
-  { titre: 'Architecte Logiciel', date: '15 Jan 2026', icon: 'bx-building', color: 'success' },
-]
-
-const certificats = [
-  { titre: 'JavaScript ES6+ Avancé', organisme: 'Plateforme AUXO', date: '20 Nov 2025' },
-  { titre: 'Vue.js Certification', organisme: 'Vue School', date: '15 Déc 2025' },
-]
+// Badges et certificats supprimés — section retirée
 
 const selectedTab = ref('timeline')
 const filtreType = ref('Tous')
 
-const typesActivite = ['Tous', 'Module', 'Évaluation', 'Projet', 'Badge', 'Certificat', 'Compétence', 'Quiz']
+const typesActivite = ['Tous', 'Module', 'Évaluation', 'Projet', 'Compétence', 'Quiz']
 
 const historiqueFiltre = filtreType.value === 'Tous' 
   ? historique 
@@ -170,98 +160,17 @@ const statsParMois = [
       </VCol>
     </VRow>
 
-    <!-- Stats Cards -->
-    <VRow class="mb-6">
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-book"
-              color="primary"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ historique.filter(h => h.type === 'Module' && h.action.includes('complété')).length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Modules complétés
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-edit"
-              color="success"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ historique.filter(h => h.type === 'Évaluation').length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Évaluations réussies
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-award"
-              color="warning"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ badges.length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Badges obtenus
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-certification"
-              color="error"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ certificats.length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Certificats
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
-
     <!-- Tabs -->
     <VTabs
       v-model="selectedTab"
       class="mb-6"
     >
-      <VTab value="timeline">Chronologie</VTab>
-      <VTab value="badges">Badges & Certificats</VTab>
-      <VTab value="stats">Statistiques mensuelles</VTab>
+      <VTab value="timeline">
+        Chronologie
+      </VTab>
+      <VTab value="stats">
+        Statistiques mensuelles
+      </VTab>
     </VTabs>
 
     <!-- Tab Content -->
@@ -270,7 +179,10 @@ const statsParMois = [
       <VWindowItem value="timeline">
         <!-- Filtre -->
         <VRow class="mb-4">
-          <VCol cols="12" md="4">
+          <VCol
+            cols="12"
+            md="4"
+          >
             <VSelect
               v-model="filtreType"
               :items="typesActivite"
@@ -285,7 +197,7 @@ const statsParMois = [
             <VCard>
               <VCardText>
                 <VTimeline
-                  side="end"
+                  side="start"
                   align="start"
                   truncate-line="both"
                 >
@@ -294,13 +206,19 @@ const statsParMois = [
                     :key="idx"
                     :dot-color="item.color"
                     size="small"
+                    side="start"
+                    class="w-100"
+                    style="width:100%; padding-inline-start:0 !important; margin-inline-start:0 !important;"
                   >
                     <template #icon>
-                      <VIcon :icon="item.icon" size="18" />
+                      <VIcon
+                        :icon="item.icon"
+                        size="18"
+                      />
                     </template>
 
-                    <VCard variant="tonal">
-                      <VCardText>
+                    <VCard variant="tonal" class="timeline-card w-100" style="width:100%; min-height:140px; display:flex; flex-direction:column;">
+                      <VCardText class="timeline-card-content" style="flex:1; display:flex; flex-direction:column; justify-content:space-between;">
                         <div class="d-flex align-center justify-space-between mb-2">
                           <VChip
                             :color="item.color"
@@ -316,9 +234,19 @@ const statsParMois = [
                         <p class="text-sm text-medium-emphasis mb-2">
                           {{ item.details }}
                         </p>
-                        <div v-if="item.note" class="d-flex align-center gap-2">
-                          <VIcon icon="bx-star" size="16" :color="item.note >= 15 ? 'success' : item.note >= 10 ? 'warning' : 'error'" />
-                          <span class="text-sm font-weight-medium" :class="item.note >= 15 ? 'text-success' : item.note >= 10 ? 'text-warning' : 'text-error'">
+                        <div
+                          v-if="item.note"
+                          class="d-flex align-center gap-2"
+                        >
+                          <VIcon
+                            icon="bx-star"
+                            size="16"
+                            :color="item.note >= 15 ? 'success' : item.note >= 10 ? 'warning' : 'error'"
+                          />
+                          <span
+                            class="text-sm font-weight-medium"
+                            :class="item.note >= 15 ? 'text-success' : item.note >= 10 ? 'text-warning' : 'text-error'"
+                          >
                             Note: {{ item.note }}/20
                           </span>
                         </div>
@@ -332,94 +260,7 @@ const statsParMois = [
         </VRow>
       </VWindowItem>
 
-      <!-- Badges Tab -->
-      <VWindowItem value="badges">
-        <VRow>
-          <VCol cols="12">
-            <VCard title="Badges obtenus">
-              <VCardText>
-                <VRow>
-                  <VCol
-                    v-for="(badge, idx) in badges"
-                    :key="idx"
-                    cols="12"
-                    sm="6"
-                    md="3"
-                  >
-                    <VCard variant="tonal">
-                      <VCardText class="text-center">
-                        <VAvatar
-                          :icon="badge.icon"
-                          :color="badge.color"
-                          size="80"
-                          rounded
-                          variant="tonal"
-                          class="mb-4"
-                        />
-                        <h6 class="text-h6 mb-2">
-                          {{ badge.titre }}
-                        </h6>
-                        <p class="text-sm text-medium-emphasis">
-                          Obtenu le {{ badge.date }}
-                        </p>
-                      </VCardText>
-                    </VCard>
-                  </VCol>
-                </VRow>
-              </VCardText>
-            </VCard>
-          </VCol>
-
-          <VCol cols="12">
-            <VCard title="Certificats">
-              <VCardText>
-                <VRow>
-                  <VCol
-                    v-for="(cert, idx) in certificats"
-                    :key="idx"
-                    cols="12"
-                    md="6"
-                  >
-                    <VCard variant="tonal" color="error">
-                      <VCardText>
-                        <div class="d-flex align-center gap-3">
-                          <VAvatar
-                            icon="bx-certification"
-                            color="error"
-                            size="64"
-                            rounded
-                            variant="tonal"
-                          />
-                          <div class="flex-grow-1">
-                            <h6 class="text-h6 mb-1">
-                              {{ cert.titre }}
-                            </h6>
-                            <p class="text-sm text-medium-emphasis mb-2">
-                              {{ cert.organisme }}
-                            </p>
-                            <div class="d-flex align-center gap-2">
-                              <VIcon icon="bx-calendar" size="16" />
-                              <span class="text-sm">{{ cert.date }}</span>
-                            </div>
-                          </div>
-                        </div>
-                        <VBtn
-                          block
-                          color="error"
-                          class="mt-4"
-                          prepend-icon="bx-download"
-                        >
-                          Télécharger
-                        </VBtn>
-                      </VCardText>
-                    </VCard>
-                  </VCol>
-                </VRow>
-              </VCardText>
-            </VCard>
-          </VCol>
-        </VRow>
-      </VWindowItem>
+      <!-- Badges & certificats section removed -->
 
       <!-- Stats Tab -->
       <VWindowItem value="stats">
@@ -437,7 +278,10 @@ const statsParMois = [
               </VCardItem>
               <VCardText>
                 <VRow>
-                  <VCol cols="12" sm="4">
+                  <VCol
+                    cols="12"
+                    sm="4"
+                  >
                     <div class="d-flex align-center gap-3">
                       <VAvatar
                         icon="bx-book"
@@ -447,12 +291,19 @@ const statsParMois = [
                         variant="tonal"
                       />
                       <div>
-                        <h6 class="text-h6">{{ stat.modules }}</h6>
-                        <p class="text-sm text-medium-emphasis">Modules</p>
+                        <h6 class="text-h6">
+                          {{ stat.modules }}
+                        </h6>
+                        <p class="text-sm text-medium-emphasis">
+                          Modules
+                        </p>
                       </div>
                     </div>
                   </VCol>
-                  <VCol cols="12" sm="4">
+                  <VCol
+                    cols="12"
+                    sm="4"
+                  >
                     <div class="d-flex align-center gap-3">
                       <VAvatar
                         icon="bx-edit"
@@ -462,23 +313,12 @@ const statsParMois = [
                         variant="tonal"
                       />
                       <div>
-                        <h6 class="text-h6">{{ stat.evaluations }}</h6>
-                        <p class="text-sm text-medium-emphasis">Évaluations</p>
-                      </div>
-                    </div>
-                  </VCol>
-                  <VCol cols="12" sm="4">
-                    <div class="d-flex align-center gap-3">
-                      <VAvatar
-                        icon="bx-award"
-                        color="warning"
-                        size="48"
-                        rounded
-                        variant="tonal"
-                      />
-                      <div>
-                        <h6 class="text-h6">{{ stat.badges }}</h6>
-                        <p class="text-sm text-medium-emphasis">Badges</p>
+                        <h6 class="text-h6">
+                          {{ stat.evaluations }}
+                        </h6>
+                        <p class="text-sm text-medium-emphasis">
+                          Évaluations
+                        </p>
                       </div>
                     </div>
                   </VCol>

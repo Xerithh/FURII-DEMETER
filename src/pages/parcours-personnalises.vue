@@ -56,19 +56,19 @@ const parcours = [
   },
 ]
 
-const getStatutColor = (statut) => {
+const getStatutColor = statut => {
   switch (statut) {
-    case 'completed': return 'success'
-    case 'in-progress': return 'warning'
-    default: return 'secondary'
+  case 'completed': return 'success'
+  case 'in-progress': return 'warning'
+  default: return 'secondary'
   }
 }
 
-const getStatutIcon = (statut) => {
+const getStatutIcon = statut => {
   switch (statut) {
-    case 'completed': return 'bx-check-circle'
-    case 'in-progress': return 'bx-time'
-    default: return 'bx-lock'
+  case 'completed': return 'bx-check-circle'
+  case 'in-progress': return 'bx-time'
+  default: return 'bx-lock'
   }
 }
 
@@ -150,39 +150,79 @@ const moreList = [
           <VCardText>
             <!-- Info Row -->
             <VRow class="mb-4">
-              <VCol cols="12" sm="3">
+              <VCol
+                cols="12"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-book" size="20" />
+                  <VIcon
+                    icon="bx-book"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">Modules</div>
-                    <div class="font-weight-medium">{{ p.modules }}</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Modules
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ p.modules }}
+                    </div>
                   </div>
                 </div>
               </VCol>
-              <VCol cols="12" sm="3">
+              <VCol
+                cols="12"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-time" size="20" />
+                  <VIcon
+                    icon="bx-time"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">Durée</div>
-                    <div class="font-weight-medium">{{ p.duree }}</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Durée
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ p.duree }}
+                    </div>
                   </div>
                 </div>
               </VCol>
-              <VCol cols="12" sm="3">
+              <VCol
+                cols="12"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-medal" size="20" />
+                  <VIcon
+                    icon="bx-medal"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">Niveau</div>
-                    <div class="font-weight-medium">{{ p.niveau }}</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Niveau
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ p.niveau }}
+                    </div>
                   </div>
                 </div>
               </VCol>
-              <VCol cols="12" sm="3">
+              <VCol
+                cols="12"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-trending-up" size="20" />
+                  <VIcon
+                    icon="bx-trending-up"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">Progression</div>
-                    <div class="font-weight-medium">{{ p.progression }}%</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Progression
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ p.progression }}%
+                    </div>
                   </div>
                 </div>
               </VCol>
@@ -199,7 +239,9 @@ const moreList = [
 
             <!-- Compétences -->
             <div class="mb-4">
-              <p class="text-sm font-weight-medium mb-2">Compétences acquises :</p>
+              <p class="text-sm font-weight-medium mb-2">
+                Compétences acquises :
+              </p>
               <div class="d-flex flex-wrap gap-2">
                 <VChip
                   v-for="comp in p.competences"
@@ -215,7 +257,9 @@ const moreList = [
 
             <!-- Étapes du parcours -->
             <div class="mb-4">
-              <p class="text-sm font-weight-medium mb-3">Étapes du parcours :</p>
+              <p class="text-sm font-weight-medium mb-3">
+                Étapes du parcours :
+              </p>
               <VTimeline
                 side="end"
                 align="start"

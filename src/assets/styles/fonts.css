@@ -1,0 +1,37 @@
+@font-face {
+  font-family: "Fira Sans";
+  src: url("/fonts/FiraSans-Medium.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cormorant";
+  src: url("/fonts/CormorantGaramond-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Mada";
+  src: url("/fonts/Mada-VariableFont_wght.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+.landing-premium {
+  font-family: "Fira Sans", "Segoe UI", sans-serif;
+}
+
+.landing-premium .desc-text {
+  font-family: "Mada", "Segoe UI", sans-serif;
+}
+
+.landing-premium .hero-subtitle,
+.landing-premium .hero-subtitle.ui-subtitle {
+  font-family: "Cormorant", Georgia, serif;
+  font-weight: 900;
+}

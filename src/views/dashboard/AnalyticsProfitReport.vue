@@ -1,8 +1,8 @@
 <script setup>
 import { hexToRgb } from '@core/utils/colorConverter'
 import {
-    useDisplay,
-    useTheme,
+  useDisplay,
+  useTheme,
 } from 'vuetify'
 
 const vuetifyTheme = useTheme()

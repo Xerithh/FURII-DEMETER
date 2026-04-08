@@ -50,7 +50,10 @@ const resetAvatar = () => {
 
           <form class="d-flex flex-column justify-center gap-5">
             <div class="d-flex flex-wrap gap-2">
-              <VBtn color="primary" @click="refInputEl?.click()">
+              <VBtn
+                color="primary"
+                @click="refInputEl?.click()"
+              >
                 <span>Téléverser la photo</span>
               </VBtn>
 
@@ -60,7 +63,7 @@ const resetAvatar = () => {
                 accept=".jpeg,.png,.jpg,GIF"
                 hidden
                 @input="changeAvatar"
-              />
+              >
 
               <VBtn
                 type="reset"
@@ -83,22 +86,51 @@ const resetAvatar = () => {
         <VCardText>
           <VForm class="mt-6">
             <VRow>
-              <VCol md="6" cols="12">
-                <VTextField v-model="accountDataLocal.firstName" placeholder="Sophie" label="Prénom" />
+              <VCol
+                md="6"
+                cols="12"
+              >
+                <VTextField
+                  v-model="accountDataLocal.firstName"
+                  placeholder="Sophie"
+                  label="Prénom"
+                />
               </VCol>
 
-              <VCol md="6" cols="12">
-                <VTextField v-model="accountDataLocal.lastName" placeholder="Martin" label="Nom" />
+              <VCol
+                md="6"
+                cols="12"
+              >
+                <VTextField
+                  v-model="accountDataLocal.lastName"
+                  placeholder="Martin"
+                  label="Nom"
+                />
               </VCol>
 
-              <VCol cols="12" md="12">
-                <VTextField v-model="accountDataLocal.org" label="Organisation" />
+              <VCol
+                cols="12"
+                md="12"
+              >
+                <VTextField
+                  v-model="accountDataLocal.org"
+                  label="Organisation"
+                />
               </VCol>
             </VRow>
 
             <div class="d-flex flex-wrap gap-4 mt-4">
-              <VBtn type="submit">Enregistrer</VBtn>
-              <VBtn color="secondary" variant="tonal" type="reset" @click="resetForm">Réinitialiser</VBtn>
+              <VBtn type="submit">
+                Enregistrer
+              </VBtn>
+              <VBtn
+                color="secondary"
+                variant="tonal"
+                type="reset"
+                @click="resetForm"
+              >
+                Réinitialiser
+              </VBtn>
             </div>
           </VForm>
         </VCardText>
@@ -109,10 +141,19 @@ const resetAvatar = () => {
       <VCard title="Désactiver le compte">
         <VCardText>
           <div>
-            <VCheckbox v-model="isAccountDeactivated" label="Je confirme la désactivation de mon compte" />
+            <VCheckbox
+              v-model="isAccountDeactivated"
+              label="Je confirme la désactivation de mon compte"
+            />
           </div>
 
-          <VBtn :disabled="!isAccountDeactivated" color="error" class="mt-3">Désactiver le compte</VBtn>
+          <VBtn
+            :disabled="!isAccountDeactivated"
+            color="error"
+            class="mt-3"
+          >
+            Désactiver le compte
+          </VBtn>
         </VCardText>
       </VCard>
     </VCol>

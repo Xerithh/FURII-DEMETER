@@ -102,11 +102,11 @@ const modules = [
   },
 ]
 
-const getStatutColor = (statut) => {
+const getStatutColor = statut => {
   switch (statut) {
-    case 'Terminé': return 'success'
-    case 'En cours': return 'primary'
-    default: return 'secondary'
+  case 'Terminé': return 'success'
+  case 'En cours': return 'primary'
+  default: return 'secondary'
   }
 }
 
@@ -154,90 +154,6 @@ const moreList = [
       </VCol>
     </VRow>
 
-    <!-- Stats Section -->
-    <VRow class="mb-6">
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-book-open"
-              color="primary"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ modules.filter(m => m.statut === 'En cours').length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Modules en cours
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-check-circle"
-              color="success"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ modules.filter(m => m.statut === 'Terminé').length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Modules terminés
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-trending-up"
-              color="info"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ Math.round(modules.reduce((acc, m) => acc + m.progression, 0) / modules.length) }}%
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Progression moyenne
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-star"
-              color="warning"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ modules.reduce((acc, m) => acc + (m.credits || 0), 0) }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Crédits totaux
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
-
     <!-- Modules List -->
     <VRow>
       <VCol
@@ -280,39 +196,79 @@ const moreList = [
           <VCardText>
             <!-- Info Grid -->
             <VRow class="mb-4">
-              <VCol cols="6" sm="3">
+              <VCol
+                cols="6"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-time" size="20" />
+                  <VIcon
+                    icon="bx-time"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">Durée</div>
-                    <div class="font-weight-medium">{{ module.duree }}</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Durée
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ module.duree }}
+                    </div>
                   </div>
                 </div>
               </VCol>
-              <VCol cols="6" sm="3">
+              <VCol
+                cols="6"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-award" size="20" />
+                  <VIcon
+                    icon="bx-award"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">Crédits</div>
-                    <div class="font-weight-medium">{{ module.credits }} ECTS</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Crédits
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ module.credits }} ECTS
+                    </div>
                   </div>
                 </div>
               </VCol>
-              <VCol cols="6" sm="3">
+              <VCol
+                cols="6"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-trending-up" size="20" />
+                  <VIcon
+                    icon="bx-trending-up"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">Progression</div>
-                    <div class="font-weight-medium">{{ module.progression }}%</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Progression
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ module.progression }}%
+                    </div>
                   </div>
                 </div>
               </VCol>
-              <VCol cols="6" sm="3">
+              <VCol
+                cols="6"
+                sm="3"
+              >
                 <div class="d-flex align-center gap-2">
-                  <VIcon :icon="module.note ? 'bx-check-circle' : 'bx-calendar'" size="20" />
+                  <VIcon
+                    :icon="module.note ? 'bx-check-circle' : 'bx-calendar'"
+                    size="20"
+                  />
                   <div>
-                    <div class="text-sm text-medium-emphasis">{{ module.note ? 'Note' : 'Échéance' }}</div>
-                    <div class="font-weight-medium">{{ module.note || module.prochaineCheance }}</div>
+                    <div class="text-sm text-medium-emphasis">
+                      {{ module.note ? 'Note' : 'Échéance' }}
+                    </div>
+                    <div class="font-weight-medium">
+                      {{ module.note || module.prochaineCheance }}
+                    </div>
                   </div>
                 </div>
               </VCol>
@@ -329,7 +285,9 @@ const moreList = [
 
             <!-- Chapitres -->
             <div class="mb-4">
-              <p class="text-sm font-weight-medium mb-3">Chapitres :</p>
+              <p class="text-sm font-weight-medium mb-3">
+                Chapitres :
+              </p>
               <VRow>
                 <VCol
                   v-for="(chapitre, idx) in module.chapitres"
@@ -344,7 +302,10 @@ const moreList = [
                       :color="chapitre.complete ? 'success' : 'secondary'"
                       size="18"
                     />
-                    <span :class="chapitre.complete ? 'text-success' : 'text-medium-emphasis'" class="text-sm">
+                    <span
+                      :class="chapitre.complete ? 'text-success' : 'text-medium-emphasis'"
+                      class="text-sm"
+                    >
                       {{ chapitre.titre }}
                     </span>
                   </div>
@@ -354,7 +315,9 @@ const moreList = [
 
             <!-- Compétences -->
             <div class="mb-4">
-              <p class="text-sm font-weight-medium mb-2">Compétences :</p>
+              <p class="text-sm font-weight-medium mb-2">
+                Compétences :
+              </p>
               <div class="d-flex flex-wrap gap-2">
                 <VChip
                   v-for="comp in module.competences"
