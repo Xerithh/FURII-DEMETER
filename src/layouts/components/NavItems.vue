@@ -1,8 +1,8 @@
 <script setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue';
-import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue';
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
-import { useRouter } from 'vue-router';
+import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
+import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue'
+import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
@@ -157,7 +157,7 @@ const handleLogout = () => {
     :item="{
       title: 'Forum',
       icon: 'bx-message-square-dots',
-      to: '/tables',
+      to: '/forum',
     }"
   />
   <VerticalNavLink
@@ -208,8 +208,8 @@ const handleLogout = () => {
       title: 'Déconnexion',
       icon: 'bx-log-out',
     }"
-    @click="handleLogout"
     class="mb-logout"
+    @click="handleLogout"
   />
 </template>
 

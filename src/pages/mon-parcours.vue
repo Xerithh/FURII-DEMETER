@@ -136,98 +136,20 @@ const selectedTab = ref('progression')
       </VCol>
     </VRow>
 
-    <!-- Stats Cards -->
-    <VRow class="mb-6">
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-trending-up"
-              color="primary"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ parcours.progression }}%
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Progression globale
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-award"
-              color="success"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ semestres.reduce((acc, s) => acc + (s.creditsObtenus || 0), 0) }}/{{ semestres.reduce((acc, s) => acc + s.credits, 0) }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Crédits ECTS
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-bar-chart"
-              color="info"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ (semestres.filter(s => s.moyenne).reduce((acc, s) => acc + s.moyenne, 0) / semestres.filter(s => s.moyenne).length).toFixed(1) }}/20
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Moyenne générale
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-calendar"
-              color="warning"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ parcours.dateFin }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Diplôme prévu
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
-
     <!-- Tabs -->
     <VTabs
       v-model="selectedTab"
       class="mb-6"
     >
-      <VTab value="progression">Progression par semestre</VTab>
-      <VTab value="competences">Compétences</VTab>
-      <VTab value="objectifs">Objectifs</VTab>
+      <VTab value="progression">
+        Progression par semestre
+      </VTab>
+      <VTab value="competences">
+        Compétences
+      </VTab>
+      <VTab value="objectifs">
+        Objectifs
+      </VTab>
     </VTabs>
 
     <!-- Tab Content -->
@@ -254,9 +176,16 @@ const selectedTab = ref('progression')
                       {{ semestre.statut }}
                     </VChip>
                   </div>
-                  <div v-if="semestre.moyenne" class="text-end">
-                    <div class="text-h5 mb-1">{{ semestre.moyenne }}/20</div>
-                    <div class="text-sm text-medium-emphasis">Moyenne</div>
+                  <div
+                    v-if="semestre.moyenne"
+                    class="text-end"
+                  >
+                    <div class="text-h5 mb-1">
+                      {{ semestre.moyenne }}/20
+                    </div>
+                    <div class="text-sm text-medium-emphasis">
+                      Moyenne
+                    </div>
                   </div>
                 </div>
               </VCardItem>
@@ -264,7 +193,10 @@ const selectedTab = ref('progression')
               <VCardText>
                 <div class="d-flex align-center gap-4 mb-4">
                   <div>
-                    <VIcon icon="bx-award" size="20" />
+                    <VIcon
+                      icon="bx-award"
+                      size="20"
+                    />
                     <span class="ms-2">{{ semestre.creditsObtenus || 0 }}/{{ semestre.credits }} crédits</span>
                   </div>
                   <VProgressLinear
@@ -286,12 +218,18 @@ const selectedTab = ref('progression')
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(module, midx) in semestre.modules" :key="midx">
+                    <tr
+                      v-for="(module, midx) in semestre.modules"
+                      :key="midx"
+                    >
                       <td>{{ module.nom }}</td>
                       <td>{{ module.credits }} ECTS</td>
                       <td>
                         <span v-if="typeof module.note === 'number'">{{ module.note }}/20</span>
-                        <div v-else-if="module.progression !== undefined" class="d-flex align-center gap-2">
+                        <div
+                          v-else-if="module.progression !== undefined"
+                          class="d-flex align-center gap-2"
+                        >
                           <VProgressLinear
                             :model-value="module.progression"
                             color="primary"
@@ -301,7 +239,10 @@ const selectedTab = ref('progression')
                           />
                           <span class="text-sm">{{ module.progression }}%</span>
                         </div>
-                        <span v-else class="text-medium-emphasis">-</span>
+                        <span
+                          v-else
+                          class="text-medium-emphasis"
+                        >-</span>
                       </td>
                       <td>
                         <VChip
@@ -368,7 +309,10 @@ const selectedTab = ref('progression')
                   {{ obj.titre }}
                 </h5>
                 <div class="d-flex align-center gap-2 mb-3">
-                  <VIcon icon="bx-calendar" size="16" />
+                  <VIcon
+                    icon="bx-calendar"
+                    size="16"
+                  />
                   <span class="text-sm text-medium-emphasis">Échéance: {{ obj.echeance }}</span>
                 </div>
                 <VProgressLinear
@@ -381,7 +325,9 @@ const selectedTab = ref('progression')
               </VCardItem>
 
               <VCardText>
-                <p class="text-sm font-weight-medium mb-2">Sous-objectifs :</p>
+                <p class="text-sm font-weight-medium mb-2">
+                  Sous-objectifs :
+                </p>
                 <div
                   v-for="(sousObj, sidx) in obj.sousObjectifs"
                   :key="sidx"

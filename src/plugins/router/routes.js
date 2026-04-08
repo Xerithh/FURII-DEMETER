@@ -1,5 +1,14 @@
 export const routes = [
-  { path: '/', redirect: '/dashboard' },
+  {
+    path: '/',
+    component: () => import('@/layouts/blank.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/pages/landing.vue'),
+      },
+    ],
+  },
   {
     path: '/',
     component: () => import('@/layouts/default.vue'),
@@ -60,6 +69,10 @@ export const routes = [
         path: 'historique',
         component: () => import('@/pages/historique.vue'),
       },
+      {
+        path: 'forum',
+        component: () => import('@/pages/forum.vue'),
+      },
     ],
   },
   {
@@ -68,11 +81,11 @@ export const routes = [
     children: [
       {
         path: 'login',
-        component: () => import('@/pages/login.vue'),
+        component: () => import('@/pages/authentication.vue'),
       },
       {
         path: 'register',
-        component: () => import('@/pages/register.vue'),
+        component: () => import('@/pages/authentication.vue'),
       },
       {
         path: '/:pathMatch(.*)*',

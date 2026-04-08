@@ -96,7 +96,15 @@ const handleNavScroll = evt => {
   display: flex;
   align-items: center;
   column-gap: 0.75rem;
-
+  
+  // Constrain any inline SVG or image used as logo
+  img.app-logo-img,
+  > div img,
+  > div svg {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
   .app-logo-title {
     font-size: 1.25rem;
     font-weight: 500;

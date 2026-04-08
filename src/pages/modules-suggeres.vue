@@ -165,11 +165,17 @@ const moreList = [
 
             <div class="d-flex align-center justify-space-between text-sm mb-4">
               <div class="d-flex align-center gap-1">
-                <VIcon icon="bx-time" size="18" />
+                <VIcon
+                  icon="bx-time"
+                  size="18"
+                />
                 <span>{{ module.duree }}</span>
               </div>
               <div class="d-flex align-center gap-1">
-                <VIcon icon="bx-medal" size="18" />
+                <VIcon
+                  icon="bx-medal"
+                  size="18"
+                />
                 <span>{{ module.niveau }}</span>
               </div>
             </div>
@@ -189,76 +195,7 @@ const moreList = [
               >
                 Commencer
               </VBtn>
-              <VBtn
-                icon="bx-bookmark"
-                variant="tonal"
-                color="secondary"
-              />
             </div>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
-
-    <!-- Stats Section -->
-    <VRow class="mt-6">
-      <VCol cols="12" sm="4">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-book-open"
-              color="primary"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ modulesRecommandes.length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Modules Recommandés
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="4">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-star"
-              color="warning"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              85%
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Compatibilité Moyenne
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="4">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-trending-up"
-              color="success"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              260h
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Durée Totale
-            </p>
           </VCardText>
         </VCard>
       </VCol>

@@ -94,7 +94,7 @@ const chartOptions = computed(() => {
       },
       plotOptions: {
         radar: {
-            polygons: {
+          polygons: {
             strokeColors: `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`,
             connectorColors: `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`,
           },
@@ -240,8 +240,6 @@ const moreList = [
             :series="series"
           />
         </VCardText>
-
-        
       </VCol>
 
       <!-- Graphique Radial 67% à droite -->

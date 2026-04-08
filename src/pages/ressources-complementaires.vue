@@ -130,12 +130,12 @@ const categories = [
   },
 ]
 
-const getDifficulteColor = (difficulte) => {
+const getDifficulteColor = difficulte => {
   switch (difficulte) {
-    case 'Débutant': return 'success'
-    case 'Intermédiaire': return 'warning'
-    case 'Avancé': return 'error'
-    default: return 'info'
+  case 'Débutant': return 'success'
+  case 'Intermédiaire': return 'warning'
+  case 'Avancé': return 'error'
+  default: return 'info'
   }
 }
 
@@ -178,36 +178,6 @@ const moreList = [
                 </VBtn>
               </div>
             </div>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
-
-    <!-- Stats Cards -->
-    <VRow class="mb-6">
-      <VCol
-        v-for="cat in categories"
-        :key="cat.titre"
-        cols="12"
-        sm="6"
-        md="3"
-      >
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              :icon="cat.icon"
-              :color="cat.color"
-              size="56"
-              rounded
-              variant="tonal"
-              class="mb-3"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ cat.count }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              {{ cat.titre }}
-            </p>
           </VCardText>
         </VCard>
       </VCol>
@@ -258,7 +228,10 @@ const moreList = [
                       >
                         {{ ressource.type }}
                       </VChip>
-                      <MoreBtn :menu-list="moreList" size="small" />
+                      <MoreBtn
+                        :menu-list="moreList"
+                        size="small"
+                      />
                     </div>
                   </VCardItem>
 
@@ -269,7 +242,10 @@ const moreList = [
 
                     <div class="d-flex align-center justify-space-between text-sm mb-3">
                       <div class="d-flex align-center gap-1">
-                        <VIcon icon="bx-time" size="16" />
+                        <VIcon
+                          icon="bx-time"
+                          size="16"
+                        />
                         <span>{{ ressource.duree }}</span>
                       </div>
                       <VChip
@@ -281,7 +257,10 @@ const moreList = [
                     </div>
 
                     <div class="d-flex align-center gap-1 text-sm mb-3">
-                      <VIcon icon="bx-user" size="16" />
+                      <VIcon
+                        icon="bx-user"
+                        size="16"
+                      />
                       <span class="text-medium-emphasis">{{ ressource.auteur }}</span>
                     </div>
 

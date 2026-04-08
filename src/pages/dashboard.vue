@@ -108,9 +108,16 @@ const scoreMoreList = [
               </div>
             </VCardItem>
             <VCardText class="text-start">
-              <p class="text-sm text-medium-emphasis mb-1">Modules Complétés</p>
-              <h5 class="text-h5 mb-1">12/18</h5>
-              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />25.4%</span>
+              <p class="text-sm text-medium-emphasis mb-1">
+                Modules Complétés
+              </p>
+              <h5 class="text-h5 mb-1">
+                12/18
+              </h5>
+              <span class="text-sm text-success"><VIcon
+                icon="bx-chevron-up"
+                size="20"
+              />25.4%</span>
             </VCardText>
           </VCard>
         </VCol>
@@ -134,9 +141,16 @@ const scoreMoreList = [
               </div>
             </VCardItem>
             <VCardText class="text-start">
-              <p class="text-sm text-medium-emphasis mb-1">Progression Totale</p>
-              <h5 class="text-h5 mb-1">67%</h5>
-              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />15.8%</span>
+              <p class="text-sm text-medium-emphasis mb-1">
+                Progression Totale
+              </p>
+              <h5 class="text-h5 mb-1">
+                67%
+              </h5>
+              <span class="text-sm text-success"><VIcon
+                icon="bx-chevron-up"
+                size="20"
+              />15.8%</span>
             </VCardText>
           </VCard>
         </VCol>
@@ -160,9 +174,16 @@ const scoreMoreList = [
               </div>
             </VCardItem>
             <VCardText class="text-start">
-              <p class="text-sm text-medium-emphasis mb-1">Heures d'étude (semaine)</p>
-              <h5 class="text-h5 mb-1">12h</h5>
-              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />10%</span>
+              <p class="text-sm text-medium-emphasis mb-1">
+                Heures d'étude (semaine)
+              </p>
+              <h5 class="text-h5 mb-1">
+                12h
+              </h5>
+              <span class="text-sm text-success"><VIcon
+                icon="bx-chevron-up"
+                size="20"
+              />10%</span>
             </VCardText>
           </VCard>
         </VCol>
@@ -186,9 +207,16 @@ const scoreMoreList = [
               </div>
             </VCardItem>
             <VCardText class="text-start">
-              <p class="text-sm text-medium-emphasis mb-1">Score Moyen</p>
-              <h5 class="text-h5 mb-1">14.8/20</h5>
-              <span class="text-sm text-success"><VIcon icon="bx-chevron-up" size="20" />8.2%</span>
+              <p class="text-sm text-medium-emphasis mb-1">
+                Score Moyen
+              </p>
+              <h5 class="text-h5 mb-1">
+                14.8/20
+              </h5>
+              <span class="text-sm text-success"><VIcon
+                icon="bx-chevron-up"
+                size="20"
+              />8.2%</span>
             </VCardText>
           </VCard>
         </VCol>

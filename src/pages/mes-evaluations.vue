@@ -105,22 +105,22 @@ const evaluationsAVenir = evaluations.filter(e => e.statut === 'À venir')
 const evaluationsEnCours = evaluations.filter(e => e.statut === 'En cours')
 const evaluationsTerminees = evaluations.filter(e => e.statut === 'Terminé')
 
-const getTypeIcon = (type) => {
+const getTypeIcon = type => {
   switch (type) {
-    case 'Examen': return 'bx-edit'
-    case 'Projet': return 'bx-code-alt'
-    case 'Quiz': return 'bx-brain'
-    case 'TP': return 'bx-laptop'
-    default: return 'bx-file'
+  case 'Examen': return 'bx-edit'
+  case 'Projet': return 'bx-code-alt'
+  case 'Quiz': return 'bx-brain'
+  case 'TP': return 'bx-laptop'
+  default: return 'bx-file'
   }
 }
 
-const getStatutColor = (statut) => {
+const getStatutColor = statut => {
   switch (statut) {
-    case 'À venir': return 'warning'
-    case 'En cours': return 'primary'
-    case 'Terminé': return 'success'
-    default: return 'secondary'
+  case 'À venir': return 'warning'
+  case 'En cours': return 'primary'
+  case 'Terminé': return 'success'
+  default: return 'secondary'
   }
 }
 
@@ -168,98 +168,20 @@ const moreList = [
       </VCol>
     </VRow>
 
-    <!-- Stats Cards -->
-    <VRow class="mb-6">
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-calendar-check"
-              color="warning"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ evaluationsAVenir.length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Évaluations à venir
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-time"
-              color="primary"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ evaluationsEnCours.length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              En cours
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-check-circle"
-              color="success"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ evaluationsTerminees.length }}
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Terminées
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <VCard>
-          <VCardText class="text-center">
-            <VAvatar
-              icon="bx-bar-chart"
-              color="info"
-              size="48"
-              rounded
-              variant="tonal"
-              class="mb-4"
-            />
-            <h6 class="text-h6 mb-1">
-              {{ (evaluationsTerminees.reduce((acc, e) => acc + (e.note || 0), 0) / evaluationsTerminees.length).toFixed(1) }}/20
-            </h6>
-            <p class="text-sm text-medium-emphasis">
-              Moyenne
-            </p>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
-
     <!-- Tabs -->
     <VTabs
       v-model="selectedTab"
       class="mb-6"
     >
-      <VTab value="a-venir">À venir ({{ evaluationsAVenir.length }})</VTab>
-      <VTab value="en-cours">En cours ({{ evaluationsEnCours.length }})</VTab>
-      <VTab value="terminees">Terminées ({{ evaluationsTerminees.length }})</VTab>
+      <VTab value="a-venir">
+        À venir ({{ evaluationsAVenir.length }})
+      </VTab>
+      <VTab value="en-cours">
+        En cours ({{ evaluationsEnCours.length }})
+      </VTab>
+      <VTab value="terminees">
+        Terminées ({{ evaluationsTerminees.length }})
+      </VTab>
     </VTabs>
 
     <!-- Tab Content -->
@@ -268,8 +190,8 @@ const moreList = [
       <VWindowItem value="a-venir">
         <VRow>
           <VCol
-            v-for="eval in evaluationsAVenir"
-            :key="eval.id"
+            v-for="evaluation in evaluationsAVenir"
+            :key="evaluation.id"
             cols="12"
             md="6"
           >
@@ -278,18 +200,18 @@ const moreList = [
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center gap-3">
                     <VAvatar
-                      :icon="eval.icon"
-                      :color="eval.color"
+                      :icon="evaluation.icon"
+                      :color="evaluation.color"
                       size="56"
                       rounded
                       variant="tonal"
                     />
                     <div>
                       <h6 class="text-h6 mb-1">
-                        {{ eval.titre }}
+                        {{ evaluation.titre }}
                       </h6>
                       <p class="text-sm text-medium-emphasis">
-                        {{ eval.module }}
+                        {{ evaluation.module }}
                       </p>
                     </div>
                   </div>
@@ -300,29 +222,52 @@ const moreList = [
               <VCardText>
                 <div class="d-flex flex-wrap gap-4 mb-4">
                   <div class="d-flex align-center gap-2">
-                    <VIcon icon="bx-calendar" size="18" />
-                    <span class="text-sm">{{ eval.date }}</span>
+                    <VIcon
+                      icon="bx-calendar"
+                      size="18"
+                    />
+                    <span class="text-sm">{{ evaluation.date }}</span>
                   </div>
-                  <div v-if="eval.duree" class="d-flex align-center gap-2">
-                    <VIcon icon="bx-time" size="18" />
-                    <span class="text-sm">{{ eval.duree }}</span>
+                  <div
+                    v-if="evaluation.duree"
+                    class="d-flex align-center gap-2"
+                  >
+                    <VIcon
+                      icon="bx-time"
+                      size="18"
+                    />
+                    <span class="text-sm">{{ evaluation.duree }}</span>
                   </div>
                   <div class="d-flex align-center gap-2">
-                    <VIcon icon="bx-bar-chart" size="18" />
-                    <span class="text-sm">Coef. {{ eval.coefficient }}</span>
+                    <VIcon
+                      icon="bx-bar-chart"
+                      size="18"
+                    />
+                    <span class="text-sm">Coef. {{ evaluation.coefficient }}</span>
                   </div>
                 </div>
 
-                <div v-if="eval.salle" class="d-flex align-center gap-2 mb-3">
-                  <VIcon icon="bx-door-open" size="18" />
-                  <span class="text-sm">{{ eval.salle }} • {{ eval.heure }}</span>
+                <div
+                  v-if="evaluation.salle"
+                  class="d-flex align-center gap-2 mb-3"
+                >
+                  <VIcon
+                    icon="bx-door-open"
+                    size="18"
+                  />
+                  <span class="text-sm">{{ evaluation.salle }} • {{ evaluation.heure }}</span>
                 </div>
 
-                <div v-if="eval.ressources" class="mb-4">
-                  <p class="text-sm font-weight-medium mb-2">Ressources à réviser :</p>
+                <div
+                  v-if="evaluation.ressources"
+                  class="mb-4"
+                >
+                  <p class="text-sm font-weight-medium mb-2">
+                    Ressources à réviser :
+                  </p>
                   <div class="d-flex flex-wrap gap-1">
                     <VChip
-                      v-for="ressource in eval.ressources"
+                      v-for="ressource in evaluation.ressources"
                       :key="ressource"
                       size="small"
                       variant="tonal"
@@ -332,10 +277,21 @@ const moreList = [
                   </div>
                 </div>
 
-                <div v-if="eval.chapitres" class="mb-4">
-                  <p class="text-sm font-weight-medium mb-2">Chapitres concernés :</p>
+                <div
+                  v-if="evaluation.chapitres"
+                  class="mb-4"
+                >
+                  <p class="text-sm font-weight-medium mb-2">
+                    Chapitres concernés :
+                  </p>
                   <ul class="ps-4">
-                    <li v-for="chap in eval.chapitres" :key="chap" class="text-sm">{{ chap }}</li>
+                    <li
+                      v-for="chap in evaluation.chapitres"
+                      :key="chap"
+                      class="text-sm"
+                    >
+                      {{ chap }}
+                    </li>
                   </ul>
                 </div>
 
@@ -366,8 +322,8 @@ const moreList = [
       <VWindowItem value="en-cours">
         <VRow>
           <VCol
-            v-for="eval in evaluationsEnCours"
-            :key="eval.id"
+            v-for="evaluation in evaluationsEnCours"
+            :key="evaluation.id"
             cols="12"
           >
             <VCard>
@@ -375,18 +331,18 @@ const moreList = [
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center gap-3">
                     <VAvatar
-                      :icon="eval.icon"
-                      :color="eval.color"
+                      :icon="evaluation.icon"
+                      :color="evaluation.color"
                       size="56"
                       rounded
                       variant="tonal"
                     />
                     <div>
                       <h6 class="text-h6 mb-1">
-                        {{ eval.titre }}
+                        {{ evaluation.titre }}
                       </h6>
                       <p class="text-sm text-medium-emphasis">
-                        {{ eval.module }}
+                        {{ evaluation.module }}
                       </p>
                     </div>
                   </div>
@@ -397,33 +353,44 @@ const moreList = [
               <VCardText>
                 <div class="d-flex align-center gap-4 mb-4">
                   <div class="d-flex align-center gap-2">
-                    <VIcon icon="bx-calendar" size="18" />
-                    <span class="text-sm">Échéance: {{ eval.date }}</span>
+                    <VIcon
+                      icon="bx-calendar"
+                      size="18"
+                    />
+                    <span class="text-sm">Échéance: {{ evaluation.date }}</span>
                   </div>
                   <div class="d-flex align-center gap-2">
-                    <VIcon icon="bx-bar-chart" size="18" />
-                    <span class="text-sm">Coef. {{ eval.coefficient }}</span>
+                    <VIcon
+                      icon="bx-bar-chart"
+                      size="18"
+                    />
+                    <span class="text-sm">Coef. {{ evaluation.coefficient }}</span>
                   </div>
                 </div>
 
                 <div class="mb-4">
                   <div class="d-flex align-center justify-space-between mb-2">
                     <span class="text-sm font-weight-medium">Progression</span>
-                    <span class="text-sm">{{ eval.progression }}%</span>
+                    <span class="text-sm">{{ evaluation.progression }}%</span>
                   </div>
                   <VProgressLinear
-                    :model-value="eval.progression"
-                    :color="eval.color"
+                    :model-value="evaluation.progression"
+                    :color="evaluation.color"
                     height="8"
                     rounded
                   />
                 </div>
 
-                <div v-if="eval.taches" class="mb-4">
-                  <p class="text-sm font-weight-medium mb-3">Tâches :</p>
+                <div
+                  v-if="evaluation.taches"
+                  class="mb-4"
+                >
+                  <p class="text-sm font-weight-medium mb-3">
+                    Tâches :
+                  </p>
                   <VRow>
                     <VCol
-                      v-for="(tache, idx) in eval.taches"
+                      v-for="(tache, idx) in evaluation.taches"
                       :key="idx"
                       cols="12"
                       sm="6"
@@ -434,7 +401,10 @@ const moreList = [
                           :color="tache.complete ? 'success' : 'secondary'"
                           size="18"
                         />
-                        <span :class="tache.complete ? 'text-success' : ''" class="text-sm">
+                        <span
+                          :class="tache.complete ? 'text-success' : ''"
+                          class="text-sm"
+                        >
                           {{ tache.titre }}
                         </span>
                       </div>
@@ -467,8 +437,8 @@ const moreList = [
       <VWindowItem value="terminees">
         <VRow>
           <VCol
-            v-for="eval in evaluationsTerminees"
-            :key="eval.id"
+            v-for="evaluation in evaluationsTerminees"
+            :key="evaluation.id"
             cols="12"
             md="6"
           >
@@ -477,45 +447,56 @@ const moreList = [
                 <div class="d-flex align-center justify-space-between">
                   <div class="d-flex align-center gap-3">
                     <VAvatar
-                      :icon="eval.icon"
-                      :color="eval.color"
+                      :icon="evaluation.icon"
+                      :color="evaluation.color"
                       size="56"
                       rounded
                       variant="tonal"
                     />
                     <div>
                       <h6 class="text-h6 mb-1">
-                        {{ eval.titre }}
+                        {{ evaluation.titre }}
                       </h6>
                       <p class="text-sm text-medium-emphasis">
-                        {{ eval.module }}
+                        {{ evaluation.module }}
                       </p>
                     </div>
                   </div>
                   <div class="text-end">
-                    <div class="text-h5 mb-1" :class="eval.note >= 10 ? 'text-success' : 'text-error'">
-                      {{ eval.note }}/20
+                    <div
+                      class="text-h5 mb-1"
+                      :class="evaluation.note >= 10 ? 'text-success' : 'text-error'"
+                    >
+                      {{ evaluation.note }}/20
                     </div>
-                    <div class="text-sm text-medium-emphasis">Coef. {{ eval.coefficient }}</div>
+                    <div class="text-sm text-medium-emphasis">
+                      Coef. {{ evaluation.coefficient }}
+                    </div>
                   </div>
                 </div>
               </VCardItem>
 
               <VCardText>
                 <div class="d-flex align-center gap-2 mb-3">
-                  <VIcon icon="bx-calendar" size="18" />
-                  <span class="text-sm">{{ eval.date }}</span>
+                  <VIcon
+                    icon="bx-calendar"
+                    size="18"
+                  />
+                  <span class="text-sm">{{ evaluation.date }}</span>
                 </div>
 
                 <VAlert
-                  v-if="eval.commentaire"
+                  v-if="evaluation.commentaire"
                   color="info"
                   variant="tonal"
                   class="mb-3"
                 >
                   <div class="d-flex align-center gap-2">
-                    <VIcon icon="bx-message-square-detail" size="18" />
-                    <span class="text-sm">{{ eval.commentaire }}</span>
+                    <VIcon
+                      icon="bx-message-square-detail"
+                      size="18"
+                    />
+                    <span class="text-sm">{{ evaluation.commentaire }}</span>
                   </div>
                 </VAlert>
 

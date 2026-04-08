@@ -9,15 +9,15 @@ const activeTab = ref(route.query.tab || route.params.tab || 'account')
 // Keep activeTab in sync with route query/params (so links like ?tab=settings work)
 watch(
   () => route.query.tab,
-  (val) => {
+  val => {
     if (val) activeTab.value = val
-  }
+  },
 )
 watch(
   () => route.params.tab,
-  (val) => {
+  val => {
     if (val) activeTab.value = val
-  }
+  },
 )
 
 // tabs
@@ -96,8 +96,16 @@ const tabs = [
                 </VCol>
               </VRow>
               <div class="d-flex flex-wrap gap-4 mt-4">
-                <VBtn type="submit">Enregistrer</VBtn>
-                <VBtn color="secondary" variant="tonal" type="reset">Réinitialiser</VBtn>
+                <VBtn type="submit">
+                  Enregistrer
+                </VBtn>
+                <VBtn
+                  color="secondary"
+                  variant="tonal"
+                  type="reset"
+                >
+                  Réinitialiser
+                </VBtn>
               </div>
             </VForm>
           </VCardText>
