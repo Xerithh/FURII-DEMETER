@@ -1,17 +1,62 @@
 export const routes = [
-  { path: '/', redirect: '/dashboard' },
+  { path: '/', redirect: '/etudiant/dashboard' },
   {
-    path: '/',
+    path: '/etudiant',
     component: () => import('@/layouts/default.vue'),
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/pages/dashboard.vue'),
+        name: 'etudiant-dashboard',
+        component: () => import('@/views/etudiant/DashboardEtudiant.vue'),
       },
       {
         path: 'account-settings',
-        component: () => import('@/pages/account-settings.vue'),
+        name: 'etudiant-account-settings',
+        component: () => import('@/views/etudiant/ProfileEtudiant.vue'),
       },
+      {
+        path: 'modules-suggeres',
+        name: 'etudiant-modules-suggeres',
+        component: () => import('@/views/etudiant/ModulesSuggeresEtudiant.vue'),
+      },
+      {
+        path: 'parcours-personnalises',
+        name: 'etudiant-parcours-personnalises',
+        component: () => import('@/views/etudiant/ParcoursPersonnalisesEtudiant.vue'),
+      },
+      {
+        path: 'ressources-complementaires',
+        name: 'etudiant-ressources-complementaires',
+        component: () => import('@/views/etudiant/RessourcesComplementairesEtudiant.vue'),
+      },
+      {
+        path: 'mes-modules',
+        name: 'etudiant-mes-modules',
+        component: () => import('@/views/etudiant/MesModulesEtudiant.vue'),
+      },
+      {
+        path: 'mon-parcours',
+        name: 'etudiant-mon-parcours',
+        component: () => import('@/views/etudiant/MonParcoursEtudiant.vue'),
+      },
+      {
+        path: 'mes-evaluations',
+        name: 'etudiant-mes-evaluations',
+        component: () => import('@/views/etudiant/MesEvaluationsEtudiant.vue'),
+      },
+      {
+        path: 'historique',
+        name: 'etudiant-historique',
+        component: () => import('@/views/etudiant/HistoriqueEtudiant.vue'),
+      },
+      // Keep dev pages here temporarily to avoid breaking existing links if needed,
+      // or we can put them in a generic path
+    ],
+  },
+  {
+    path: '/dev',
+    component: () => import('@/layouts/default.vue'),
+    children: [
       {
         path: 'typography',
         component: () => import('@/pages/typography.vue'),
@@ -32,35 +77,7 @@ export const routes = [
         path: 'form-layouts',
         component: () => import('@/pages/form-layouts.vue'),
       },
-      {
-        path: 'modules-suggeres',
-        component: () => import('@/pages/modules-suggeres.vue'),
-      },
-      {
-        path: 'parcours-personnalises',
-        component: () => import('@/pages/parcours-personnalises.vue'),
-      },
-      {
-        path: 'ressources-complementaires',
-        component: () => import('@/pages/ressources-complementaires.vue'),
-      },
-      {
-        path: 'mes-modules',
-        component: () => import('@/pages/mes-modules.vue'),
-      },
-      {
-        path: 'mon-parcours',
-        component: () => import('@/pages/mon-parcours.vue'),
-      },
-      {
-        path: 'mes-evaluations',
-        component: () => import('@/pages/mes-evaluations.vue'),
-      },
-      {
-        path: 'historique',
-        component: () => import('@/pages/historique.vue'),
-      },
-    ],
+    ]
   },
   {
     path: '/',
