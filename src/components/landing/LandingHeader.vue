@@ -1,7 +1,50 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+
 defineProps<{
   isPastHero: boolean;
 }>();
+
+const isMobileMenuOpen = ref(false);
+
+const syncBodyScrollLock = (isLocked: boolean) => {
+  document.body.style.overflow = isLocked ? "hidden" : "";
+};
+
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value;
+};
+
+const closeMobileMenu = () => {
+  isMobileMenuOpen.value = false;
+};
+
+const handleWindowResize = () => {
+  if (window.innerWidth >= 640) {
+    closeMobileMenu();
+  }
+};
+
+const handleEscape = (event: KeyboardEvent) => {
+  if (event.key === "Escape") {
+    closeMobileMenu();
+  }
+};
+
+watch(isMobileMenuOpen, (isOpen) => {
+  syncBodyScrollLock(isOpen);
+});
+
+onMounted(() => {
+  window.addEventListener("resize", handleWindowResize);
+  window.addEventListener("keydown", handleEscape);
+});
+
+onBeforeUnmount(() => {
+  syncBodyScrollLock(false);
+  window.removeEventListener("resize", handleWindowResize);
+  window.removeEventListener("keydown", handleEscape);
+});
 </script>
 
 <template>
@@ -11,7 +54,7 @@ defineProps<{
       aria-label="Navigation principale"
     >
       <div
-        class="nav-bar-box flex w-full max-w-3xl items-center justify-between rounded-xl border bg-white/10 px-4 py-1"
+        class="nav-bar-box relative flex w-full max-w-3xl items-center justify-between rounded-xl border bg-white/10 px-4 py-1"
       >
         <div class="nav-left flex items-center gap-3">
           <a
@@ -26,7 +69,7 @@ defineProps<{
           </a>
         </div>
 
-        <div class="nav-right flex items-center gap-6">
+        <div class="nav-right flex items-center gap-3 sm:gap-6">
           <div
             class="nav-center hidden items-center gap-6 text-sm sm:flex"
             :class="isPastHero ? 'text-slate-900' : 'text-white'"
@@ -62,7 +105,7 @@ defineProps<{
 
           <a
             href="/login"
-            class="btn-small inline-flex items-center rounded-xl border bg-transparent px-4 py-1 text-sm transition-colors"
+            class="btn-small hidden items-center rounded-xl border bg-transparent px-4 py-1 text-sm transition-colors sm:inline-flex"
             :class="
               isPastHero
                 ? 'border-slate-300 text-slate-900 hover:bg-slate-100/80'
@@ -71,10 +114,95 @@ defineProps<{
           >
             Connexion
           </a>
+
+          <button
+            type="button"
+            class="mobile-menu-btn inline-flex h-9 w-9 items-center justify-center rounded-md border transition-colors sm:hidden"
+            :class="
+              isPastHero
+                ? 'border-slate-300 text-slate-900 hover:bg-slate-100/80'
+                : 'border-white/80 text-white hover:bg-white/10'
+            "
+            :aria-expanded="isMobileMenuOpen"
+            aria-controls="landing-mobile-menu"
+            aria-label="Ouvrir le menu"
+            @click="toggleMobileMenu"
+          >
+            <span v-if="!isMobileMenuOpen" class="text-xl leading-none"
+              >☰</span
+            >
+            <span v-else class="text-xl leading-none">✕</span>
+          </button>
         </div>
       </div>
     </nav>
   </header>
+
+  <div
+    id="landing-mobile-menu"
+    class="mobile-panel fixed inset-0 z-[70] sm:hidden"
+    :class="[
+      isMobileMenuOpen
+        ? 'pointer-events-auto opacity-100'
+        : 'pointer-events-none opacity-0',
+    ]"
+  >
+    <div
+      class="mobile-panel-surface flex h-screen flex-col bg-white px-0 pb-6 pt-5 text-slate-900"
+    >
+      <div class="flex items-center justify-between px-6">
+        <span class="text-sm uppercase tracking-[0.2em] text-slate-500"
+          >Menu</span
+        >
+        <button
+          type="button"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 text-xl leading-none text-slate-900 transition hover:bg-slate-50"
+          aria-label="Fermer le menu"
+          @click="closeMobileMenu"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div
+        class="mobile-menu-links mt-10 flex flex-1 flex-col justify-center gap-6 px-6"
+      >
+        <a
+          href="#processus"
+          class="px-2 py-2 text-3xl font-semibold leading-tight tracking-tight text-slate-900 transition hover:bg-slate-50 rounded-md"
+          @click="closeMobileMenu"
+          >Processus</a
+        >
+        <a
+          href="#apercu-dashboard"
+          class="px-2 py-2 text-3xl font-semibold leading-tight tracking-tight text-slate-900 transition hover:bg-slate-50 rounded-md"
+          @click="closeMobileMenu"
+          >Dashboard</a
+        >
+        <a
+          href="#recommandations"
+          class="px-2 py-2 text-3xl font-semibold leading-tight tracking-tight text-slate-900 transition hover:bg-slate-50 rounded-md"
+          @click="closeMobileMenu"
+          >Recommandations</a
+        >
+        <a
+          href="#faq"
+          class="px-2 py-2 text-3xl font-semibold leading-tight tracking-tight text-slate-900 transition hover:bg-slate-50 rounded-md"
+          @click="closeMobileMenu"
+          >FAQ</a
+        >
+      </div>
+
+      <div class="mobile-login-cta mt-auto pt-5 px-6">
+        <a
+          href="/login"
+          class="inline-flex h-14 w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-6 text-lg font-semibold text-[var(--isis-blue)] transition hover:bg-slate-50"
+          @click="closeMobileMenu"
+          >Se connecter</a
+        >
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -100,6 +228,20 @@ defineProps<{
 
 .force-white-border {
   border: 1px solid rgba(255, 255, 255, 0.95) !important;
+}
+
+.mobile-panel {
+  transition: opacity 200ms ease;
+}
+
+.mobile-panel-surface {
+  min-height: 100dvh;
+}
+
+@media (max-width: 420px) {
+  .mobile-menu-links a {
+    font-size: 1.65rem;
+  }
 }
 
 @media (min-width: 768px) {

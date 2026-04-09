@@ -6,7 +6,7 @@ defineEmits<{
 
 <template>
   <section
-    class="hero-section relative overflow-hidden px-6 pb-28 pt-36 lg:px-10 lg:pt-44"
+    class="hero-section relative overflow-hidden px-6 pb-20 pt-28 lg:px-10 lg:pb-28 lg:pt-44"
     data-reveal
   >
     <div class="hero-image absolute inset-0" data-parallax />
@@ -21,34 +21,37 @@ defineEmits<{
         </p>
 
         <h1
-          class="mt-6 text-balance text-5xl leading-[1.02] text-white sm:text-7xl lg:text-[72px]"
+          class="mt-6 text-balance text-3xl leading-[1.05] text-white sm:text-5xl lg:text-[72px]"
         >
-          Mesurez votre niveau avec
+          Mesurez votre niveau reel avec
           <span class="hero-subtitle text-[var(--isis-blue-light)]"
-            >Evaluation Adaptative</span
+            >une analyse intelligente</span
           >
-          et precision scientifique.
+          et obtenez les bons modules au bon moment.
         </h1>
 
         <p
           class="desc-text mt-8 max-w-2xl text-lg leading-relaxed text-slate-100"
         >
-          ISISU combine la robustesse du modele de Rasch et du CAT pour estimer
-          votre niveau avec precision, puis recommander les modules les plus
-          utiles a votre progression academique.
+          ISISU analyse votre niveau reel, puis propulse des recommandations de
+          modules personnalisees selon vos besoins. Votre progression est
+          boostee par l intelligence artificielle, de l evaluation a la decision
+          pedagogique.
         </p>
 
-        <div class="mt-10 flex items-center gap-4">
+        <div
+          class="mt-10 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4"
+        >
           <a
             href="/login"
-            class="cta-interactive inline-flex h-11 items-center rounded-md bg-[var(--isis-blue)] px-5 text-base font-medium text-white shadow-sm transition hover:bg-[#1e40af]"
+            class="cta-interactive inline-flex h-11 items-center justify-start sm:justify-center rounded-md bg-[var(--isis-blue)] px-5 text-sm font-medium text-white shadow-sm transition hover:bg-[#1e40af] sm:text-base"
           >
             Demarrer mon evaluation
           </a>
 
           <button
             type="button"
-            class="cta-interactive inline-flex h-11 items-center rounded-md border border-white/90 bg-white/5 px-4 text-base font-medium text-white transition hover:bg-slate-600"
+            class="cta-interactive inline-flex h-11 items-center justify-start sm:justify-center rounded-md border border-white/90 bg-white/5 px-4 text-sm font-medium text-white transition hover:bg-slate-600 sm:text-base"
             @click="$emit('discover')"
           >
             Nous découvrir
@@ -93,5 +96,11 @@ defineEmits<{
 
 .hero-section h1 .hero-subtitle {
   font-size: 1.25em;
+}
+
+@media (max-width: 639px) {
+  .hero-section {
+    min-height: 560px;
+  }
 }
 </style>

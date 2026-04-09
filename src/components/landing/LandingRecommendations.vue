@@ -46,7 +46,7 @@ defineProps<{
           data-stagger-item
         >
           <div
-            class="absolute -left-[22px] top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-[3px] border-white/50 bg-white transition-colors duration-300 group-hover:border-white lg:-left-[30px]"
+            class="absolute -left-[26px] top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-[3px] border-white/50 bg-white transition-colors duration-300 group-hover:border-white lg:-left-[30px]"
           />
 
           <div class="space-y-2">

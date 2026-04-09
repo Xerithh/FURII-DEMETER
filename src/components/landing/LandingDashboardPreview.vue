@@ -13,14 +13,15 @@ import Card from "@/components/ui/card/Card.vue";
         <p
           class="ui-subtitle text-sm uppercase tracking-[0.16em] text-[var(--isis-blue)]"
         >
-          Visual Proof
+          Vue d ensemble
         </p>
         <h2 class="section-title text-3xl sm:text-4xl">
           Apercu du dashboard ISISU
         </h2>
         <p class="desc-text text-lg text-slate-600">
-          Les donnees sont restituees avec une precision clinique (Erreur ≤
-          10%), directement exploitables pour la decision pedagogique.
+          Le dashboard met en avant votre niveau reel, les priorites d
+          apprentissage et les modules recommandes, avec des insights IA
+          directement exploitables pour la decision pedagogique.
         </p>
       </div>
 
