@@ -1,16 +1,18 @@
 <script setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
-import { useRouter } from 'vue-router'
+import VerticalNavSectionTitle from "@/@layouts/components/VerticalNavSectionTitle.vue";
+import VerticalNavGroup from "@layouts/components/VerticalNavGroup.vue";
+import VerticalNavLink from "@layouts/components/VerticalNavLink.vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
 const handleLogout = () => {
   // clear session/local storage if needed
-  try { localStorage.removeItem('authToken') } catch (e) {}
-  router.push('/login')
-}
+  try {
+    localStorage.removeItem("authToken");
+  } catch (e) {}
+  router.push("/login");
+};
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const handleLogout = () => {
     :item="{
       title: 'Mon Tableau de Bord',
       icon: 'bx-home-smile',
-      to: '/dashboard',
+      to: '/etudiant',
     }"
   />
 
@@ -144,8 +146,6 @@ const handleLogout = () => {
       to: '/form-layouts',
     }"
   />
-  
-  
 
   <!-- 👉 Communauté -->
   <VerticalNavSectionTitle
@@ -192,10 +192,10 @@ const handleLogout = () => {
     :item="{
       title: 'Contacter un Tuteur',
       icon: 'bx-message',
-      to: '/dashboard',
+      to: '/etudiant',
     }"
   />
-  
+
   <!-- 👉 Compte -->
   <VerticalNavSectionTitle
     :item="{

@@ -14,8 +14,8 @@ export const routes = [
     component: () => import('@/layouts/default.vue'),
     children: [
       {
-        path: 'dashboard',
-        component: () => import('@/pages/dashboard.vue'),
+        path: 'etudiant',
+        component: () => import('@/pages/etudiant.vue'),
       },
       {
         path: 'account-settings',

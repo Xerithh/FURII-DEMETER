@@ -9,7 +9,7 @@
       <LandingHero @discover="scrollToSection('processus')" />
       <LandingProcess :process-steps="processSteps" :bg-words="bgWords" />
       <LandingAccessibility />
-      <LandingDashboardPreview />
+      <LandingEtudiantPreview />
       <LandingRecommendations :recommended-modules="recommendedModules" />
       <LandingCompetences />
       <LandingMiddleCta />
@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import LandingAccessibility from "@/components/landing/LandingAccessibility.vue";
 import LandingCompetences from "@/components/landing/LandingCompetences.vue";
-import LandingDashboardPreview from "@/components/landing/LandingDashboardPreview.vue";
+import LandingEtudiantPreview from "@/components/landing/LandingEtudiantPreview.vue";
 import LandingFaq from "@/components/landing/LandingFaq.vue";
 import LandingFooter from "@/components/landing/LandingFooter.vue";
 import LandingHeader from "@/components/landing/LandingHeader.vue";
