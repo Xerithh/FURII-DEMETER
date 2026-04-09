@@ -23,13 +23,9 @@ const moduleCards = [
 </script>
 
 <template>
-  <section
-    id="competences"
-    class="section-block section-white px-6 py-16 lg:px-10"
-    data-reveal
-  >
+  <section id="competences" class="section-block section-white" data-reveal>
     <div
-      class="section-inner mx-auto flex w-full max-w-7xl flex-col items-center space-y-12 text-center"
+      class="section-inner flex w-full flex-col items-center space-y-12 text-center"
     >
       <div class="max-w-3xl space-y-4">
         <p
@@ -62,13 +58,17 @@ const moduleCards = [
 
 <style scoped>
 .section-block {
+  height: 100vh;
   min-height: 100vh;
   display: flex;
   align-items: center;
+  padding: 0;
 }
 
 .section-inner {
   width: 100%;
+  max-width: 100%;
+  margin: 0;
 }
 
 .section-white {
@@ -98,8 +98,11 @@ const moduleCards = [
 }
 
 .card-3d {
+  --card-w: 105px;
+  --card-h: 180px;
+  --ring-z: 225px;
   position: relative;
-  width: 600px;
+  width: min(600px, 100%);
   height: 300px;
   margin-left: auto;
   margin-right: auto;
@@ -111,8 +114,8 @@ const moduleCards = [
 
 .card-3d div {
   position: absolute;
-  width: 105px;
-  height: 180px;
+  width: var(--card-w);
+  height: var(--card-h);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -160,52 +163,79 @@ const moduleCards = [
 }
 
 .card-3d div:nth-child(1) {
-  transform: translate(-50%, -50%) rotateY(0deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(0deg) translateZ(var(--ring-z));
   animation-delay: -0s;
 }
 
 .card-3d div:nth-child(2) {
-  transform: translate(-50%, -50%) rotateY(36deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(36deg) translateZ(var(--ring-z));
   animation-delay: -2s;
 }
 
 .card-3d div:nth-child(3) {
-  transform: translate(-50%, -50%) rotateY(72deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(72deg) translateZ(var(--ring-z));
   animation-delay: -4s;
 }
 
 .card-3d div:nth-child(4) {
-  transform: translate(-50%, -50%) rotateY(108deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(108deg) translateZ(var(--ring-z));
   animation-delay: -6s;
 }
 
 .card-3d div:nth-child(5) {
-  transform: translate(-50%, -50%) rotateY(144deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(144deg) translateZ(var(--ring-z));
   animation-delay: -8s;
 }
 
 .card-3d div:nth-child(6) {
-  transform: translate(-50%, -50%) rotateY(180deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(180deg) translateZ(var(--ring-z));
   animation-delay: -10s;
 }
 
 .card-3d div:nth-child(7) {
-  transform: translate(-50%, -50%) rotateY(216deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(216deg) translateZ(var(--ring-z));
   animation-delay: -12s;
 }
 
 .card-3d div:nth-child(8) {
-  transform: translate(-50%, -50%) rotateY(252deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(252deg) translateZ(var(--ring-z));
   animation-delay: -14s;
 }
 
 .card-3d div:nth-child(9) {
-  transform: translate(-50%, -50%) rotateY(288deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(288deg) translateZ(var(--ring-z));
   animation-delay: -16s;
 }
 
 .card-3d div:nth-child(10) {
-  transform: translate(-50%, -50%) rotateY(324deg) translateZ(225px);
+  transform: translate(-50%, -50%) rotateY(324deg) translateZ(var(--ring-z));
   animation-delay: -18s;
+}
+
+@media (max-width: 1023px) {
+  .card-3d {
+    --card-w: 92px;
+    --card-h: 156px;
+    --ring-z: 185px;
+    height: 250px;
+  }
+}
+
+@media (max-width: 639px) {
+  .card-3d {
+    --card-w: 72px;
+    --card-h: 118px;
+    --ring-z: 126px;
+    height: 195px;
+  }
+
+  .card-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .card-text {
+    font-size: 0.58rem;
+  }
 }
 </style>

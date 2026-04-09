@@ -30,8 +30,8 @@ defineProps<{
           Un processus en 3 etapes, sans friction
         </h2>
         <p class="desc-text text-lg text-slate-600">
-          Une approche clinique qui transforme vos reponses en plan de
-          progression actionnable.
+          Une approche pilotee par l intelligence artificielle qui transforme
+          votre niveau en recommandations de modules actionnables.
         </p>
       </div>
 

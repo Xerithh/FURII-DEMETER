@@ -57,10 +57,9 @@ interface FaqItem {
   answer: string;
 }
 
-const LANDING_TITLE =
-  "ISISU - Evaluation Adaptative et Recommandations Pedagogiques";
+const LANDING_TITLE = "ISISU - Recommandations de modules boostees par IA";
 const LANDING_DESCRIPTION =
-  "ISISU mesure votre niveau avec le modele de Rasch et le CAT, puis recommande des modules personnalises pour accelerer votre progression academique.";
+  "ISISU analyse le niveau reel de chaque etudiant et recommande les modules les plus utiles, avec des decisions pedagogiques boostees par l intelligence artificielle.";
 
 let previousTitle = "";
 let previousDescription = "";
@@ -146,21 +145,21 @@ let onLandingScroll: (() => void) | null = null;
 
 const processSteps: ProcessStep[] = [
   {
-    title: "Evaluation Adaptative",
+    title: "Evaluation du Niveau",
     description:
-      "Realisez un test dont la difficulte s'ajuste en temps reel selon vos reponses.",
+      "Realisez une evaluation simple pour positionner votre niveau reel de depart.",
     icon: Activity,
   },
   {
-    title: "Analyse de Competence",
+    title: "Analyse IA du Profil",
     description:
-      "L'algorithme (Modele de Rasch) identifie vos acquis et vos lacunes precises.",
+      "L intelligence artificielle identifie vos acquis, vos lacunes et vos priorites d apprentissage.",
     icon: SlidersHorizontal,
   },
   {
-    title: "Parcours Sur-Mesure",
+    title: "Modules Recommandes",
     description:
-      "Recevez des recommandations de modules cibles pour optimiser votre progression.",
+      "Recevez les modules les plus pertinents pour progresser plus vite, au bon niveau.",
     icon: Compass,
   },
 ];
@@ -197,7 +196,7 @@ const faqItems: FaqItem[] = [
   {
     question: "Quelle est la fiabilite de la mesure ?",
     answer:
-      "La mesure repose sur le modele de Rasch et un algorithme CAT, ce qui permet d'obtenir une estimation robuste du niveau avec moins de questions qu un test fixe.",
+      "L estimation du niveau est consolidee par des analyses IA sur vos reponses et votre progression, afin de fournir des recommandations coherentes, utiles et adaptables dans le temps.",
   },
   {
     question:
