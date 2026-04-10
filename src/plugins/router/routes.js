@@ -58,20 +58,12 @@ export const routes = [
         component: () => import('@/pages/mes-modules.vue'),
       },
       {
-        path: 'mon-parcours',
-        component: () => import('@/pages/mon-parcours.vue'),
-      },
-      {
-        path: 'mes-evaluations',
-        component: () => import('@/pages/mes-evaluations.vue'),
-      },
-      {
         path: 'historique',
         component: () => import('@/pages/historique.vue'),
       },
       {
-        path: 'forum',
-        component: () => import('@/pages/forum.vue'),
+        path: 'centre-aide',
+        component: () => import('@/pages/centre-aide.vue'),
       },
     ],
   },

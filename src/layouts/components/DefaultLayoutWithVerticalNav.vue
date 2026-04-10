@@ -1,82 +1,227 @@
 <script setup>
-import Footer from '@/layouts/components/Footer.vue'
-import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import NavItems from '@/layouts/components/NavItems.vue'
-import UserProfile from '@/layouts/components/UserProfile.vue'
+import Footer from "@/layouts/components/Footer.vue";
+import NavbarThemeSwitcher from "@/layouts/components/NavbarThemeSwitcher.vue";
+import NavItems from "@/layouts/components/NavItems.vue";
+import UserProfile from "@/layouts/components/UserProfile.vue";
 
 // TODO: Remplacer par votre logo AUXO au format PNG
 // import logoAuxo from '@images/logo-auxo.png'
-import logoAuxo from '@images/logo-auxo.png'
-import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import logoAuxo from "@images/logo-auxo.png";
+import VerticalNavLayout from "@layouts/components/VerticalNavLayout.vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
-const searchInput = ref(null)
-const searchValue = ref('')
-const searchFocused = ref(false)
-const isMac = ref(false)
+const router = useRouter();
+const searchContainer = ref(null);
+const searchInput = ref(null);
+const searchValue = ref("");
+const searchFocused = ref(false);
+const isMac = ref(false);
 
-const onGlobalKeydown = e => {
-  const isK = e.key && (e.key === 'k' || e.key === 'K')
+const navSearchItems = [
+  {
+    title: "Mon Tableau de Bord",
+    to: "/etudiant",
+    icon: "bx-home-smile",
+    keywords: ["tableau", "dashboard", "etudiant"],
+  },
+  {
+    title: "Quiz sur une UE",
+    to: "/tables",
+    icon: "bx-brain",
+    keywords: ["quiz", "ue"],
+  },
+  {
+    title: "Quiz sur une matière",
+    to: "/icons",
+    icon: "bx-brain",
+    keywords: ["quiz", "matiere"],
+  },
+  {
+    title: "Quiz Aléatoire",
+    to: "/icons",
+    icon: "bx-brain",
+    keywords: ["quiz", "aleatoire"],
+  },
+  {
+    title: "Modules Suggérés",
+    to: "/modules-suggeres",
+    icon: "bx-bulb",
+    keywords: ["recommandations", "modules"],
+  },
+  {
+    title: "Parcours Personnalisés",
+    to: "/parcours-personnalises",
+    icon: "bx-map",
+    keywords: ["parcours"],
+  },
+  {
+    title: "Ressources Complémentaires",
+    to: "/ressources-complementaires",
+    icon: "bx-book-alt",
+    keywords: ["ressources"],
+  },
+  {
+    title: "Mes Modules",
+    to: "/mes-modules",
+    icon: "bx-book-open",
+    keywords: ["apprentissage", "modules"],
+  },
+  {
+    title: "Historique",
+    to: "/historique",
+    icon: "bx-history",
+    keywords: ["progression"],
+  },
+  {
+    title: "Mon Profil",
+    to: "/account-settings",
+    icon: "bx-user",
+    keywords: ["profil", "compte", "parametres"],
+  },
+  {
+    title: "Bibliothèque",
+    to: "/cards",
+    icon: "bx-library",
+    keywords: ["ressources", "bibliotheque"],
+  },
+  {
+    title: "Centre d'aide",
+    to: "/centre-aide",
+    icon: "bx-help-circle",
+    keywords: ["aide", "faq", "support"],
+  },
+];
+
+const normalizedSearch = computed(() => searchValue.value.trim().toLowerCase());
+const filteredSearchItems = computed(() => {
+  const query = normalizedSearch.value;
+
+  if (!query) return navSearchItems.slice(0, 8);
+
+  return navSearchItems
+    .filter((item) => {
+      const haystack =
+        `${item.title} ${item.to} ${(item.keywords || []).join(" ")}`.toLowerCase();
+
+      return haystack.includes(query);
+    })
+    .slice(0, 8);
+});
+const showSuggestions = computed(
+  () => searchFocused.value && filteredSearchItems.value.length > 0,
+);
+
+const openSearch = async () => {
+  searchFocused.value = true;
+  await nextTick();
+
+  if (searchInput.value && typeof searchInput.value.focus === "function") {
+    searchInput.value.focus();
+
+    const val = searchInput.value.value;
+
+    searchInput.value.setSelectionRange?.(val?.length ?? 0, val?.length ?? 0);
+  }
+};
+
+const closeSearch = ({ clearValue = false } = {}) => {
+  if (clearValue) searchValue.value = "";
+  searchFocused.value = false;
+  searchInput.value?.blur?.();
+};
+
+const resetSearchState = () => closeSearch({ clearValue: true });
+
+const selectSearchItem = (item) => {
+  resetSearchState();
+  router.push(item.to).catch(() => {});
+};
+
+const onGlobalClick = (e) => {
+  if (searchContainer.value && !searchContainer.value.contains(e.target))
+    closeSearch();
+};
+
+const onGlobalKeydown = (e) => {
+  const isK = e.key && (e.key === "k" || e.key === "K");
+
   if ((e.ctrlKey || e.metaKey) && isK) {
     // prevent browser/search shortcuts
-    e.preventDefault()
-    e.stopPropagation()
+    e.preventDefault();
+    e.stopPropagation();
 
-    // focus the search input if available
-    if (searchInput.value && typeof searchInput.value.focus === 'function') {
-      searchInput.value.focus()
+    openSearch();
 
-
-      // place cursor at end
-      const val = searchInput.value.value
-
-      searchInput.value.setSelectionRange?.(val?.length ?? 0, val?.length ?? 0)
-    }
+    return;
   }
-}
 
-onMounted(() => window.addEventListener('keydown', onGlobalKeydown))
-onBeforeUnmount(() => window.removeEventListener('keydown', onGlobalKeydown))
+  if (e.key === "Escape" && searchFocused.value) {
+    closeSearch();
+
+    return;
+  }
+
+  if (
+    e.key === "Enter" &&
+    searchFocused.value &&
+    filteredSearchItems.value.length > 0
+  ) {
+    e.preventDefault();
+    selectSearchItem(filteredSearchItems.value[0]);
+  }
+};
+
+onMounted(() => {
+  window.addEventListener("keydown", onGlobalKeydown);
+  window.addEventListener("click", onGlobalClick);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", onGlobalKeydown);
+  window.removeEventListener("click", onGlobalClick);
+});
 
 onMounted(() => {
   // detect Mac platform for displaying the correct shortcut
   try {
-    isMac.value = /Mac|iPhone|iPad|iPod/.test(navigator.platform) || /Macintosh/.test(navigator.userAgent)
+    isMac.value =
+      /Mac|iPhone|iPad|iPod/.test(navigator.platform) ||
+      /Macintosh/.test(navigator.userAgent);
   } catch (e) {
-    isMac.value = false
+    isMac.value = false;
   }
-})
+});
 
 const notifications = [
   {
-    title: 'Nouveau module recommandé',
-    message: 'DevOps - CI/CD pour débutants',
-    time: 'il y a 2h',
-    icon: 'bx-cloud',
-    color: 'primary',
+    title: "Nouveau module recommandé",
+    message: "DevOps - CI/CD pour débutants",
+    time: "il y a 2h",
+    icon: "bx-cloud",
+    color: "primary",
   },
   {
-    title: 'Félicitations ! 🎉',
-    message: 'Vous avez obtenu 8 badges cette semaine',
-    time: 'il y a 5h',
-    icon: 'bx-trophy',
-    color: 'success',
+    title: "Félicitations ! 🎉",
+    message: "Vous avez obtenu 8 badges cette semaine",
+    time: "il y a 5h",
+    icon: "bx-trophy",
+    color: "success",
   },
   {
-    title: 'Rappel d\'évaluation',
-    message: 'Quiz JavaScript - à rendre avant demain',
-    time: 'il y a 1j',
-    icon: 'bx-list-check',
-    color: 'warning',
+    title: "Rappel d'évaluation",
+    message: "Quiz JavaScript - à rendre avant demain",
+    time: "il y a 1j",
+    icon: "bx-list-check",
+    color: "warning",
   },
   {
-    title: 'Score amélioré',
-    message: 'Votre score en Compréhension a augmenté de 5%',
-    time: 'il y a 2j',
-    icon: 'bx-trending-up',
-    color: 'info',
+    title: "Score amélioré",
+    message: "Votre score en Compréhension a augmenté de 5%",
+    time: "il y a 2j",
+    icon: "bx-trending-up",
+    color: "info",
   },
-]
+];
 </script>
 
 <template>
@@ -94,11 +239,12 @@ const notifications = [
 
         <!-- 👉 Search -->
         <div
-          class="d-flex align-center cursor-pointer ms-lg-n3"
-          style="user-select: none;"
+          ref="searchContainer"
+          class="search-navbar-container d-flex align-center cursor-pointer ms-lg-n3"
+          style="user-select: none"
         >
           <!-- 👉 Search Trigger button -->
-          <IconBtn>
+          <IconBtn @click.stop="openSearch">
             <VIcon icon="bx-search" />
           </IconBtn>
 
@@ -112,21 +258,42 @@ const notifications = [
                 v-model="searchValue"
                 type="text"
                 placeholder="Rechercher..."
-                style="background: transparent; border: none; outline: none; color: #000; font-size: inherit; font-family: inherit; padding: 0;"
+                style="
+                  background: transparent;
+                  border: none;
+                  outline: none;
+                  color: #000;
+                  font-size: inherit;
+                  font-family: inherit;
+                  padding: 0;
+                "
                 class="search-input"
-                @focus="searchFocused = true"
+                @focus="openSearch"
                 @blur="searchFocused = false"
-              >
+              />
 
-              <span
-                v-show="!searchValue.length"
-                class="shortcut-badge"
-              >
+              <span v-show="!searchValue.length" class="shortcut-badge">
                 <span class="kbd">Ctrl+K</span>
                 <span class="kbd">⌘K</span>
               </span>
             </div>
           </span>
+
+          <div v-if="showSuggestions" class="search-suggestions">
+            <button
+              v-for="item in filteredSearchItems"
+              :key="`${item.title}-${item.to}`"
+              type="button"
+              class="search-suggestion-item"
+              @mousedown.prevent="selectSearchItem(item)"
+            >
+              <span class="search-suggestion-left">
+                <VIcon :icon="item.icon" size="18" class="me-2" />
+                <span>{{ item.title }}</span>
+              </span>
+              <span class="search-suggestion-path">{{ item.to }}</span>
+            </button>
+          </div>
         </div>
 
         <VSpacer />
@@ -150,11 +317,7 @@ const notifications = [
 
               <VDivider class="my-2" />
 
-              <VListItem
-                v-for="(notif, idx) in notifications"
-                :key="idx"
-                link
-              >
+              <VListItem v-for="(notif, idx) in notifications" :key="idx" link>
                 <template #prepend>
                   <VAvatar
                     :icon="notif.icon"
@@ -195,16 +358,8 @@ const notifications = [
     </template>
 
     <template #vertical-nav-header="{ toggleIsOverlayNavActive }">
-      <RouterLink
-        to="/"
-        class="app-logo app-title-wrapper"
-      >
-        <img
-          :src="logoAuxo"
-          alt="AUXO Logo"
-          class="app-logo-img"
-          height="32"
-        >
+      <RouterLink to="/" class="app-logo app-title-wrapper">
+        <img :src="logoAuxo" alt="AUXO Logo" class="app-logo-img" height="32" />
       </RouterLink>
 
       <IconBtn
@@ -267,13 +422,17 @@ const notifications = [
   align-items: center;
 }
 
+.search-navbar-container {
+  position: relative;
+}
+
 .search-input-wrapper .search-input {
   padding-right: 2.5rem;
 }
 
 .shortcut-badge {
   position: absolute;
-  right: -.75rem;
+  right: -0.75rem;
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
@@ -319,5 +478,52 @@ const notifications = [
   border-radius: 6px;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   background-color: rgba(0, 0, 0, 0.04);
+}
+
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 0;
+  z-index: 30;
+  width: min(38rem, 82vw);
+  max-height: 22rem;
+  overflow-y: auto;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 0 0 12px 12px;
+  background: rgb(var(--v-theme-surface));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.search-suggestion-item {
+  inline-size: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.search-suggestion-item + .search-suggestion-item {
+  border-top: 1px solid rgba(var(--v-border-color), 0.08);
+}
+
+.search-suggestion-item:hover {
+  background: rgba(var(--v-theme-on-surface), 0.05);
+}
+
+.search-suggestion-left {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.search-suggestion-path {
+  color: rgba(var(--v-theme-on-surface), 0.58);
+  font-size: 0.78rem;
+  white-space: nowrap;
 }
 </style>

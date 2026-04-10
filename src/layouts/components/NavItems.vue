@@ -98,20 +98,6 @@ const handleLogout = () => {
   />
   <VerticalNavLink
     :item="{
-      title: 'Mon Parcours',
-      icon: 'bx-trending-up',
-      to: '/mon-parcours',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Mes Évaluations',
-      icon: 'bx-medal',
-      to: '/mes-evaluations',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
       title: 'Historique',
       icon: 'bx-history',
       to: '/historique',
@@ -139,13 +125,6 @@ const handleLogout = () => {
       to: '/cards',
     }"
   />
-  <VerticalNavLink
-    :item="{
-      title: 'Exercices',
-      icon: 'bx-edit',
-      to: '/form-layouts',
-    }"
-  />
 
   <!-- 👉 Communauté -->
   <VerticalNavSectionTitle
@@ -155,44 +134,9 @@ const handleLogout = () => {
   />
   <VerticalNavLink
     :item="{
-      title: 'Forum',
-      icon: 'bx-message-square-dots',
-      to: '/forum',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Groupes d\'étude',
-      icon: 'bx-group',
-      to: '/cards',
-    }"
-  />
-
-  <!-- 👉 Aide -->
-  <VerticalNavSectionTitle
-    :item="{
-      heading: 'Aide & Support',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
       title: 'Centre d\'aide',
-      icon: 'bx-help-circle',
-      to: '/typography',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Tutoriels',
-      icon: 'bx-video',
-      to: '/icons',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Contacter un Tuteur',
-      icon: 'bx-message',
-      to: '/etudiant',
+      icon: 'bx-group',
+      to: '/centre-aide',
     }"
   />
 

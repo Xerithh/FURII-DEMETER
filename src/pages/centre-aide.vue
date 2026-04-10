@@ -2,7 +2,7 @@
 const faqCategories = [
   { label: "Comprendre AUXO", color: "primary" },
   { label: "Recommandations", color: "success" },
-  { label: "Quiz & Évaluations", color: "info" },
+  { label: "Quiz", color: "info" },
   { label: "Parcours & Modules", color: "warning" },
   { label: "VAE", color: "secondary" },
 ];
@@ -46,16 +46,10 @@ const faqItems = [
       "Dans “Mes Modules”, vous retrouvez vos modules actifs, leur progression, les échéances et les indicateurs de statut. C'est l'espace principal pour piloter votre apprentissage semaine après semaine.",
   },
   {
-    question: "Où voir ma progression globale dans le parcours ?",
-    category: "Parcours & Modules",
-    answer:
-      "La page “Mon Parcours” centralise l'avancement global, les objectifs, les modules validés et les compétences acquises. Elle vous permet de vérifier ce qui est déjà atteint et ce qu'il reste à consolider.",
-  },
-  {
     question: "Où retrouver mes évaluations et résultats de quiz ?",
-    category: "Quiz & Évaluations",
+    category: "Quiz",
     answer:
-      "La page “Mes Évaluations” regroupe vos quiz, examens et projets, avec les statuts associés. Vous pouvez y suivre vos résultats, vos prochaines échéances et vos priorités de révision.",
+      "Les quiz sont accessibles depuis la section dédiée dans le menu. Vous pouvez y suivre vos résultats et priorités de révision.",
   },
   {
     question: "Qu'est-ce que la plateforme permet concrètement ?",
@@ -80,17 +74,11 @@ const faqItems = [
     question: "Comment poser une question ou demander de l'aide ?",
     category: "Comprendre AUXO",
     answer:
-      "Vous pouvez utiliser cette page comme centre de réponses rapides, puis contacter un tuteur depuis la navigation “Aide & Support” si votre besoin nécessite un accompagnement personnalisé.",
+      "Cette page centralise les réponses existantes pour les besoins les plus fréquents. Pour un besoin spécifique, consultez les ressources proposées dans votre parcours.",
   },
 ];
 
 const quickLinks = [
-  {
-    title: "Faire un quiz",
-    icon: "bx-brain",
-    to: "/mes-evaluations",
-    color: "primary",
-  },
   {
     title: "Voir les modules suggérés",
     icon: "bx-bulb",
@@ -98,20 +86,12 @@ const quickLinks = [
     color: "success",
   },
   {
-    title: "Consulter mon parcours",
-    icon: "bx-trending-up",
-    to: "/mon-parcours",
-    color: "info",
-  },
-  {
-    title: "Contacter un tuteur",
-    icon: "bx-message-dots",
+    title: "Retour au tableau étudiant",
+    icon: "bx-home-smile",
     to: "/etudiant",
-    color: "warning",
+    color: "primary",
   },
 ];
-
-const openQuestion = ref("");
 </script>
 
 <template>
@@ -122,10 +102,12 @@ const openQuestion = ref("");
           class="d-flex flex-wrap align-center justify-space-between gap-4"
         >
           <div>
-            <h4 class="text-h4 mb-2">Forum AUXO • Questions Fréquentes</h4>
+            <h4 class="text-h4 mb-2">
+              Centre d'aide AUXO • Questions Fréquentes
+            </h4>
             <p class="text-body-1 text-medium-emphasis mb-0">
-              Réponses rapides pour comprendre le projet, activer les
-              recommandations et avancer sur votre parcours.
+              Consultez les réponses existantes pour comprendre le projet,
+              activer les recommandations et avancer sur votre parcours.
             </p>
           </div>
           <VChip color="primary" variant="tonal" prepend-icon="bx-info-circle">
@@ -197,35 +179,6 @@ const openQuestion = ref("");
               >
                 {{ link.title }}
               </VBtn>
-            </VCardText>
-          </VCard>
-        </VCol>
-
-        <VCol cols="12">
-          <VCard>
-            <VCardItem>
-              <VCardTitle>Poser une question</VCardTitle>
-            </VCardItem>
-            <VCardText>
-              <VTextarea
-                v-model="openQuestion"
-                rows="4"
-                placeholder="Décrivez votre question (ex: comment obtenir des recommandations plus précises ?)"
-                variant="outlined"
-                class="mb-3"
-              />
-              <VBtn
-                block
-                color="primary"
-                prepend-icon="bx-send"
-                :disabled="!openQuestion.trim()"
-              >
-                Publier
-              </VBtn>
-              <p class="text-caption text-medium-emphasis mt-3 mb-0">
-                Cette V1 simule la publication. La persistance des messages sera
-                ajoutée dans une itération backend.
-              </p>
             </VCardText>
           </VCard>
         </VCol>
