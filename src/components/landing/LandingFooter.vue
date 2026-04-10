@@ -21,7 +21,7 @@
               Se connecter
             </a>
             <a
-              href="/dashboard"
+              href="/etudiant"
               class="inline-flex items-center justify-center rounded-md bg-[var(--isis-blue)] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(29,78,216,0.35)] transition hover:bg-[#1e40af]"
             >
               Demarrer mon analyse
@@ -39,9 +39,9 @@
             >Processus</a
           >
           <a
-            href="#apercu-dashboard"
+            href="#apercu-etudiant"
             class="block text-base text-slate-200 transition hover:text-white"
-            >Dashboard</a
+            >Etudiant</a
           >
           <a
             href="#recommandations"

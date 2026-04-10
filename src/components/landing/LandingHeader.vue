@@ -84,13 +84,13 @@ onBeforeUnmount(() => {
               >Processus</a
             >
             <a
-              href="#apercu-dashboard"
+              href="#apercu-etudiant"
               :class="
                 isPastHero
                   ? 'text-slate-900 transition hover:text-[var(--isis-blue)]'
                   : 'text-white transition hover:text-[var(--isis-blue-light)]'
               "
-              >Dashboard</a
+              >Etudiant</a
             >
             <a
               href="#recommandations"
@@ -174,10 +174,10 @@ onBeforeUnmount(() => {
           >Processus</a
         >
         <a
-          href="#apercu-dashboard"
+          href="#apercu-etudiant"
           class="px-2 py-2 text-3xl font-semibold leading-tight tracking-tight text-slate-900 transition hover:bg-slate-50 rounded-md"
           @click="closeMobileMenu"
-          >Dashboard</a
+          >Etudiant</a
         >
         <a
           href="#recommandations"

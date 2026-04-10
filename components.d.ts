@@ -16,7 +16,7 @@ declare module 'vue' {
     ErrorHeader: typeof import('./src/components/ErrorHeader.vue')['default']
     LandingAccessibility: typeof import('./src/components/landing/LandingAccessibility.vue')['default']
     LandingCompetences: typeof import('./src/components/landing/LandingCompetences.vue')['default']
-    LandingDashboardPreview: typeof import('./src/components/landing/LandingDashboardPreview.vue')['default']
+    LandingEtudiantPreview: typeof import('./src/components/landing/LandingEtudiantPreview.vue')['default']
     LandingFaq: typeof import('./src/components/landing/LandingFaq.vue')['default']
     LandingFooter: typeof import('./src/components/landing/LandingFooter.vue')['default']
     LandingHeader: typeof import('./src/components/landing/LandingHeader.vue')['default']

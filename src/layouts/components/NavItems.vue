@@ -1,16 +1,18 @@
 <script setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
-import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
-import { useRouter } from 'vue-router'
+import VerticalNavSectionTitle from "@/@layouts/components/VerticalNavSectionTitle.vue";
+import VerticalNavGroup from "@layouts/components/VerticalNavGroup.vue";
+import VerticalNavLink from "@layouts/components/VerticalNavLink.vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
 const handleLogout = () => {
   // clear session/local storage if needed
-  try { localStorage.removeItem('authToken') } catch (e) {}
-  router.push('/login')
-}
+  try {
+    localStorage.removeItem("authToken");
+  } catch (e) {}
+  router.push("/login");
+};
 </script>
 
 <template>
@@ -19,7 +21,7 @@ const handleLogout = () => {
     :item="{
       title: 'Mon Tableau de Bord',
       icon: 'bx-home-smile',
-      to: '/dashboard',
+      to: '/etudiant',
     }"
   />
 
@@ -96,20 +98,6 @@ const handleLogout = () => {
   />
   <VerticalNavLink
     :item="{
-      title: 'Mon Parcours',
-      icon: 'bx-trending-up',
-      to: '/mon-parcours',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Mes Évaluations',
-      icon: 'bx-medal',
-      to: '/mes-evaluations',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
       title: 'Historique',
       icon: 'bx-history',
       to: '/historique',
@@ -137,15 +125,6 @@ const handleLogout = () => {
       to: '/cards',
     }"
   />
-  <VerticalNavLink
-    :item="{
-      title: 'Exercices',
-      icon: 'bx-edit',
-      to: '/form-layouts',
-    }"
-  />
-  
-  
 
   <!-- 👉 Communauté -->
   <VerticalNavSectionTitle
@@ -155,47 +134,12 @@ const handleLogout = () => {
   />
   <VerticalNavLink
     :item="{
-      title: 'Forum',
-      icon: 'bx-message-square-dots',
-      to: '/forum',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Groupes d\'étude',
+      title: 'Centre d\'aide',
       icon: 'bx-group',
-      to: '/cards',
+      to: '/centre-aide',
     }"
   />
 
-  <!-- 👉 Aide -->
-  <VerticalNavSectionTitle
-    :item="{
-      heading: 'Aide & Support',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Centre d\'aide',
-      icon: 'bx-help-circle',
-      to: '/typography',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Tutoriels',
-      icon: 'bx-video',
-      to: '/icons',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Contacter un Tuteur',
-      icon: 'bx-message',
-      to: '/dashboard',
-    }"
-  />
-  
   <!-- 👉 Compte -->
   <VerticalNavSectionTitle
     :item="{

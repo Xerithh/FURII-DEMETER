@@ -4,7 +4,7 @@ import Card from "@/components/ui/card/Card.vue";
 
 <template>
   <section
-    id="apercu-dashboard"
+    id="apercu-etudiant"
     class="section-block section-white px-6 py-16 lg:px-10"
     data-reveal
   >
@@ -16,10 +16,10 @@ import Card from "@/components/ui/card/Card.vue";
           Vue d ensemble
         </p>
         <h2 class="section-title text-3xl sm:text-4xl">
-          Apercu du dashboard ISISU
+          Apercu etudiant ISISU
         </h2>
         <p class="desc-text text-lg text-slate-600">
-          Le dashboard met en avant votre niveau reel, les priorites d
+          L espace etudiant met en avant votre niveau reel, les priorites d
           apprentissage et les modules recommandes, avec des insights IA
           directement exploitables pour la decision pedagogique.
         </p>
@@ -31,17 +31,17 @@ import Card from "@/components/ui/card/Card.vue";
             <span class="h-2.5 w-2.5 rounded-full bg-slate-300" />
             <span class="h-2.5 w-2.5 rounded-full bg-slate-300" />
             <span class="h-2.5 w-2.5 rounded-full bg-slate-300" />
-            <span class="ml-3 text-xs text-slate-500">isisu-dashboard</span>
+            <span class="ml-3 text-xs text-slate-500">isisu-etudiant</span>
           </div>
         </div>
 
         <div
-          class="dashboard-preview-container relative m-0 flex w-full items-center justify-center bg-slate-100 p-0"
+          class="etudiant-preview-container relative m-0 flex w-full items-center justify-center bg-slate-100 p-0"
         >
           <img
-            src="/images/dashboard-preview.png"
-            alt="Aperçu du dashboard"
-            class="dashboard-preview-img opacity-0 transition-opacity duration-300"
+            src="/images/etudiant-preview.png"
+            alt="Aperçu etudiant"
+            class="etudiant-preview-img opacity-0 transition-opacity duration-300"
             data-focus-visual
             onload="this.classList.remove('opacity-0')"
             onerror="
@@ -71,7 +71,7 @@ import Card from "@/components/ui/card/Card.vue";
   background: #fff;
 }
 
-.dashboard-preview-container {
+.etudiant-preview-container {
   padding: 0;
   margin: 0;
   display: block;
@@ -79,7 +79,7 @@ import Card from "@/components/ui/card/Card.vue";
   min-height: 180px;
 }
 
-.dashboard-preview-img {
+.etudiant-preview-img {
   display: block;
   width: 100%;
   height: auto;

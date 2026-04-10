@@ -1,8 +1,8 @@
 <script setup>
-import avatar1 from '@images/avatars/avatar-1.png'
-import { useRoute } from 'vue-router'
+import avatar1 from "@images/avatars/avatar-1.png";
+import { useRoute } from "vue-router";
 
-const route = useRoute()
+const route = useRoute();
 </script>
 
 <template>
@@ -14,20 +14,11 @@ const route = useRoute()
     color="success"
     bordered
   >
-    <VAvatar
-      class="cursor-pointer"
-      color="primary"
-      variant="tonal"
-    >
+    <VAvatar class="cursor-pointer" color="primary" variant="tonal">
       <VImg :src="avatar1" />
 
       <!-- SECTION Menu -->
-      <VMenu
-        activator="parent"
-        width="230"
-        location="bottom end"
-        offset="14px"
-      >
+      <VMenu activator="parent" width="230" location="bottom end" offset="14px">
         <VList>
           <!-- 👉 User Avatar & Name -->
           <VListItem>
@@ -40,10 +31,7 @@ const route = useRoute()
                   offset-y="3"
                   color="success"
                 >
-                  <VAvatar
-                    color="primary"
-                    variant="tonal"
-                  >
+                  <VAvatar color="primary" variant="tonal">
                     <VImg :src="avatar1" />
                   </VAvatar>
                 </VBadge>
@@ -60,15 +48,15 @@ const route = useRoute()
           <!-- 👉 Profile -->
           <VListItem
             :to="{ path: '/account-settings', query: { tab: 'account' } }"
-            :class="{ 'router-link-exact-active': route.path === '/account-settings' && route.query.tab === 'account' }"
+            :class="{
+              'router-link-exact-active':
+                route.path === '/account-settings' &&
+                route.query.tab === 'account',
+            }"
             link
           >
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-user"
-                size="22"
-              />
+              <VIcon class="me-2" icon="bx-user" size="22" />
             </template>
 
             <VListItemTitle>Mon Profil</VListItemTitle>
@@ -77,47 +65,24 @@ const route = useRoute()
           <!-- 👉 Settings -->
           <VListItem
             :to="{ path: '/account-settings', query: { tab: 'settings' } }"
-            :class="{ 'router-link-exact-active': route.path === '/account-settings' && route.query.tab === 'settings' }"
+            :class="{
+              'router-link-exact-active':
+                route.path === '/account-settings' &&
+                route.query.tab === 'settings',
+            }"
             link
           >
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-cog"
-                size="22"
-              />
+              <VIcon class="me-2" icon="bx-cog" size="22" />
             </template>
 
             <VListItemTitle>Paramètres</VListItemTitle>
           </VListItem>
 
-          <!-- 👉 Mon Parcours -->
-          <VListItem
-            to="/cards"
-            link
-          >
-            <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-trending-up"
-                size="22"
-              />
-            </template>
-
-            <VListItemTitle>Mon Parcours</VListItemTitle>
-          </VListItem>
-
           <!-- 👉 FAQ -->
-          <VListItem
-            to="/typography"
-            link
-          >
+          <VListItem to="/typography" link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-help-circle"
-                size="22"
-              />
+              <VIcon class="me-2" icon="bx-help-circle" size="22" />
             </template>
 
             <VListItemTitle>Aide</VListItemTitle>
@@ -129,11 +94,7 @@ const route = useRoute()
           <!-- 👉 Logout -->
           <VListItem to="/login">
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="bx-log-out"
-                size="22"
-              />
+              <VIcon class="me-2" icon="bx-log-out" size="22" />
             </template>
 
             <VListItemTitle>Déconnexion</VListItemTitle>
