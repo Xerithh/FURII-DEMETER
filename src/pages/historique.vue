@@ -465,28 +465,7 @@ const getMarkerStyle = (index) => {
   return style;
 };
 </script>
-
 <template>
-  <!-- Header Section (adapted for Mon Parcours) -->
-  <VRow class="mb-6">
-    <VCol cols="12">
-      <VCard>
-        <VCardText>
-          <div
-            class="d-flex align-center justify-space-between flex-wrap gap-4"
-          >
-            <div>
-              <h4 class="text-h4 mb-2">Mon Parcours 🧭</h4>
-              <p class="text-body-1 text-medium-emphasis">
-                Filtrez et recherchez vos activités, évaluations et modules
-                récents
-              </p>
-            </div>
-          </div>
-        </VCardText>
-      </VCard>
-    </VCol>
-  </VRow>
   <VRow class="mb-6">
     <VCol cols="12" md="6" lg="5">
       <VTextField
@@ -520,252 +499,278 @@ const getMarkerStyle = (index) => {
       />
     </VCol>
   </VRow>
-  <div
-    class="bg-white min-h-screen font-sans text-slate-800 dark:text-slate-100 transition-colors duration-300"
-  >
-    <div class="max-w-md mx-auto py-12 px-4 scroll-smooth">
-      <div class="text-center mb-10 flex flex-col items-center gap-6">
-        <div class="relative flex items-center justify-center">
-          <div
-            class="w-24 h-24 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center"
-          >
-            <div
-              class="w-16 h-16 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center relative overflow-hidden"
-            >
-              <Calendar
-                class="w-7 h-7 text-white transition-colors duration-300 relative z-10"
-              />
-              <div
-                class="absolute -top-1 -left-3 w-12 h-5 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
-              ></div>
-              <div
-                class="absolute -bottom-1 -right-3 w-14 h-7 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
-              ></div>
-            </div>
-          </div>
-
-          <div
-            class="uppercase absolute top-1/2 -translate-y-1/2 left-[calc(100vw/2+40px)] sm:left-[240px] text-xs font-bold text-slate-400 dark:text-slate-400 whitespace-nowrap hidden sm:block"
-          >
-            Aujourd'hui, {{ today }}
-          </div>
-        </div>
-      </div>
-      <div class="relative w-full" :style="{ height: containerHeight + 'px' }">
-        <div class="absolute inset-0 pointer-events-none z-0">
-          <svg
-            class="w-full h-full text-slate-200 dark:text-slate-700"
-            preserveAspectRatio="none"
-            :viewBox="`0 0 100 ${containerHeight}`"
-            width="100%"
-          >
-            <path
-              :d="svgPath"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              vector-effect="non-scaling-stroke"
-              class="transition-all duration-1000"
-            />
-          </svg>
-        </div>
-
-        <div class="absolute inset-0 z-10">
-          <div v-for="(item, index) in historiqueFiltres" :key="item.id">
-            <button
-              @click="openModal(item)"
-              class="absolute w-16 h-16 rounded-full border-4 border-slate-200 flex items-center justify-center shadow-sm cursor-pointer transition-transform duration-300 hover:-translate-y-1 hover:shadow-md hover:border-slate-300 transform-gpu"
-              :class="[getBgClass(item)]"
-              :style="{
-                left: positions[index].x + '%',
-                top: positions[index].y + 'px',
-                transform: 'translate(-50%, -50%)',
-              }"
-            >
-              <component
-                :is="item.icon"
-                class="w-7 h-7 text-white transition-colors duration-300"
-              />
-
-              <div
-                class="uppercase absolute top-1/2 -translate-y-1/2 left-[calc(100vw/2+40px)] sm:left-[240px] text-xs font-bold text-slate-400 dark:text-slate-400 whitespace-nowrap hidden sm:block"
-              >
-                {{ item.date }}
-              </div>
-
-              <span
-                class="uppercase absolute -bottom-8 w-24 text-center text-[10px] text-slate-400 dark:text-slate-400 block sm:hidden font-bold"
-              >
-                {{ item.date }}
-              </span>
-
-              <img
-                v-if="assignRandomMarkers[index] || patternSvgMarkers[index]"
-                :src="getMarkerSrc(index, item)"
-                alt="illustration"
-                class="absolute opacity-100"
-                :style="getMarkerStyle(index)"
-              />
-              <div
-                class="absolute -top-1 -left-3 w-12 h-5 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
-              ></div>
-              <div
-                class="absolute -bottom-1 -right-3 w-14 h-7 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
-              ></div>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <Teleport defer to="body">
-      <div
-        v-if="isModalOpen"
-        class="fixed inset-0 z-50 flex items-center justify-center px-4"
-      >
-        <div
-          class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
-          @click="closeModal"
-        ></div>
-
-        <div
-          class="relative bg-white text-slate-800 rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto border border-slate-200"
-          style="background-color: white; color: #1f2937"
-        >
-          <button
-            @click="closeModal"
-            class="absolute top-4 right-4 z-20 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            aria-label="Fermer"
-          >
-            <X class="w-6 h-6 text-slate-400 hover:text-slate-600" />
-          </button>
-
-          <div class="p-8">
-            <template v-if="activeItem">
-              <div class="flex items-center gap-4 mb-6">
-                <div
-                  class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-slate-100 shrink-0"
-                  :class="getModalBgClass(activeItem)"
-                >
-                  <component :is="activeItem.icon" class="w-8 h-8 text-white" />
-                </div>
-                <div class="flex-1">
+  <VRow>
+    <VCol cols="12">
+      <VCard>
+        <VCardText>
+          <div class="font-sans scroll-smooth">
+            <div class="max-w-md mx-auto py-12 px-4">
+              <div class="text-center mb-10 flex flex-col items-center gap-6">
+                <div class="relative flex items-center justify-center">
                   <div
-                    class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 mb-1"
+                    class="w-24 h-24 rounded-full border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center"
                   >
-                    {{ activeItem.type }}
-                  </div>
-                  <h3 class="text-2xl font-bold leading-tight">
-                    {{ activeItem.action }}
-                  </h3>
-                </div>
-              </div>
-
-              <div class="space-y-6">
-                <p
-                  class="text-slate-700 dark:text-slate-200 font-medium text-base"
-                >
-                  {{ activeItem.details }}
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div v-if="activeItem.note">
                     <div
-                      class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2"
+                      class="w-16 h-16 rounded-full bg-slate-300 dark:bg-slate-600 flex items-center justify-center relative overflow-hidden"
                     >
-                      Note
-                    </div>
-                    <div class="text-4xl font-bold" :class="activeItem.color">
-                      {{ activeItem.note
-                      }}<span class="text-lg text-slate-400">/20</span>
-                    </div>
-                  </div>
-
-                  <div v-if="activeItem.progressPercentage !== undefined">
-                    <div
-                      class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2"
-                    >
-                      Progression
-                    </div>
-                    <div class="text-4xl font-bold text-blue-600">
-                      {{ activeItem.progressPercentage
-                      }}<span class="text-lg text-slate-400">%</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  v-if="
-                    activeItem.moduleScores &&
-                    activeItem.moduleScores.length > 0
-                  "
-                  class="w-full"
-                >
-                  <div
-                    class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3"
-                  >
-                    Performance par module
-                  </div>
-                  <div class="space-y-3">
-                    <div
-                      v-for="(module, idx) in activeItem.moduleScores"
-                      :key="idx"
-                      class="space-y-1"
-                    >
+                      <Calendar
+                        class="w-7 h-7 text-white transition-colors duration-300 relative z-10"
+                      />
                       <div
-                        class="flex items-center justify-between text-sm mb-1"
-                      >
-                        <span
-                          class="font-medium text-slate-700 dark:text-slate-200"
-                          >{{ module.name }}</span
-                        >
-                        <span
-                          class="font-bold text-slate-900 dark:text-slate-100"
-                          >{{ module.percentage }}%</span
-                        >
-                      </div>
-                      <div class="w-full bg-slate-200 h-2.5 overflow-hidden">
-                        <div
-                          :class="module.color"
-                          class="h-full transition-all duration-500"
-                          :style="{ width: module.percentage + '%' }"
-                        ></div>
-                      </div>
+                        class="absolute -top-1 -left-3 w-12 h-5 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
+                      ></div>
+                      <div
+                        class="absolute -bottom-1 -right-3 w-14 h-7 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
+                      ></div>
                     </div>
                   </div>
-                </div>
 
-                <div
-                  v-if="activeItem.aiInsight"
-                  class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg text-blue-900 text-sm leading-relaxed flex gap-3"
-                >
-                  <Brain class="w-5 h-5 shrink-0 text-blue-600 mt-0.5" />
-                  <p>{{ activeItem.aiInsight }}</p>
+                  <div
+                    class="uppercase absolute top-1/2 -translate-y-1/2 left-[calc(100vw/2+40px)] sm:left-[240px] text-xs font-bold text-slate-400 dark:text-slate-400 whitespace-nowrap hidden sm:block"
+                  >
+                    Aujourd'hui, {{ today }}
+                  </div>
                 </div>
               </div>
-            </template>
-          </div>
+              <div
+                class="relative w-full"
+                :style="{ height: containerHeight + 'px' }"
+              >
+                <div class="absolute inset-0 pointer-events-none z-0">
+                  <svg
+                    class="w-full h-full text-slate-200 dark:text-slate-700"
+                    preserveAspectRatio="none"
+                    :viewBox="`0 0 100 ${containerHeight}`"
+                    width="100%"
+                  >
+                    <path
+                      :d="svgPath"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      vector-effect="non-scaling-stroke"
+                      class="transition-all duration-1000"
+                    />
+                  </svg>
+                </div>
 
-          <div
-            class="p-4 border-t border-slate-100 bg-white flex justify-end sticky bottom-0 gap-3"
-          >
-            <VBtn
-              v-if="activeItem"
-              @click="continueToModules(activeItem)"
-              class="continue-module-btn"
-            >
-              Continuer le module
-            </VBtn>
+                <div class="absolute inset-0 z-10">
+                  <div
+                    v-for="(item, index) in historiqueFiltres"
+                    :key="item.id"
+                  >
+                    <button
+                      @click="openModal(item)"
+                      class="absolute w-16 h-16 rounded-full border-4 border-slate-200 flex items-center justify-center shadow-sm cursor-pointer transition-transform duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-md hover:border-slate-300 transform-gpu group"
+                      :class="[getBgClass(item)]"
+                      :style="{
+                        left: positions[index].x + '%',
+                        top: positions[index].y + 'px',
+                        transform: 'translate(-50%, -50%)',
+                      }"
+                    >
+                      <component
+                        :is="item.icon"
+                        class="w-7 h-7 text-white transition-transform duration-200 transform-gpu group-hover:scale-110"
+                      />
 
-            <VBtn variant="tonal" color="secondary" @click="closeModal">
-              Fermer
-            </VBtn>
+                      <div
+                        class="uppercase absolute top-1/2 -translate-y-1/2 left-[calc(100vw/2+40px)] sm:left-[240px] text-xs font-bold text-slate-400 dark:text-slate-400 whitespace-nowrap hidden sm:block"
+                      >
+                        {{ item.date }}
+                      </div>
+
+                      <span
+                        class="uppercase absolute -bottom-8 w-24 text-center text-[10px] text-slate-400 dark:text-slate-400 block sm:hidden font-bold"
+                      >
+                        {{ item.date }}
+                      </span>
+
+                      <img
+                        v-if="
+                          assignRandomMarkers[index] || patternSvgMarkers[index]
+                        "
+                        :src="getMarkerSrc(index, item)"
+                        alt="illustration"
+                        class="absolute opacity-100"
+                        :style="getMarkerStyle(index)"
+                      />
+                      <div
+                        class="absolute -top-1 -left-3 w-12 h-5 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
+                      ></div>
+                      <div
+                        class="absolute -bottom-1 -right-3 w-14 h-7 rounded-full bg-white/50 dark:bg-white/35 opacity-50 transform rotate-12 pointer-events-none blur-sm z-20"
+                      ></div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Teleport defer to="body">
+              <div
+                v-if="isModalOpen"
+                class="fixed inset-0 z-50 flex items-center justify-center px-4"
+              >
+                <div
+                  class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+                  @click="closeModal"
+                ></div>
+
+                <div
+                  class="relative bg-white text-slate-800 rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden z-10 animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto border border-slate-200"
+                  style="background-color: white; color: #1f2937"
+                >
+                  <button
+                    @click="closeModal"
+                    class="absolute top-4 right-4 z-20 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                    aria-label="Fermer"
+                  >
+                    <X class="w-6 h-6 text-slate-400 hover:text-slate-600" />
+                  </button>
+
+                  <div class="p-8">
+                    <template v-if="activeItem">
+                      <div class="flex items-center gap-4 mb-6">
+                        <div
+                          class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-slate-100 shrink-0"
+                          :class="getModalBgClass(activeItem)"
+                        >
+                          <component
+                            :is="activeItem.icon"
+                            class="w-8 h-8 text-white"
+                          />
+                        </div>
+                        <div class="flex-1">
+                          <div
+                            class="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-400 mb-1"
+                          >
+                            {{ activeItem.type }}
+                          </div>
+                          <h3 class="text-2xl font-bold leading-tight">
+                            {{ activeItem.action }}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div class="space-y-6">
+                        <p
+                          class="text-slate-700 dark:text-slate-200 font-medium text-base"
+                        >
+                          {{ activeItem.details }}
+                        </p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div v-if="activeItem.note">
+                            <div
+                              class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2"
+                            >
+                              Note
+                            </div>
+                            <div
+                              class="text-4xl font-bold"
+                              :class="activeItem.color"
+                            >
+                              {{ activeItem.note
+                              }}<span class="text-lg text-slate-400">/20</span>
+                            </div>
+                          </div>
+
+                          <div
+                            v-if="activeItem.progressPercentage !== undefined"
+                          >
+                            <div
+                              class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2"
+                            >
+                              Progression
+                            </div>
+                            <div class="text-4xl font-bold text-blue-600">
+                              {{ activeItem.progressPercentage
+                              }}<span class="text-lg text-slate-400">%</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          v-if="
+                            activeItem.moduleScores &&
+                            activeItem.moduleScores.length > 0
+                          "
+                          class="w-full"
+                        >
+                          <div
+                            class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3"
+                          >
+                            Performance par module
+                          </div>
+                          <div class="space-y-3">
+                            <div
+                              v-for="(module, idx) in activeItem.moduleScores"
+                              :key="idx"
+                              class="space-y-1"
+                            >
+                              <div
+                                class="flex items-center justify-between text-sm mb-1"
+                              >
+                                <span
+                                  class="font-medium text-slate-700 dark:text-slate-200"
+                                  >{{ module.name }}</span
+                                >
+                                <span
+                                  class="font-bold text-slate-900 dark:text-slate-100"
+                                  >{{ module.percentage }}%</span
+                                >
+                              </div>
+                              <div
+                                class="w-full bg-slate-200 h-2.5 overflow-hidden"
+                              >
+                                <div
+                                  :class="module.color"
+                                  class="h-full transition-all duration-500"
+                                  :style="{ width: module.percentage + '%' }"
+                                ></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          v-if="activeItem.aiInsight"
+                          class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg text-blue-900 text-sm leading-relaxed flex gap-3"
+                        >
+                          <Brain
+                            class="w-5 h-5 shrink-0 text-blue-600 mt-0.5"
+                          />
+                          <p>{{ activeItem.aiInsight }}</p>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+
+                  <div
+                    class="p-4 border-t border-slate-100 bg-white flex justify-end sticky bottom-0 gap-3"
+                  >
+                    <VBtn
+                      v-if="activeItem"
+                      @click="continueToModules(activeItem)"
+                      class="continue-module-btn"
+                    >
+                      Continuer le module
+                    </VBtn>
+
+                    <VBtn variant="tonal" color="secondary" @click="closeModal">
+                      Fermer
+                    </VBtn>
+                  </div>
+                </div>
+              </div>
+            </Teleport>
           </div>
-        </div>
-      </div>
-    </Teleport>
-  </div>
+        </VCardText>
+      </VCard>
+    </VCol>
+  </VRow>
 </template>
 
 <style scoped>

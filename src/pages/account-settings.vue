@@ -19,10 +19,6 @@ const applyAutoDarkMode = () => {
     : "light";
 };
 
-const onSystemThemeChange = () => {
-  applyAutoDarkMode();
-};
-
 // Keep activeTab in sync with route query/params (so links like ?tab=settings work)
 watch(
   () => route.query.tab,
@@ -60,16 +56,6 @@ onMounted(() => {
   autoDarkMode.value =
     sessionStorage.getItem(AUTO_DARK_MODE_SESSION_KEY) === "true";
   applyAutoDarkMode();
-
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", onSystemThemeChange);
-});
-
-onBeforeUnmount(() => {
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .removeEventListener("change", onSystemThemeChange);
 });
 
 watch(autoDarkMode, (value) => {

@@ -1,6 +1,5 @@
 <script setup>
 import VerticalNavSectionTitle from "@/@layouts/components/VerticalNavSectionTitle.vue";
-import VerticalNavGroup from "@layouts/components/VerticalNavGroup.vue";
 import VerticalNavLink from "@layouts/components/VerticalNavLink.vue";
 import { useRouter } from "vue-router";
 
@@ -24,63 +23,33 @@ const handleLogout = () => {
     }"
   />
 
-  <!-- 👉 Quiz (remonté en haut) -->
-  <VerticalNavGroup
+  <!-- 👉 Quiz -->
+  <VerticalNavSectionTitle
     :item="{
-      title: 'Quiz',
-      icon: 'bx-brain',
-      neutral: true,
+      heading: 'Quizz',
     }"
-  >
-    <VerticalNavLink
-      :item="{
-        title: 'Quiz sur une UE',
-        to: '/tables',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Quiz sur une matière',
-        to: '/icons',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Quiz Aléatoire',
-        to: '/icons',
-      }"
-    />
-  </VerticalNavGroup>
-
-  <!-- 👉 Recommandations -->
-  <VerticalNavGroup
+  />
+  <VerticalNavLink
     :item="{
-      title: 'Recommandations',
+      title: 'Quiz sur une UE',
       icon: 'bx-brain',
-      badgeContent: '3',
-      badgeClass: 'bg-success',
-      neutral: true,
+      to: '/tables',
     }"
-  >
-    <VerticalNavLink
-      :item="{
-        title: 'Modules Suggérés',
-        to: '/modules-suggeres',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Parcours Personnalisés',
-        to: '/parcours-personnalises',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Ressources Complémentaires',
-        to: '/ressources-complementaires',
-      }"
-    />
-  </VerticalNavGroup>
+  />
+  <VerticalNavLink
+    :item="{
+      title: 'Quiz sur une matière',
+      icon: 'bx-book-open',
+      to: '/icons',
+    }"
+  />
+  <VerticalNavLink
+    :item="{
+      title: 'Quiz Aléatoire',
+      icon: 'bx-shuffle',
+      to: '/quiz-aleatoire',
+    }"
+  />
 
   <!-- 👉 Mon Apprentissage -->
   <VerticalNavSectionTitle
@@ -100,14 +69,6 @@ const handleLogout = () => {
       title: 'Historique',
       icon: 'bx-history',
       to: '/historique',
-    }"
-  />
-
-  <VerticalNavLink
-    :item="{
-      title: 'Mon Profil',
-      icon: 'bx-user',
-      to: '/account-settings',
     }"
   />
 
@@ -143,6 +104,14 @@ const handleLogout = () => {
   <VerticalNavSectionTitle
     :item="{
       heading: 'Compte',
+    }"
+  />
+
+  <VerticalNavLink
+    :item="{
+      title: 'Mon Profil',
+      icon: 'bx-user',
+      to: '/account-settings',
     }"
   />
 

@@ -32,7 +32,7 @@ const modules = [
     prochaineCheance: "8 Fév 2026",
     competences: ["SQL", "PostgreSQL", "Modélisation"],
     icon: "bx-data",
-    color: "info",
+    color: "primary",
     chapitres: [
       { titre: "Modèle relationnel", complete: true },
       { titre: "SQL avancé", complete: true },
@@ -52,7 +52,7 @@ const modules = [
     prochaineCheance: "20 Fév 2026",
     competences: ["Algorithmes", "Structures de données", "Complexité"],
     icon: "bx-brain",
-    color: "success",
+    color: "primary",
     chapitres: [
       { titre: "Tri et recherche", complete: true },
       { titre: "Graphes", complete: true },
@@ -72,7 +72,7 @@ const modules = [
     note: "16/20",
     competences: ["Design Patterns", "Architecture", "UML"],
     icon: "bx-building",
-    color: "secondary",
+    color: "primary",
     chapitres: [
       { titre: "Design Patterns", complete: true },
       { titre: "Architecture MVC", complete: true },
@@ -92,7 +92,7 @@ const modules = [
     prochaineCheance: "28 Fév 2026",
     competences: ["Cryptographie", "Sécurité web", "Pentesting"],
     icon: "bx-shield",
-    color: "warning",
+    color: "primary",
     chapitres: [
       { titre: "Introduction à la sécurité", complete: true },
       { titre: "Cryptographie", complete: false },
@@ -108,19 +108,13 @@ const filtreEnseignant = ref("Tous");
 const getStatutColor = (statut) => {
   switch (statut) {
     case "Terminé":
-      return "success";
+      return "primary";
     case "En cours":
       return "primary";
     default:
-      return "secondary";
+      return "primary";
   }
 };
-
-const moreList = [
-  { title: "Voir le contenu", value: "Content" },
-  { title: "Planning", value: "Schedule" },
-  { title: "Ressources", value: "Resources" },
-];
 
 const statuts = ["Tous", ...new Set(modules.map((module) => module.statut))];
 const enseignants = computed(() => [
@@ -172,14 +166,6 @@ const reinitialiserFiltres = () => {
                   Suivez votre progression dans vos modules de formation
                 </p>
               </div>
-              <VBtn
-                variant="tonal"
-                color="secondary"
-                prepend-icon="bx-reset"
-                @click="reinitialiserFiltres"
-              >
-                Réinitialiser
-              </VBtn>
             </div>
           </VCardText>
         </VCard>
@@ -222,7 +208,13 @@ const reinitialiserFiltres = () => {
 
     <!-- Modules List -->
     <VRow>
-      <VCol v-for="module in modulesFiltres" :key="module.id" cols="12">
+      <VCol
+        v-for="module in modulesFiltres"
+        :key="module.id"
+        cols="12"
+        md="6"
+        lg="3"
+      >
         <VCard>
           <VCardItem>
             <div
@@ -241,16 +233,12 @@ const reinitialiserFiltres = () => {
                     <h5 class="text-h5">
                       {{ module.titre }}
                     </h5>
-                    <VChip :color="getStatutColor(module.statut)" size="small">
-                      {{ module.statut }}
-                    </VChip>
                   </div>
                   <p class="text-sm text-medium-emphasis">
                     {{ module.code }} • {{ module.enseignant }}
                   </p>
                 </div>
               </div>
-              <MoreBtn :menu-list="moreList" />
             </div>
           </VCardItem>
 
@@ -270,38 +258,11 @@ const reinitialiserFiltres = () => {
               </VCol>
               <VCol cols="6" sm="3">
                 <div class="d-flex align-center gap-2">
-                  <VIcon icon="bx-award" size="20" />
-                  <div>
-                    <div class="text-sm text-medium-emphasis">Crédits</div>
-                    <div class="font-weight-medium">
-                      {{ module.credits }} ECTS
-                    </div>
-                  </div>
-                </div>
-              </VCol>
-              <VCol cols="6" sm="3">
-                <div class="d-flex align-center gap-2">
                   <VIcon icon="bx-trending-up" size="20" />
                   <div>
                     <div class="text-sm text-medium-emphasis">Progression</div>
                     <div class="font-weight-medium">
                       {{ module.progression }}%
-                    </div>
-                  </div>
-                </div>
-              </VCol>
-              <VCol cols="6" sm="3">
-                <div class="d-flex align-center gap-2">
-                  <VIcon
-                    :icon="module.note ? 'bx-check-circle' : 'bx-calendar'"
-                    size="20"
-                  />
-                  <div>
-                    <div class="text-sm text-medium-emphasis">
-                      {{ module.note ? "Note" : "Échéance" }}
-                    </div>
-                    <div class="font-weight-medium">
-                      {{ module.note || module.prochaineCheance }}
                     </div>
                   </div>
                 </div>
@@ -316,40 +277,6 @@ const reinitialiserFiltres = () => {
               rounded
               class="mb-4"
             />
-
-            <!-- Chapitres -->
-            <div class="mb-4">
-              <p class="text-sm font-weight-medium mb-3">Chapitres :</p>
-              <VRow>
-                <VCol
-                  v-for="(chapitre, idx) in module.chapitres"
-                  :key="idx"
-                  cols="12"
-                  sm="6"
-                  md="3"
-                >
-                  <div class="d-flex align-center gap-2">
-                    <VIcon
-                      :icon="
-                        chapitre.complete ? 'bx-check-circle' : 'bx-circle'
-                      "
-                      :color="chapitre.complete ? 'success' : 'secondary'"
-                      size="18"
-                    />
-                    <span
-                      :class="
-                        chapitre.complete
-                          ? 'text-success'
-                          : 'text-medium-emphasis'
-                      "
-                      class="text-sm"
-                    >
-                      {{ chapitre.titre }}
-                    </span>
-                  </div>
-                </VCol>
-              </VRow>
-            </div>
 
             <!-- Compétences -->
             <div class="mb-4">
@@ -368,30 +295,10 @@ const reinitialiserFiltres = () => {
             </div>
 
             <!-- Actions -->
-            <div class="d-flex gap-2">
-              <VBtn
-                v-if="module.statut !== 'Terminé'"
-                color="primary"
-                prepend-icon="bx-play"
-              >
+            <div class="d-flex">
+              <VBtn block color="primary" prepend-icon="bx-play">
                 Continuer
               </VBtn>
-              <VBtn
-                v-else
-                variant="tonal"
-                color="success"
-                prepend-icon="bx-download"
-              >
-                Certificat
-              </VBtn>
-              <VBtn
-                variant="tonal"
-                color="secondary"
-                prepend-icon="bx-info-circle"
-              >
-                Détails
-              </VBtn>
-              <VBtn variant="tonal" icon="bx-bookmark" />
             </div>
           </VCardText>
         </VCard>
