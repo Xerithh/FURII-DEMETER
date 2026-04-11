@@ -38,8 +38,9 @@ const iconFor = (type: string) => {
         <button
           type="button"
           @click="toastStore.removeToast(toast.id)"
-          class="absolute top-1 right-1 z-10 rounded-sm p-1 text-slate-500 hover:text-slate-700"
+          class="absolute top-1 right-1 z-10 rounded-sm p-1 hover:text-slate-700"
           aria-label="Fermer"
+          style="color: #64748b"
         >
           <X class="h-4 w-4" />
         </button>

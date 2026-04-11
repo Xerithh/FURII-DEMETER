@@ -63,6 +63,13 @@ const passwordRule = (v: string) =>
   (v && v.length >= 8) || "Au moins 8 caractères requis";
 const consentRule = (v: boolean) =>
   !!v || "Vous devez accepter ceci pour continuer";
+const nameRule = (v: string) => {
+  const s = (v || "").trim();
+  return (
+    (s.length >= 2 && s.length <= 100) ||
+    "Doit contenir entre 2 et 100 caractères"
+  );
+};
 
 // Validations form refs
 const registerFormRef = ref();
@@ -111,9 +118,7 @@ const handleRegister = async () => {
       niveauEtudes: mappedNiveau,
       secteurActivite: mappedSecteur,
     };
-    // debug: show exact payload sent to the API
     // eslint-disable-next-line no-console
-    console.log("registerVae payload", payload);
     success = await authStore.registerVae(payload);
   }
 
@@ -165,7 +170,7 @@ const sideImage = "/images/auth-placeholder.jpg";
                 <div class="text-caption mb-1 font-weight-medium">Prénom</div>
                 <VTextField
                   v-model="baseForm.prenom"
-                  :rules="[requiredRule]"
+                  :rules="[requiredRule, nameRule]"
                   placeholder="Jean"
                   variant="outlined"
                   class="mb-4 minimalist-input"
@@ -176,7 +181,7 @@ const sideImage = "/images/auth-placeholder.jpg";
                 <div class="text-caption mb-1 font-weight-medium">Nom</div>
                 <VTextField
                   v-model="baseForm.nom"
-                  :rules="[requiredRule]"
+                  :rules="[requiredRule, nameRule]"
                   placeholder="Dupont"
                   variant="outlined"
                   class="mb-4 minimalist-input"
