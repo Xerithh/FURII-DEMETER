@@ -189,7 +189,7 @@ const continueToModules = (item) => {
   // close modal then navigate to 'mes-modules' with a query pointing to the module/details
   closeModal();
   const q = item?.details || item?.action || "";
-  router.push({ path: "/mes-modules", query: { q } });
+  router.push({ path: "/student/my-modules", query: { q } });
 };
 
 const openModal = (item) => {

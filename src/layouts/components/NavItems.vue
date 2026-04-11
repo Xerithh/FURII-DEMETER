@@ -19,7 +19,7 @@ const handleLogout = () => {
     :item="{
       title: 'Mon Tableau de Bord',
       icon: 'bx-home-smile',
-      to: '/etudiant',
+      to: '/student/dashboard',
     }"
   />
 
@@ -33,21 +33,21 @@ const handleLogout = () => {
     :item="{
       title: 'Quiz sur une UE',
       icon: 'bx-brain',
-      to: '/tables',
+      to: '/student/tables',
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Quiz sur une matière',
       icon: 'bx-book-open',
-      to: '/icons',
+      to: '/student/icons',
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Quiz Aléatoire',
       icon: 'bx-shuffle',
-      to: '/quiz-aleatoire',
+      to: '/student/random-quiz',
     }"
   />
 
@@ -61,14 +61,14 @@ const handleLogout = () => {
     :item="{
       title: 'Mes Modules',
       icon: 'bx-book-open',
-      to: '/mes-modules',
+      to: '/student/my-modules',
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Historique',
       icon: 'bx-history',
-      to: '/historique',
+      to: '/student/history',
     }"
   />
 
@@ -82,7 +82,7 @@ const handleLogout = () => {
     :item="{
       title: 'Bibliothèque',
       icon: 'bx-library',
-      to: '/cards',
+      to: '/student/cards',
     }"
   />
 
@@ -96,7 +96,7 @@ const handleLogout = () => {
     :item="{
       title: 'Centre d\'aide',
       icon: 'bx-group',
-      to: '/centre-aide',
+      to: '/student/help-center',
     }"
   />
 
@@ -111,7 +111,7 @@ const handleLogout = () => {
     :item="{
       title: 'Mon Profil',
       icon: 'bx-user',
-      to: '/account-settings',
+      to: '/student/account-settings',
     }"
   />
 

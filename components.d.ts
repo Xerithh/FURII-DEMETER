@@ -32,6 +32,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     TeamSection: typeof import('./src/components/TeamSection.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
+    ToastContainer: typeof import('./src/components/ToastContainer.vue')['default']
     VueApexCharts: typeof import('vue3-apexcharts')['default']
   }
 }

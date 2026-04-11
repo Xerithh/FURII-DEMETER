@@ -1,4 +1,5 @@
 <script setup>
+import { useAuthStore } from "@/stores/auth";
 import avatar1 from "@images/avatars/avatar-1.png";
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -16,7 +17,9 @@ const openLogoutDialog = () => {
 const confirmLogout = () => {
   // clear session/local storage if needed
   try {
-    localStorage.removeItem("authToken");
+    // prefer store logout to keep app state consistent and show toast
+    const authStore = useAuthStore();
+    authStore.logout();
   } catch (e) {}
 
   logoutDialogOpen.value = false;
@@ -82,10 +85,13 @@ onBeforeUnmount(() => {
 
           <!-- 👉 Profile -->
           <VListItem
-            :to="{ path: '/account-settings', query: { tab: 'account' } }"
+            :to="{
+              path: '/student/account-settings',
+              query: { tab: 'account' },
+            }"
             :class="{
               'router-link-exact-active':
-                route.path === '/account-settings' &&
+                route.path === '/student/account-settings' &&
                 route.query.tab === 'account',
             }"
             link
@@ -99,10 +105,13 @@ onBeforeUnmount(() => {
 
           <!-- 👉 Settings -->
           <VListItem
-            :to="{ path: '/account-settings', query: { tab: 'settings' } }"
+            :to="{
+              path: '/student/account-settings',
+              query: { tab: 'settings' },
+            }"
             :class="{
               'router-link-exact-active':
-                route.path === '/account-settings' &&
+                route.path === '/student/account-settings' &&
                 route.query.tab === 'settings',
             }"
             link
@@ -115,7 +124,7 @@ onBeforeUnmount(() => {
           </VListItem>
 
           <!-- 👉 FAQ -->
-          <VListItem to="/centre-aide" link>
+          <VListItem to="/student/help-center" link>
             <template #prepend>
               <VIcon class="me-2" icon="bx-help-circle" size="22" />
             </template>
