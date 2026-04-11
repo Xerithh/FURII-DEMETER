@@ -1,6 +1,6 @@
 <script setup>
 const faqCategories = [
-  { label: "Comprendre AUXO", color: "primary" },
+  { label: "Comprendre ISISU", color: "primary" },
   { label: "Recommandations", color: "success" },
   { label: "Quiz", color: "info" },
   { label: "Parcours & Modules", color: "warning" },
@@ -9,14 +9,14 @@ const faqCategories = [
 
 const faqItems = [
   {
-    question: "Qu'est-ce que le projet AUXO ?",
-    category: "Comprendre AUXO",
+    question: "Qu'est-ce que le projet ISISU ?",
+    category: "Comprendre ISISU",
     answer:
-      "AUXO est une plateforme d'apprentissage personnalisé qui aide à choisir, suivre et valider les bons modules en fonction de votre profil. L'objectif est de structurer votre progression et de rendre vos acquis visibles tout au long du parcours.",
+      "ISISU est une plateforme d'apprentissage personnalisé qui aide à choisir, suivre et valider les bons modules en fonction de votre profil. L'objectif est de structurer votre progression et de rendre vos acquis visibles tout au long du parcours.",
   },
   {
-    question: "À qui s'adresse AUXO ?",
-    category: "Comprendre AUXO",
+    question: "À qui s'adresse ISISU ?",
+    category: "Comprendre ISISU",
     answer:
       "La plateforme cible les apprenants qui souhaitent avancer avec un accompagnement plus individualisé. Elle est utile si vous voulez identifier vos priorités, renforcer certaines compétences et garder une vue claire de votre progression.",
   },
@@ -53,12 +53,12 @@ const faqItems = [
   },
   {
     question: "Qu'est-ce que la plateforme permet concrètement ?",
-    category: "Comprendre AUXO",
+    category: "Comprendre ISISU",
     answer:
-      "AUXO permet de mieux cibler vos efforts, de suivre votre progression, d'organiser un parcours plus cohérent et de valoriser vos acquis. Elle offre un cadre pratique pour transformer des résultats de quiz en actions d'apprentissage utiles.",
+      "ISISU permet de mieux cibler vos efforts, de suivre votre progression, d'organiser un parcours plus cohérent et de valoriser vos acquis. Elle offre un cadre pratique pour transformer des résultats de quiz en actions d'apprentissage utiles.",
   },
   {
-    question: "En quoi AUXO peut aider pour une démarche VAE ?",
+    question: "En quoi ISISU peut aider pour une démarche VAE ?",
     category: "VAE",
     answer:
       "La plateforme peut soutenir une logique de VAE en aidant à expliciter les compétences acquises, à documenter la progression et à identifier les écarts à combler. Cette réponse est une base V1 à confirmer avec les éléments métiers finaux du cadrage.",
@@ -72,24 +72,9 @@ const faqItems = [
   },
   {
     question: "Comment poser une question ou demander de l'aide ?",
-    category: "Comprendre AUXO",
+    category: "Comprendre ISISU",
     answer:
       "Cette page centralise les réponses existantes pour les besoins les plus fréquents. Pour un besoin spécifique, consultez les ressources proposées dans votre parcours.",
-  },
-];
-
-const quickLinks = [
-  {
-    title: "Voir les modules suggérés",
-    icon: "bx-bulb",
-    to: "/modules-suggeres",
-    color: "success",
-  },
-  {
-    title: "Retour au tableau étudiant",
-    icon: "bx-home-smile",
-    to: "/etudiant",
-    color: "primary",
   },
 ];
 </script>
@@ -103,21 +88,18 @@ const quickLinks = [
         >
           <div>
             <h4 class="text-h4 mb-2">
-              Centre d'aide AUXO • Questions Fréquentes
+              Centre d'aide ISISU • Questions fréquentes
             </h4>
             <p class="text-body-1 text-medium-emphasis mb-0">
               Consultez les réponses existantes pour comprendre le projet,
               activer les recommandations et avancer sur votre parcours.
             </p>
           </div>
-          <VChip color="primary" variant="tonal" prepend-icon="bx-info-circle">
-            Version FAQ V1
-          </VChip>
         </VCardText>
       </VCard>
     </VCol>
 
-    <VCol cols="12" lg="8">
+    <VCol cols="12" lg="12">
       <VCard>
         <VCardItem>
           <VCardTitle>Questions & réponses</VCardTitle>
@@ -139,14 +121,6 @@ const quickLinks = [
                   <VChip size="x-small" variant="tonal">
                     {{ item.category }}
                   </VChip>
-                  <VChip
-                    v-if="item.needsValidation"
-                    size="x-small"
-                    color="warning"
-                    variant="tonal"
-                  >
-                    À valider
-                  </VChip>
                 </div>
               </VExpansionPanelTitle>
               <VExpansionPanelText>
@@ -158,31 +132,6 @@ const quickLinks = [
           </VExpansionPanels>
         </VCardText>
       </VCard>
-    </VCol>
-
-    <VCol cols="12" lg="4">
-      <VRow>
-        <VCol cols="12">
-          <VCard>
-            <VCardItem>
-              <VCardTitle>Accès rapides</VCardTitle>
-            </VCardItem>
-            <VCardText class="d-flex flex-column gap-3">
-              <VBtn
-                v-for="link in quickLinks"
-                :key="link.title"
-                :to="link.to"
-                :color="link.color"
-                :prepend-icon="link.icon"
-                variant="tonal"
-                block
-              >
-                {{ link.title }}
-              </VBtn>
-            </VCardText>
-          </VCard>
-        </VCol>
-      </VRow>
     </VCol>
   </VRow>
 </template>

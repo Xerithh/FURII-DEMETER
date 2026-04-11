@@ -191,37 +191,6 @@ onMounted(() => {
     isMac.value = false;
   }
 });
-
-const notifications = [
-  {
-    title: "Nouveau module recommandé",
-    message: "DevOps - CI/CD pour débutants",
-    time: "il y a 2h",
-    icon: "bx-cloud",
-    color: "primary",
-  },
-  {
-    title: "Félicitations ! 🎉",
-    message: "Vous avez obtenu 8 badges cette semaine",
-    time: "il y a 5h",
-    icon: "bx-trophy",
-    color: "success",
-  },
-  {
-    title: "Rappel d'évaluation",
-    message: "Quiz JavaScript - à rendre avant demain",
-    time: "il y a 1j",
-    icon: "bx-list-check",
-    color: "warning",
-  },
-  {
-    title: "Score amélioré",
-    message: "Votre score en Compréhension a augmenté de 5%",
-    time: "il y a 2j",
-    icon: "bx-trending-up",
-    color: "info",
-  },
-];
 </script>
 
 <template>
@@ -297,59 +266,6 @@ const notifications = [
         </div>
 
         <VSpacer />
-
-        <IconBtn class="me-2">
-          <VIcon icon="bx-bell" />
-
-          <!-- Notifications Menu -->
-          <VMenu
-            activator="parent"
-            width="380"
-            location="bottom end"
-            offset="14px"
-          >
-            <VList>
-              <VListItem>
-                <VListItemTitle class="font-weight-semibold text-h6">
-                  Notifications
-                </VListItemTitle>
-              </VListItem>
-
-              <VDivider class="my-2" />
-
-              <VListItem v-for="(notif, idx) in notifications" :key="idx" link>
-                <template #prepend>
-                  <VAvatar
-                    :icon="notif.icon"
-                    :color="notif.color"
-                    size="40"
-                    rounded
-                    variant="tonal"
-                    class="me-3"
-                  />
-                </template>
-
-                <VListItemTitle class="font-weight-semibold">
-                  {{ notif.title }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-sm">
-                  {{ notif.message }}
-                </VListItemSubtitle>
-                <VListItemSubtitle class="text-xs text-disabled">
-                  {{ notif.time }}
-                </VListItemSubtitle>
-              </VListItem>
-
-              <VDivider class="my-2" />
-
-              <VListItem link>
-                <VListItemTitle class="text-center text-primary">
-                  Voir toutes les notifications
-                </VListItemTitle>
-              </VListItem>
-            </VList>
-          </VMenu>
-        </IconBtn>
 
         <NavbarThemeSwitcher class="me-1" />
 

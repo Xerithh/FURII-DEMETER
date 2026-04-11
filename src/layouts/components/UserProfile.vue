@@ -1,8 +1,37 @@
 <script setup>
 import avatar1 from "@images/avatars/avatar-1.png";
-import { useRoute } from "vue-router";
+import { onBeforeUnmount, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
+const profileMenuOpen = ref(false);
+const logoutDialogOpen = ref(false);
+
+const openLogoutDialog = () => {
+  profileMenuOpen.value = false;
+  logoutDialogOpen.value = true;
+};
+
+const confirmLogout = () => {
+  // clear session/local storage if needed
+  try {
+    localStorage.removeItem("authToken");
+  } catch (e) {}
+
+  logoutDialogOpen.value = false;
+  router.push("/login");
+};
+
+const externalOpenHandler = () => openLogoutDialog();
+
+onMounted(() => {
+  window.addEventListener("open-logout-dialog", externalOpenHandler);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("open-logout-dialog", externalOpenHandler);
+});
 </script>
 
 <template>
@@ -18,7 +47,13 @@ const route = useRoute();
       <VImg :src="avatar1" />
 
       <!-- SECTION Menu -->
-      <VMenu activator="parent" width="230" location="bottom end" offset="14px">
+      <VMenu
+        v-model="profileMenuOpen"
+        activator="parent"
+        width="230"
+        location="bottom end"
+        offset="14px"
+      >
         <VList>
           <!-- 👉 User Avatar & Name -->
           <VListItem>
@@ -80,7 +115,7 @@ const route = useRoute();
           </VListItem>
 
           <!-- 👉 FAQ -->
-          <VListItem to="/typography" link>
+          <VListItem to="/centre-aide" link>
             <template #prepend>
               <VIcon class="me-2" icon="bx-help-circle" size="22" />
             </template>
@@ -92,7 +127,7 @@ const route = useRoute();
           <VDivider class="my-2" />
 
           <!-- 👉 Logout -->
-          <VListItem to="/login">
+          <VListItem link @click.prevent="openLogoutDialog">
             <template #prepend>
               <VIcon class="me-2" icon="bx-log-out" size="22" />
             </template>
@@ -104,4 +139,43 @@ const route = useRoute();
       <!-- !SECTION -->
     </VAvatar>
   </VBadge>
+
+  <VDialog v-model="logoutDialogOpen" max-width="420">
+    <VCard>
+      <VCardItem>
+        <VCardTitle>Confirmer la déconnexion</VCardTitle>
+      </VCardItem>
+
+      <VCardText>
+        Voulez-vous vraiment vous déconnecter de votre session ?
+      </VCardText>
+
+      <VCardActions class="justify-end">
+        <VBtn
+          variant="tonal"
+          color="secondary"
+          @click="logoutDialogOpen = false"
+        >
+          Annuler
+        </VBtn>
+        <VBtn class="logout-confirm-btn" @click="confirmLogout"
+          >Se déconnecter</VBtn
+        >
+      </VCardActions>
+    </VCard>
+  </VDialog>
 </template>
+
+<style scoped>
+.logout-confirm-btn {
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-transform: none !important;
+}
+.logout-confirm-btn:hover {
+  background-color: #dc2626 !important;
+  color: #ffffff !important;
+}
+</style>

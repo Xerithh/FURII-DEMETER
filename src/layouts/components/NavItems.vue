@@ -7,11 +7,10 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const handleLogout = () => {
-  // clear session/local storage if needed
+  // trigger global event to open logout confirmation handled by UserProfile
   try {
-    localStorage.removeItem("authToken");
+    window.dispatchEvent(new CustomEvent("open-logout-dialog"));
   } catch (e) {}
-  router.push("/login");
 };
 </script>
 
