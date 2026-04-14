@@ -23,63 +23,62 @@
     />
 
     <!-- KPI Cards Row -->
-    <VRow class="mb-6">
-      <VCol cols="12" sm="6" md="4">
-        <KPICard
-          label="Utilisateurs"
-          :value="adminStore.dashboard?.totalUtilisateurs || 0"
-          icon="bx:users"
-          color="primary"
-          format="number"
-        />
-      </VCol>
-      <VCol cols="12" sm="6" md="4">
-        <KPICard
-          label="Étudiants FIE3"
-          :value="adminStore.dashboard?.totalEtudiantsFIE3 || 0"
-          icon="bx:user-check"
-          color="success"
-          format="number"
-        />
-      </VCol>
-      <VCol cols="12" sm="6" md="4">
-        <KPICard
-          label="Candidats VAE"
-          :value="adminStore.dashboard?.totalCandidatsVAE || 0"
-          icon="bx:briefcase"
-          color="info"
-          format="number"
-        />
-      </VCol>
-
-      <VCol cols="12" sm="6" md="3">
-        <KPICard
-          label="Sessions en Cours"
-          :value="adminStore.dashboard?.sessionsEnCours || 0"
-          icon="bx:play-circle"
-          color="warning"
-          format="number"
-        />
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <KPICard
-          label="Taux de Réussite"
-          :value="adminStore.dashboard?.tauxReussite || 0"
-          icon="bx:trending-up"
-          color="success"
-          format="percent"
-        />
-      </VCol>
-      <VCol cols="12" sm="6" md="3">
-        <KPICard
-          label="Score Moyen Global"
-          :value="(adminStore.dashboard?.scoreMoyenGlobal || 0) * 100"
-          icon="bx:bar-chart"
-          color="primary"
-          format="percent"
-        />
-      </VCol>
-    </VRow>
+<VRow class="mb-6">
+  <VCol cols="12" sm="6" md="4">
+    <KPICard
+      label="Utilisateurs"
+      :value="adminStore.dashboard?.totalUtilisateurs || 0"
+      icon="bx-users"
+      color="primary"
+      format="number"
+    />
+  </VCol>
+  <VCol cols="12" sm="6" md="4">
+    <KPICard
+      label="Étudiants FIE3"
+      :value="adminStore.dashboard?.totalEtudiantsFIE3 || 0"
+      icon="bx-user-check"
+      color="success"
+      format="number"
+    />
+  </VCol>
+  <VCol cols="12" sm="6" md="4">
+    <KPICard
+      label="Candidats VAE"
+      :value="adminStore.dashboard?.totalCandidatsVAE || 0"
+      icon="bx-briefcase"
+      color="info"
+      format="number"
+    />
+  </VCol>
+  <VCol cols="12" sm="6" md="4">
+    <KPICard
+      label="Sessions en Cours"
+      :value="adminStore.dashboard?.sessionsEnCours || 0"
+      icon="bx-play-circle"
+      color="warning"
+      format="number"
+    />
+  </VCol>
+  <VCol cols="12" sm="6" md="4">
+    <KPICard
+      label="Taux de Réussite"
+      :value="adminStore.dashboard?.tauxReussite || 0"
+      icon="bx-trending-up"
+      color="success"
+      format="percent"
+    />
+  </VCol>
+  <VCol cols="12" sm="6" md="4">
+    <KPICard
+      label="Score Moyen Global"
+      :value="(adminStore.dashboard?.scoreMoyenGlobal || 0) * 100"
+      icon="bx-bar-chart"
+      color="primary"
+      format="percent"
+    />
+  </VCol>
+</VRow>
 
     <!-- Charts Row -->
     <VRow>

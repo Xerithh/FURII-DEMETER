@@ -1,23 +1,21 @@
 <template>
   <VCard>
     <VCardItem>
-      <div class="d-flex justify-space-between align-center">
-        <VCardTitle>Gestion des Utilisateurs</VCardTitle>
-        <div class="d-flex gap-2">
-          <!-- Search -->
-          <VTextField
-            v-model="search"
-            prepend-inner-icon="bx:search"
-            placeholder="Rechercher par email ou nom..."
-            dense
-            variant="outlined"
-            class="search-field"
-            clearable
-            @click:clear="search = ''"
-          />
-        </div>
-      </div>
-    </VCardItem>
+  <VCardTitle>Utilisateurs</VCardTitle>
+  <VCardSubtitle>{{ filteredUsers.length }} utilisateur(s)</VCardSubtitle>
+  <template #append>
+    <VTextField
+      v-model="search"
+      prepend-inner-icon="bx-search"
+      placeholder="Rechercher..."
+      density="compact"
+      variant="outlined"
+      style="min-width: 250px"
+      hide-details
+      clearable
+    />
+  </template>
+</VCardItem>
     <VDivider />
 
     <!-- Filters Row -->
@@ -113,18 +111,21 @@
 
       <!-- Score Moyen Column -->
       <template #item.scoreMoyen="{ item }">
-        <div class="d-flex align-center gap-2">
-          <VProgressCircular
-            :value="item.scoreMoyen"
-            :color="getScoreColor(item.scoreMoyen)"
-            size="32"
-          >
-            <span class="text-caption font-weight-bold">
-              {{ Math.round(item.scoreMoyen) }}
-            </span>
-          </VProgressCircular>
-        </div>
-      </template>
+  <div class="d-flex align-center gap-2">
+    <VProgressCircular
+      :model-value="item.scoreMoyen > 1 ? item.scoreMoyen : item.scoreMoyen * 10"
+      :color="getScoreColor(item.scoreMoyen > 1 ? item.scoreMoyen : item.scoreMoyen * 10)"
+      size="36"
+      width="3"
+    >
+      <span class="text-caption font-weight-bold" style="font-size: 9px !important">
+        {{ item.scoreMoyen > 1 
+          ? Math.round(item.scoreMoyen) 
+          : Math.round(item.scoreMoyen * 10) }}%
+      </span>
+    </VProgressCircular>
+  </div>
+</template>
 
       <!-- Dernière Connexion Column -->
       <template #item.derniereConnexion="{ item }">
@@ -313,10 +314,11 @@ const getStatutColor = (statut: StatutCompte) => {
 };
 
 const getScoreColor = (score: number) => {
-  if (score >= 80) return "success";
-  if (score >= 60) return "warning";
-  return "error";
-};
+  const normalized = score > 1 ? score : score * 100
+  if (normalized >= 80) return 'success'
+  if (normalized >= 60) return 'warning'
+  return 'error'
+}
 
 const formatDate = (dateStr: string) => {
   const date = new Date(dateStr);

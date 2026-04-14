@@ -1,27 +1,26 @@
 <template>
   <VCard>
-    <VCardItem>
-      <div class="d-flex justify-space-between align-center">
-        <VCardTitle>Gestion des Questions</VCardTitle>
-        <div class="d-flex gap-2">
-          <!-- Search -->
-          <VTextField
-            v-model="search"
-            prepend-inner-icon="bx:search"
-            placeholder="Rechercher par énoncé..."
-            dense
-            variant="outlined"
-            class="search-field"
-            clearable
-            @click:clear="search = ''"
-          />
-          <!-- Add Button -->
-          <VBtn color="primary" prepend-icon="bx:plus" @click="emitCreate">
-            Ajouter
-          </VBtn>
-        </div>
-      </div>
-    </VCardItem>
+<VCardItem>
+  <VCardTitle>Questions</VCardTitle>
+  <VCardSubtitle>{{ filteredQuestions.length }} question(s)</VCardSubtitle>
+  <template #append>
+    <div class="d-flex gap-2">
+      <VTextField
+        v-model="search"
+        prepend-inner-icon="bx-search"
+        placeholder="Rechercher..."
+        density="compact"
+        variant="outlined"
+        style="min-width: 250px"
+        hide-details
+        clearable
+      />
+      <VBtn color="primary" prepend-icon="bx-plus" @click="emitCreate">
+        Ajouter
+      </VBtn>
+    </div>
+  </template>
+</VCardItem>
     <VDivider />
 
     <!-- Filters Row -->

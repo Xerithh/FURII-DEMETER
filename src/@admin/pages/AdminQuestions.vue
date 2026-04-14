@@ -20,6 +20,49 @@
       indeterminate
       class="mb-6"
     />
+    <!-- Stats rapides -->
+<VRow class="mb-6">
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="text-center pa-3">
+        <p class="text-h5 font-weight-bold text-primary mb-0">
+          {{ adminStore.questions.length }}
+        </p>
+        <p class="text-xs text-disabled mb-0">Total</p>
+      </VCardText>
+    </VCard>
+  </VCol>
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="text-center pa-3">
+        <p class="text-h5 font-weight-bold text-success mb-0">
+          {{ adminStore.questions.filter(q => q.difficulte === 'FACILE').length }}
+        </p>
+        <p class="text-xs text-disabled mb-0">Facile</p>
+      </VCardText>
+    </VCard>
+  </VCol>
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="text-center pa-3">
+        <p class="text-h5 font-weight-bold text-warning mb-0">
+          {{ adminStore.questions.filter(q => q.difficulte === 'MOYEN').length }}
+        </p>
+        <p class="text-xs text-disabled mb-0">Moyen</p>
+      </VCardText>
+    </VCard>
+  </VCol>
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="text-center pa-3">
+        <p class="text-h5 font-weight-bold text-error mb-0">
+          {{ adminStore.questions.filter(q => q.difficulte === 'DIFFICILE').length }}
+        </p>
+        <p class="text-xs text-disabled mb-0">Difficile</p>
+      </VCardText>
+    </VCard>
+  </VCol>
+</VRow>
 
     <!-- Questions Table -->
     <QuestionsTable

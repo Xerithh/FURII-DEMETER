@@ -158,16 +158,15 @@ export const routes = [
   },
   // ─── ADMIN ROUTES ───────────────────────────────────────────
   {
-    path: '/admin',
-    component: () => import('@/@admin/layouts/AdminLayout.vue'),
-    meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
-    children: [
-      {
-        path: '',
-        name: 'admin-dashboard',
-        component: () => import('@/@admin/pages/AdminDashboard.vue'),
-        meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
-      },
+  path: '/admin',
+  component: () => import('@/@admin/layouts/AdminLayout.vue'),
+  meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+  children: [
+    {
+      path: '',
+      name: 'admin-dashboard',
+      component: () => import('@/@admin/pages/AdminDashboard.vue'),
+    },
       {
         path: 'users',
         name: 'admin-users',
