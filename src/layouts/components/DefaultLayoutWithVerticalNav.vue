@@ -4,8 +4,6 @@ import NavbarThemeSwitcher from "@/layouts/components/NavbarThemeSwitcher.vue";
 import NavItems from "@/layouts/components/NavItems.vue";
 import UserProfile from "@/layouts/components/UserProfile.vue";
 
-// TODO: Remplacer par votre logo AUXO au format PNG
-// import logoAuxo from '@images/logo-auxo.png'
 import logoAuxo from "@images/logo-auxo.png";
 import VerticalNavLayout from "@layouts/components/VerticalNavLayout.vue";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
@@ -257,7 +255,12 @@ onMounted(() => {
 
     <template #vertical-nav-header="{ toggleIsOverlayNavActive }">
       <RouterLink to="/" class="app-logo app-title-wrapper">
-        <img :src="logoAuxo" alt="AUXO Logo" class="app-logo-img" height="32" />
+        <img
+          :src="logoAuxo"
+          alt="ISIS-U Logo"
+          class="app-logo-img"
+          height="32"
+        />
       </RouterLink>
 
       <IconBtn

@@ -13,7 +13,7 @@
             <p
               class="ui-subtitle text-sm uppercase tracking-[0.16em] text-slate-200"
             >
-              Newsletter AUXO
+              Newsletter ISIS-U
             </p>
             <h2 class="section-title text-3xl sm:text-4xl text-white">
               Recevez nos conseils pour progresser plus vite

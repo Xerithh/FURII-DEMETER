@@ -67,7 +67,7 @@ onBeforeUnmount(() => {
           >
             <img
               :src="logoAuxo"
-              alt="logo-auxo"
+              alt="logo-ISIS-U"
               class="h-6 w-6 object-contain"
             />
           </a>
@@ -110,7 +110,7 @@ onBeforeUnmount(() => {
           <RouterLink
             v-if="!authStore.isAuthenticated"
             to="/login"
-            class="hidden items-center rounded-xl bg-[var(--isis-blue)] px-4 py-1 text-sm font-semibold text-white shadow-sm sm:inline-flex"
+            class="hidden items-center rounded-xl bg-[#1d4ed8] px-4 py-1 text-sm font-semibold text-white shadow-sm sm:inline-flex"
           >
             Connexion
           </RouterLink>
@@ -118,7 +118,7 @@ onBeforeUnmount(() => {
           <RouterLink
             v-else
             to="/student/dashboard"
-            class="hidden items-center rounded-xl bg-[var(--isis-blue)] px-4 py-1 text-sm font-semibold text-white shadow-sm sm:inline-flex"
+            class="hidden items-center rounded-xl bg-[#1d4ed8] px-4 py-1 text-sm font-semibold text-white shadow-sm sm:inline-flex"
           >
             Dashboard
           </RouterLink>
@@ -205,7 +205,7 @@ onBeforeUnmount(() => {
         <RouterLink
           v-if="!authStore.isAuthenticated"
           to="/login"
-          class="inline-flex h-14 w-full items-center justify-center rounded-xl bg-[var(--isis-blue)] px-6 text-lg font-semibold text-white transition hover:bg-[#1e40af]"
+          class="inline-flex h-14 w-full items-center justify-center rounded-xl bg-[#1d4ed8] px-6 text-lg font-semibold text-white transition hover:bg-[#1e40af]"
           @click="closeMobileMenu"
         >
           Se connecter
@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
         <RouterLink
           v-else
           to="/student/dashboard"
-          class="inline-flex h-14 w-full items-center justify-center rounded-xl bg-[var(--isis-blue)] px-6 text-lg font-semibold text-white transition hover:bg-[#1e40af]"
+          class="inline-flex h-14 w-full items-center justify-center rounded-xl bg-[#1d4ed8] px-6 text-lg font-semibold text-white transition hover:bg-[#1e40af]"
           @click="closeMobileMenu"
         >
           Dashboard
