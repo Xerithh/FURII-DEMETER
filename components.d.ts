@@ -26,11 +26,14 @@ declare module 'vue' {
     LandingNewsletter: typeof import('./src/components/landing/LandingNewsletter.vue')['default']
     LandingProcess: typeof import('./src/components/landing/LandingProcess.vue')['default']
     LandingRecommendations: typeof import('./src/components/landing/LandingRecommendations.vue')['default']
+    ModuleCard: typeof import('./src/components/ModuleCard.vue')['default']
     MoreBtn: typeof import('./src/@core/components/MoreBtn.vue')['default']
+    PreQuizIntro: typeof import('./src/components/PreQuizIntro.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TeamSection: typeof import('./src/components/TeamSection.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
+    ToastContainer: typeof import('./src/components/ToastContainer.vue')['default']
     VueApexCharts: typeof import('vue3-apexcharts')['default']
   }
 }

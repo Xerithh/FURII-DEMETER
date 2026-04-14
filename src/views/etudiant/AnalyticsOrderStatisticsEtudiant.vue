@@ -1,56 +1,44 @@
-<script setup>
-import { hexToRgb } from '@core/utils/colorConverter'
-import { useTheme } from 'vuetify'
+<script setup lang="ts">
+import { hexToRgb } from '@core/utils/colorConverter';
+import { useDashboardStore } from '@/stores/dashboard';
+import { useTheme } from 'vuetify';
 
-const vuetifyTheme = useTheme()
+const vuetifyTheme = useTheme();
+const dashboardStore = useDashboardStore();
 
-const series = [
-  12,
-  4,
-  2,
-  0,
-]
+// Segment compétences par niveau
+const countByNiveau = computed(() => {
+  const competences = dashboardStore.data?.competences ?? [];
+  return {
+    acquis: competences.filter(c => c.niveau === 'ACQUIS').length,
+    enCours: competences.filter(c => c.niveau === 'EN_COURS').length,
+    nonDemarre: competences.filter(c => c.niveau === 'NON_DEMARRE').length,
+    total: competences.length,
+  };
+});
+
+const series = computed(() => [
+  countByNiveau.value.acquis,
+  countByNiveau.value.enCours,
+  countByNiveau.value.nonDemarre,
+]);
 
 const chartOptions = computed(() => {
-  const currentTheme = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
-  const secondaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['medium-emphasis-opacity'] })`
-  const primaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['high-emphasis-opacity'] })`
-  
+  const currentTheme = vuetifyTheme.current.value.colors;
+  const variableTheme = vuetifyTheme.current.value.variables;
+  const secondaryTextColor = `rgba(${hexToRgb(String(currentTheme['on-surface']))},${variableTheme['medium-emphasis-opacity']})`;
+  const primaryTextColor = `rgba(${hexToRgb(String(currentTheme['on-surface']))},${variableTheme['high-emphasis-opacity']})`;
+
   return {
-    chart: {
-      sparkline: { enabled: true },
-      animations: { enabled: false },
-    },
-    stroke: {
-      width: 6,
-      colors: [currentTheme.surface],
-    },
+    chart: { sparkline: { enabled: true }, animations: { enabled: false } },
+    stroke: { width: 6, colors: [currentTheme.surface] },
     legend: { show: false },
     tooltip: { enabled: false },
     dataLabels: { enabled: false },
-    labels: [
-      'Complétés',
-      'En Cours',
-      'Recommandés',
-      'Bloqués',
-    ],
-    colors: [
-      currentTheme.success,
-      currentTheme.primary,
-      currentTheme.warning,
-      currentTheme.error,
-    ],
-    grid: {
-      padding: {
-        top: -7,
-        bottom: 5,
-      },
-    },
-    states: {
-      hover: { filter: { type: 'none' } },
-      active: { filter: { type: 'none' } },
-    },
+    labels: ['Acquises', 'En Cours', 'Non démarrées'],
+    colors: [currentTheme.success, currentTheme.primary, currentTheme.warning],
+    grid: { padding: { top: -7, bottom: 5 } },
+    states: { hover: { filter: { type: 'none' } }, active: { filter: { type: 'none' } } },
     plotOptions: {
       pie: {
         expandOnClick: false,
@@ -59,24 +47,16 @@ const chartOptions = computed(() => {
           labels: {
             show: true,
             name: {
-              offsetY: 17,
-              fontSize: '13px',
-              color: secondaryTextColor,
-              fontFamily: 'Public Sans',
+              offsetY: 17, fontSize: '13px', color: secondaryTextColor, fontFamily: 'Public Sans',
             },
             value: {
-              offsetY: -17,
-              fontSize: '18px',
-              color: primaryTextColor,
-              fontFamily: 'Public Sans',
-              fontWeight: 500,
+              offsetY: -17, fontSize: '18px', color: primaryTextColor, fontFamily: 'Public Sans', fontWeight: 500,
             },
             total: {
               show: true,
               label: 'Total',
               fontSize: '13px',
-              lineHeight: '18px',
-              formatter: () => '18',
+              formatter: () => String(countByNiveau.value.total),
               color: secondaryTextColor,
               fontFamily: 'Public Sans',
             },
@@ -84,119 +64,78 @@ const chartOptions = computed(() => {
         },
       },
     },
-  }
-})
+  };
+});
 
-const orders = [
+const orders = computed(() => [
   {
-    amount: '12',
-    title: 'Modules Complétés',
+    amount: String(countByNiveau.value.acquis),
+    title: 'Compétences Acquises',
     avatarColor: 'success',
-    subtitle: 'Validés avec succès',
+    subtitle: 'Validées avec succès',
     avatarIcon: 'bx-check-circle',
   },
   {
-    amount: '4',
-    title: 'Modules En Cours',
+    amount: String(countByNiveau.value.enCours),
+    title: 'En Cours',
     avatarColor: 'primary',
     subtitle: 'Apprentissage actif',
     avatarIcon: 'bx-book-open',
   },
   {
-    amount: '2',
-    title: 'Recommandés',
+    amount: String(countByNiveau.value.nonDemarre),
+    title: 'Non Démarrées',
     avatarColor: 'warning',
-    subtitle: 'Suggestions personnalisées',
+    subtitle: 'À découvrir',
     avatarIcon: 'bx-bulb',
   },
-  {
-    amount: '0',
-    title: 'Modules Bloqués',
-    avatarColor: 'error',
-    subtitle: 'Prérequis manquants',
-    avatarIcon: 'bx-lock-alt',
-  },
-]
+]);
 
 const moreList = [
-  {
-    title: 'Voir Détails',
-    value: 'Details',
-  },
-  {
-    title: 'Actualiser',
-    value: 'Refresh',
-  },
-  {
-    title: 'Télécharger',
-    value: 'Download',
-  },
-]
+  { title: 'Voir Détails', value: 'Details' },
+  { title: 'Actualiser', value: 'Refresh' },
+  { title: 'Télécharger', value: 'Download' },
+];
 </script>
 
 <template>
   <VCard>
     <VCardItem>
-      <VCardTitle>
-        Répartition des Modules
-      </VCardTitle>
-      <VCardSubtitle>18 Modules Total</VCardSubtitle>
-
+      <VCardTitle>Répartition des Compétences</VCardTitle>
+      <VCardSubtitle>{{ countByNiveau.total }} Compétences Total</VCardSubtitle>
       <template #append>
         <MoreBtn :menu-list="moreList" />
       </template>
     </VCardItem>
 
     <VCardText>
-      <div class="d-flex align-center justify-space-between mb-6">
-        <div class="">
-          <h3 class="text-h3 mb-1">
-            18
-          </h3>
-          <div class="text-caption text-medium-emphasis">
-            Total Modules
-          </div>
-        </div>
-
-        <div>
-          <VueApexCharts
-            type="donut"
-            :height="120"
-            width="100"
-            :options="chartOptions"
-            :series="series"
-          />
-        </div>
+      <div v-if="dashboardStore.isLoading" class="d-flex justify-center py-8">
+        <VProgressCircular indeterminate color="primary" />
       </div>
+      <template v-else>
+        <div class="d-flex align-center justify-space-between mb-6">
+          <div>
+            <h3 class="text-h3 mb-1">{{ countByNiveau.total }}</h3>
+            <div class="text-caption text-medium-emphasis">Total Compétences</div>
+          </div>
+          <VueApexCharts type="donut" :height="120" width="100" :options="chartOptions" :series="series" />
+        </div>
 
-      <VList class="card-list">
-        <VListItem
-          v-for="order in orders"
-          :key="order.title"
-        >
-          <template #prepend>
-            <VAvatar
-              size="40"
-              rounded
-              variant="tonal"
-              :color="order.avatarColor"
-            >
-              <VIcon :icon="order.avatarIcon" />
-            </VAvatar>
-          </template>
-
-          <VListItemTitle class="font-weight-medium">
-            {{ order.title }}
-          </VListItemTitle>
-          <VListItemSubtitle class="text-body-2">
-            {{ order.subtitle }}
-          </VListItemSubtitle>
-
-          <template #append>
-            <span>{{ order.amount }}</span>
-          </template>
-        </VListItem>
-      </VList>
+        <VList class="card-list">
+          <VListItem v-for="order in orders" :key="order.title">
+            <template #prepend>
+              <VAvatar size="40" rounded variant="tonal" :color="order.avatarColor">
+                <VIcon :icon="order.avatarIcon" />
+              </VAvatar>
+            </template>
+            <VListItemTitle class="font-weight-medium">{{ order.title }}</VListItemTitle>
+            <VListItemSubtitle class="text-body-2">{{ order.subtitle }}</VListItemSubtitle>
+            <template #append>
+              <span>{{ order.amount }}</span>
+            </template>
+          </VListItem>
+        </VList>
+      </template>
     </VCardText>
   </VCard>
 </template>

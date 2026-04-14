@@ -21,7 +21,7 @@
               Se connecter
             </a>
             <a
-              href="/etudiant"
+              href="/student/dashboard"
               class="inline-flex items-center justify-center rounded-md bg-[var(--isis-blue)] px-4 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(29,78,216,0.35)] transition hover:bg-[#1e40af]"
             >
               Demarrer mon analyse
@@ -64,15 +64,15 @@
             class="block text-base text-slate-200 transition hover:text-white"
             >contact@isisu.fr</a
           >
-          <a
-            href="#"
+          <RouterLink
+            :to="{ name: 'terms' }"
             class="block text-base text-slate-200 transition hover:text-white"
-            >Mentions legales</a
+            >Mentions legales</RouterLink
           >
-          <a
-            href="#"
+          <RouterLink
+            :to="{ name: 'privacy' }"
             class="block text-base text-slate-200 transition hover:text-white"
-            >Politique de confidentialite</a
+            >Politique de confidentialite</RouterLink
           >
         </div>
       </div>

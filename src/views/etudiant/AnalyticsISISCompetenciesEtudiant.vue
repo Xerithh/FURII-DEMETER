@@ -1,70 +1,87 @@
-<script setup>
-import { hexToRgb } from '@core/utils/colorConverter'
-import { useTheme } from 'vuetify'
+<script setup lang="ts">
+import { hexToRgb } from "@core/utils/colorConverter";
+import { useDashboardStore } from "@/stores/dashboard";
+import { useTheme } from "vuetify";
 
-const vuetifyTheme = useTheme()
+const vuetifyTheme = useTheme();
+const dashboardStore = useDashboardStore();
 
-const series = [
+// ─── Données dynamiques depuis le store ──────────────────────────────────────
+
+const competenceLabels = computed(() => dashboardStore.competenceLabels);
+const competenceScores = computed(() => dashboardStore.competenceScores);
+const progressionPercent = computed(() => dashboardStore.progressionPercent);
+
+// Niveau requis fixé à 60% (seuil pédagogique)
+const SEUIL = 60;
+
+const series = computed(() => [
   {
-    name: 'Votre niveau',
-    data: [85, 72, 68, 90, 78, 82],
+    name: "Votre niveau",
+    data: competenceScores.value.length > 0 ? competenceScores.value : [0],
   },
   {
-    name: 'Minimum requis',
-    data: [60, 60, 60, 60, 60, 60],
+    name: "Minimum requis",
+    data:
+      competenceScores.value.length > 0
+        ? Array(competenceScores.value.length).fill(SEUIL)
+        : [SEUIL],
   },
-]
+]);
 
-const categories = [
-  'Managment de projet',
-  'Ingénieurie numérique',
-  'Ingénieurie des données',
-  'Santé numérique',
-  'Devenir ingénieur',
-  'Innovaiton et recherche',
-]
+const categories = computed(() =>
+  competenceLabels.value.length > 0 ? competenceLabels.value : ["—"],
+);
+
+// ─── Statistiques badge/modules ──────────────────────────────────────────────
+
+const nbAcquis = computed(
+  () =>
+    dashboardStore.data?.competences?.filter((c) => c.niveau === "ACQUIS")
+      .length ?? 0,
+);
+
+const balanceData = computed(() => [
+  {
+    icon: "bx-book-open",
+    amount: `${dashboardStore.data?.competences?.length ?? 0} compétences`,
+    label: "Total",
+    color: "primary",
+  },
+  {
+    icon: "bx-trophy",
+    amount: `${nbAcquis.value} acquises`,
+    label: "Validées",
+    color: "success",
+  },
+]);
+
+// ─── Options des graphiques (inchangé visuellement) ──────────────────────────
 
 const chartOptions = computed(() => {
-  const currentTheme = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
-  const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
-  const primaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['high-emphasis-opacity'] })`
-  const secondaryTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['medium-emphasis-opacity'] })`
-  const drawColor = 'rgba(34,48,62,0.7)'
-  
+  const currentTheme = vuetifyTheme.current.value.colors;
+  const variableTheme = vuetifyTheme.current.value.variables;
+  const primaryTextColor = `rgba(${hexToRgb(String(currentTheme["on-surface"]))},${variableTheme["high-emphasis-opacity"]})`;
+  const secondaryTextColor = `rgba(${hexToRgb(String(currentTheme["on-surface"]))},${variableTheme["medium-emphasis-opacity"]})`;
+  const drawColor = "rgba(34,48,62,0.7)";
+
   return {
     radar: {
-      chart: {
-        height: 400,
-        type: 'radar',
-        toolbar: { show: false },
-        dropShadow: {
-          enabled: false,
-        },
-      },
+      chart: { height: 400, type: "radar", toolbar: { show: false } },
       colors: [
-        `rgba(${ hexToRgb(String(currentTheme.primary)) }, 1)`,
-        `rgba(${ hexToRgb(String(currentTheme.warning)) }, 1)`,
+        `rgba(${hexToRgb(String(currentTheme.primary))}, 1)`,
+        `rgba(${hexToRgb(String(currentTheme.warning))}, 1)`,
       ],
-      stroke: {
-        width: 2,
-      },
-      fill: {
-        opacity: 1,
-      },
-      markers: {
-        size: 0,
-        hover: {
-          size: 6,
-        },
-      },
+      stroke: { width: 2 },
+      fill: { opacity: 0.15 },
+      markers: { size: 0, hover: { size: 6 } },
       xaxis: {
-        categories: categories,
+        categories: categories.value,
         labels: {
           style: {
-            colors: Array(categories.length).fill(drawColor),
-            fontSize: '13px',
-            fontFamily: 'Public Sans',
+            colors: Array(categories.value.length).fill(drawColor),
+            fontSize: "13px",
+            fontFamily: "Public Sans",
           },
         },
       },
@@ -73,59 +90,41 @@ const chartOptions = computed(() => {
         min: 0,
         max: 100,
         tickAmount: 5,
-        labels: {
-          style: {
-            colors: drawColor,
-            fontSize: '12px',
-          },
-        },
+        labels: { style: { colors: drawColor, fontSize: "12px" } },
       },
       legend: {
-        position: 'top',
-        horizontalAlign: 'left',
-        fontSize: '13px',
-        fontFamily: 'Public Sans',
+        position: "top",
+        horizontalAlign: "left",
+        fontSize: "13px",
+        fontFamily: "Public Sans",
         labels: { colors: drawColor },
-        markers: {
-          width: 11,
-          height: 11,
-          radius: 10,
-        },
+        markers: { width: 11, height: 11, radius: 10 },
       },
       plotOptions: {
         radar: {
           polygons: {
-            strokeColors: `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`,
-            connectorColors: `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`,
+            strokeColors: `rgba(${hexToRgb(String(variableTheme["border-color"]))},${variableTheme["border-opacity"]})`,
+            connectorColors: `rgba(${hexToRgb(String(variableTheme["border-color"]))},${variableTheme["border-opacity"]})`,
           },
         },
       },
       responsive: [
-        {
-          breakpoint: 768,
-          options: {
-            xaxis: {
-              labels: {
-                show: false,
-              },
-            },
-          },
-        },
+        { breakpoint: 768, options: { xaxis: { labels: { show: false } } } },
       ],
     },
     radial: {
       chart: { sparkline: { enabled: true } },
-      labels: ['Progression'],
+      labels: ["Progression"],
       stroke: { dashArray: 5 },
-      colors: [`rgba(${ hexToRgb(String(currentTheme.primary)) }, 1)`],
+      colors: [`rgba(${hexToRgb(String(currentTheme.primary))}, 1)`],
       states: {
-        hover: { filter: { type: 'none' } },
-        active: { filter: { type: 'none' } },
+        hover: { filter: { type: "none" } },
+        active: { filter: { type: "none" } },
       },
       fill: {
-        type: 'gradient',
+        type: "gradient",
         gradient: {
-          shade: 'dark',
+          shade: "dark",
           opacityTo: 0.5,
           opacityFrom: 1,
           shadeIntensity: 0.5,
@@ -138,86 +137,42 @@ const chartOptions = computed(() => {
         radialBar: {
           endAngle: 150,
           startAngle: -140,
-          hollow: { size: '55%' },
-          track: { background: 'transparent' },
+          hollow: { size: "55%" },
+          track: { background: "transparent" },
           dataLabels: {
             name: {
               offsetY: 25,
               fontWeight: 500,
-              fontSize: '14px',
+              fontSize: "14px",
               color: secondaryTextColor,
-              fontFamily: 'Public Sans',
+              fontFamily: "Public Sans",
             },
             value: {
               offsetY: -15,
               fontWeight: 600,
-              fontSize: '26px',
+              fontSize: "26px",
               color: primaryTextColor,
-              fontFamily: 'Public Sans',
-              formatter: function(val) {
-                return val + '%'
-              },
+              fontFamily: "Public Sans",
+              formatter: (val: number) => val + "%",
             },
           },
         },
       },
-      responsive: [
-        {
-          breakpoint: 900,
-          options: { chart: { height: 200 } },
-        },
-        {
-          breakpoint: 735,
-          options: { chart: { height: 200 } },
-        },
-        {
-          breakpoint: 660,
-          options: { chart: { height: 200 } },
-        },
-        {
-          breakpoint: 600,
-          options: { chart: { height: 200 } },
-        },
-      ],
     },
-  }
-})
-
-const balanceData = [
-  {
-    icon: 'bx-book-open',
-    amount: '12 modules',
-    year: '2026',
-    color: 'primary',
-  },
-  {
-    icon: 'bx-trophy',
-    amount: '8 badges',
-    year: '2026',
-    color: 'success',
-  },
-]
+  };
+});
 
 const moreList = [
-  {
-    title: 'Exporter',
-    value: 'Export',
-  },
-  {
-    title: 'Actualiser',
-    value: 'Refresh',
-  },
-  {
-    title: 'Rapport Détaillé',
-    value: 'Details',
-  },
-]
+  { title: "Exporter", value: "Export" },
+  { title: "Actualiser", value: "Refresh" },
+  { title: "Rapport Détaillé", value: "Details" },
+];
 </script>
 
 <template>
-  <VCard>
+  <VCard class="h-100">
     <VRow no-gutters>
-      <!-- Graphique Radar à gauche -->
+      <!-- Graphique Radar dynamique -->
       <VCol
         cols="12"
         sm="7"
@@ -226,14 +181,20 @@ const moreList = [
       >
         <VCardItem class="pb-0">
           <VCardTitle>Compétences ISIS</VCardTitle>
-
           <template #append>
             <MoreBtn :menu-list="moreList" />
           </template>
         </VCardItem>
 
         <VCardText class="pb-0">
+          <div
+            v-if="dashboardStore.isLoading"
+            class="d-flex justify-center align-center py-16"
+          >
+            <VProgressCircular indeterminate color="primary" />
+          </div>
           <VueApexCharts
+            v-else
             type="radar"
             :height="400"
             :options="chartOptions.radar"
@@ -242,66 +203,49 @@ const moreList = [
         </VCardText>
       </VCol>
 
-      <!-- Graphique Radial 67% à droite -->
-      <VCol
-        cols="12"
-        sm="5"
-        xl="4"
-      >
+      <!-- Graphique Radial progression dynamique -->
+      <VCol cols="12" sm="5" xl="4">
         <VCardText class="text-center pt-10">
-          <VBtn
-            variant="tonal"
-            class="mb-2"
-            append-icon="bx-chevron-down"
+          <!-- Radial chart -->
+          <div
+            v-if="dashboardStore.isLoading"
+            class="d-flex justify-center align-center py-8"
           >
-            2026
-            <VMenu activator="parent">
-              <VList>
-                <VListItem
-                  v-for="(item, index) in ['2026', '2025', '2024']"
-                  :key="index"
-                  :value="item"
-                >
-                  <VListItemTitle>{{ item }}</VListItemTitle>
-                </VListItem>
-              </VList>
-            </VMenu>
-          </VBtn>
+            <VProgressCircular indeterminate color="primary" size="48" />
+          </div>
+          <template v-else>
+            <VueApexCharts
+              type="radialBar"
+              :height="200"
+              :options="chartOptions.radial"
+              :series="[progressionPercent]"
+            />
+            <h6 class="text-h6 text-medium-emphasis mb-8 mt-1">
+              {{ progressionPercent }}% Parcours Complété
+            </h6>
 
-          <!-- radial chart -->
-          <VueApexCharts
-            type="radialBar"
-            :height="200"
-            :options="chartOptions.radial"
-            :series="[67]"
-          />
-
-          <h6 class="text-h6 text-medium-emphasis mb-8 mt-1">
-            67% Parcours Complété
-          </h6>
-
-          <div class="d-flex align-center justify-center flex-wrap gap-x-6 gap-y-3">
             <div
-              v-for="data in balanceData"
-              :key="data.year"
-              class="d-flex align-center gap-2"
+              class="d-flex align-center justify-center flex-wrap gap-x-6 gap-y-3"
             >
-              <VAvatar
-                :icon="data.icon"
-                :color="data.color"
-                size="38"
-                rounded
-                variant="tonal"
-              />
-
-              <div class="text-start">
-                <span class="text-sm"> {{ data.year }}</span>
-                <h6 class="text-h6">
-                  {{ data.amount }}
-                </h6>
+              <div
+                v-for="data in balanceData"
+                :key="data.label"
+                class="d-flex align-center gap-2"
+              >
+                <VAvatar
+                  :icon="data.icon"
+                  :color="data.color"
+                  size="38"
+                  rounded
+                  variant="tonal"
+                />
+                <div class="text-start">
+                  <span class="text-sm">{{ data.label }}</span>
+                  <h6 class="text-h6">{{ data.amount }}</h6>
+                </div>
               </div>
             </div>
-          </div>
+          </template>
         </VCardText>
       </VCol>
     </VRow>
@@ -309,6 +253,5 @@ const moreList = [
 </template>
 
 <style lang="scss">
-@use "@core/scss/template/libs/apex-chart.scss"
+@use "@core/scss/template/libs/apex-chart.scss";
 </style>
-

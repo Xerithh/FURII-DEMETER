@@ -21,27 +21,15 @@ const isMac = ref(false);
 const navSearchItems = [
   {
     title: "Mon Tableau de Bord",
-    to: "/etudiant",
+    to: "/student/dashboard",
     icon: "bx-home-smile",
     keywords: ["tableau", "dashboard", "etudiant"],
   },
   {
-    title: "Quiz sur une UE",
-    to: "/tables",
+    title: "Évaluation Globale",
+    to: "/student/random-quiz",
     icon: "bx-brain",
-    keywords: ["quiz", "ue"],
-  },
-  {
-    title: "Quiz sur une matière",
-    to: "/icons",
-    icon: "bx-brain",
-    keywords: ["quiz", "matiere"],
-  },
-  {
-    title: "Quiz Aléatoire",
-    to: "/icons",
-    icon: "bx-brain",
-    keywords: ["quiz", "aleatoire"],
+    keywords: ["quiz", "evaluation", "globale", "fie3"],
   },
   {
     title: "Modules Suggérés",
@@ -63,31 +51,31 @@ const navSearchItems = [
   },
   {
     title: "Mes Modules",
-    to: "/mes-modules",
+    to: "/student/my-modules",
     icon: "bx-book-open",
     keywords: ["apprentissage", "modules"],
   },
   {
     title: "Historique",
-    to: "/historique",
+    to: "/student/history",
     icon: "bx-history",
     keywords: ["progression"],
   },
   {
     title: "Mon Profil",
-    to: "/account-settings",
+    to: "/student/account-settings",
     icon: "bx-user",
     keywords: ["profil", "compte", "parametres"],
   },
   {
     title: "Bibliothèque",
-    to: "/cards",
+    to: "/student/cards",
     icon: "bx-library",
     keywords: ["ressources", "bibliotheque"],
   },
   {
     title: "Centre d'aide",
-    to: "/centre-aide",
+    to: "/student/help-center",
     icon: "bx-help-circle",
     keywords: ["aide", "faq", "support"],
   },
@@ -191,37 +179,6 @@ onMounted(() => {
     isMac.value = false;
   }
 });
-
-const notifications = [
-  {
-    title: "Nouveau module recommandé",
-    message: "DevOps - CI/CD pour débutants",
-    time: "il y a 2h",
-    icon: "bx-cloud",
-    color: "primary",
-  },
-  {
-    title: "Félicitations ! 🎉",
-    message: "Vous avez obtenu 8 badges cette semaine",
-    time: "il y a 5h",
-    icon: "bx-trophy",
-    color: "success",
-  },
-  {
-    title: "Rappel d'évaluation",
-    message: "Quiz JavaScript - à rendre avant demain",
-    time: "il y a 1j",
-    icon: "bx-list-check",
-    color: "warning",
-  },
-  {
-    title: "Score amélioré",
-    message: "Votre score en Compréhension a augmenté de 5%",
-    time: "il y a 2j",
-    icon: "bx-trending-up",
-    color: "info",
-  },
-];
 </script>
 
 <template>
@@ -297,59 +254,6 @@ const notifications = [
         </div>
 
         <VSpacer />
-
-        <IconBtn class="me-2">
-          <VIcon icon="bx-bell" />
-
-          <!-- Notifications Menu -->
-          <VMenu
-            activator="parent"
-            width="380"
-            location="bottom end"
-            offset="14px"
-          >
-            <VList>
-              <VListItem>
-                <VListItemTitle class="font-weight-semibold text-h6">
-                  Notifications
-                </VListItemTitle>
-              </VListItem>
-
-              <VDivider class="my-2" />
-
-              <VListItem v-for="(notif, idx) in notifications" :key="idx" link>
-                <template #prepend>
-                  <VAvatar
-                    :icon="notif.icon"
-                    :color="notif.color"
-                    size="40"
-                    rounded
-                    variant="tonal"
-                    class="me-3"
-                  />
-                </template>
-
-                <VListItemTitle class="font-weight-semibold">
-                  {{ notif.title }}
-                </VListItemTitle>
-                <VListItemSubtitle class="text-sm">
-                  {{ notif.message }}
-                </VListItemSubtitle>
-                <VListItemSubtitle class="text-xs text-disabled">
-                  {{ notif.time }}
-                </VListItemSubtitle>
-              </VListItem>
-
-              <VDivider class="my-2" />
-
-              <VListItem link>
-                <VListItemTitle class="text-center text-primary">
-                  Voir toutes les notifications
-                </VListItemTitle>
-              </VListItem>
-            </VList>
-          </VMenu>
-        </IconBtn>
 
         <NavbarThemeSwitcher class="me-1" />
 

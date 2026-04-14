@@ -1,17 +1,15 @@
 <script setup>
 import VerticalNavSectionTitle from "@/@layouts/components/VerticalNavSectionTitle.vue";
-import VerticalNavGroup from "@layouts/components/VerticalNavGroup.vue";
 import VerticalNavLink from "@layouts/components/VerticalNavLink.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const handleLogout = () => {
-  // clear session/local storage if needed
+  // trigger global event to open logout confirmation handled by UserProfile
   try {
-    localStorage.removeItem("authToken");
+    window.dispatchEvent(new CustomEvent("open-logout-dialog"));
   } catch (e) {}
-  router.push("/login");
 };
 </script>
 
@@ -21,67 +19,23 @@ const handleLogout = () => {
     :item="{
       title: 'Mon Tableau de Bord',
       icon: 'bx-home-smile',
-      to: '/etudiant',
+      to: '/student/dashboard',
     }"
   />
 
-  <!-- 👉 Quiz (remonté en haut) -->
-  <VerticalNavGroup
+  <!-- 👉 Quiz -->
+  <VerticalNavSectionTitle
     :item="{
-      title: 'Quiz',
-      icon: 'bx-brain',
-      neutral: true,
+      heading: 'Quizz',
     }"
-  >
-    <VerticalNavLink
-      :item="{
-        title: 'Quiz sur une UE',
-        to: '/tables',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Quiz sur une matière',
-        to: '/icons',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Quiz Aléatoire',
-        to: '/icons',
-      }"
-    />
-  </VerticalNavGroup>
-
-  <!-- 👉 Recommandations -->
-  <VerticalNavGroup
+  />
+  <VerticalNavLink
     :item="{
-      title: 'Recommandations',
+      title: 'Évaluation Globale',
       icon: 'bx-brain',
-      badgeContent: '3',
-      badgeClass: 'bg-success',
-      neutral: true,
+      to: '/student/random-quiz',
     }"
-  >
-    <VerticalNavLink
-      :item="{
-        title: 'Modules Suggérés',
-        to: '/modules-suggeres',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Parcours Personnalisés',
-        to: '/parcours-personnalises',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Ressources Complémentaires',
-        to: '/ressources-complementaires',
-      }"
-    />
-  </VerticalNavGroup>
+  />
 
   <!-- 👉 Mon Apprentissage -->
   <VerticalNavSectionTitle
@@ -93,22 +47,14 @@ const handleLogout = () => {
     :item="{
       title: 'Mes Modules',
       icon: 'bx-book-open',
-      to: '/mes-modules',
+      to: '/student/my-modules',
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Historique',
       icon: 'bx-history',
-      to: '/historique',
-    }"
-  />
-
-  <VerticalNavLink
-    :item="{
-      title: 'Mon Profil',
-      icon: 'bx-user',
-      to: '/account-settings',
+      to: '/student/history',
     }"
   />
 
@@ -122,7 +68,7 @@ const handleLogout = () => {
     :item="{
       title: 'Bibliothèque',
       icon: 'bx-library',
-      to: '/cards',
+      to: '/student/cards',
     }"
   />
 
@@ -136,7 +82,7 @@ const handleLogout = () => {
     :item="{
       title: 'Centre d\'aide',
       icon: 'bx-group',
-      to: '/centre-aide',
+      to: '/student/help-center',
     }"
   />
 
@@ -144,6 +90,14 @@ const handleLogout = () => {
   <VerticalNavSectionTitle
     :item="{
       heading: 'Compte',
+    }"
+  />
+
+  <VerticalNavLink
+    :item="{
+      title: 'Mon Profil',
+      icon: 'bx-user',
+      to: '/student/account-settings',
     }"
   />
 
