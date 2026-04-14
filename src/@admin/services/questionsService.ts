@@ -1,9 +1,9 @@
-import api from '@/services/api';
 import type {
-  QuestionDTO,
-  CreateQuestionDTO,
-  ApiResponse,
+    ApiResponse,
+    CreateQuestionDTO,
+    QuestionDTO,
 } from '@/@admin/types/admin';
+import api from '@/services/api';
 
 /**
  * Questions Service - API calls for questions management
@@ -14,10 +14,10 @@ export const questionsService = {
    * Récupère toutes les questions PUBLIC (estCorrect masqué)
    */
   async getAll(): Promise<QuestionDTO[]> {
-    const response = await api.get<ApiResponse<QuestionDTO[]>>(
+    const response = await api.get<QuestionDTO[]>(
       '/api/v1/questions'
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
@@ -25,10 +25,10 @@ export const questionsService = {
    * Récupère TOUTES les questions (actives + inactives, admin seulement)
    */
   async getAllAdmin(): Promise<QuestionDTO[]> {
-    const response = await api.get<ApiResponse<QuestionDTO[]>>(
+    const response = await api.get<QuestionDTO[]>(
       '/api/v1/admin/questions'
     );
-    return response.data.data;
+    return response.data;
   },
 
   /**
