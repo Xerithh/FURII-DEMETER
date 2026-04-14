@@ -33,6 +33,19 @@ export interface ActiviteRecenteDTO {
   resultat: string;
 }
 
+export interface Activite7JoursDTO {
+  id?: number | string;
+  date: string;
+  type: string;
+  titre: string;
+  resultat?: string;
+  sessionId?: number;
+  competenceId?: number;
+  competenceNom?: string;
+  niveauAvant?: number | string;
+  niveauApres?: number | string;
+}
+
 export interface ApprenantDashboardDTO {
   utilisateur: UtilisateurDTO;
   progression: ProgressionDTO;
@@ -80,6 +93,11 @@ export interface CompetenceProgressDTO {
   nom: string;
   score: number;
   niveau?: string;
+  description?: string;
+  niveauAtteint?: string | number;
+  niveauPrecedent?: string | number;
+  dateValidation?: string;
+  derniereValidation?: string;
 }
 
 // ─── Service ──────────────────────────────────────────────────────────────────
@@ -100,6 +118,14 @@ export const dashboardService = {
    */
   async getSessions(): Promise<SessionTest[]> {
     const response = await api.get('/api/v1/dashboard/apprenant/sessions');
+    return response.data.data ?? response.data;
+  },
+
+  /**
+   * Récupère le flux d'activité des 7 derniers jours
+   */
+  async getRecentActivity7Days(): Promise<Activite7JoursDTO[]> {
+    const response = await api.get('/api/v1/dashboard/apprenant/activite/7-jours');
     return response.data.data ?? response.data;
   },
 
