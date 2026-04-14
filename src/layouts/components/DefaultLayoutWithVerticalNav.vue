@@ -4,8 +4,6 @@ import NavbarThemeSwitcher from "@/layouts/components/NavbarThemeSwitcher.vue";
 import NavItems from "@/layouts/components/NavItems.vue";
 import UserProfile from "@/layouts/components/UserProfile.vue";
 
-// TODO: Remplacer par votre logo AUXO au format PNG
-// import logoAuxo from '@images/logo-auxo.png'
 import logoAuxo from "@images/logo-auxo.png";
 import VerticalNavLayout from "@layouts/components/VerticalNavLayout.vue";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
@@ -18,76 +16,65 @@ const searchValue = ref("");
 const searchFocused = ref(false);
 const isMac = ref(false);
 
-const navSearchItems = [
-  {
-    title: "Mon Tableau de Bord",
-    to: "/student/dashboard",
-    icon: "bx-home-smile",
-    keywords: ["tableau", "dashboard", "etudiant"],
-  },
-  {
-    title: "Évaluation Globale",
-    to: "/student/random-quiz",
-    icon: "bx-brain",
-    keywords: ["quiz", "evaluation", "globale", "fie3"],
-  },
-  {
-    title: "Modules Suggérés",
-    to: "/modules-suggeres",
-    icon: "bx-bulb",
-    keywords: ["recommandations", "modules"],
-  },
-  {
-    title: "Parcours Personnalisés",
-    to: "/parcours-personnalises",
-    icon: "bx-map",
-    keywords: ["parcours"],
-  },
-  {
-    title: "Ressources Complémentaires",
-    to: "/ressources-complementaires",
-    icon: "bx-book-alt",
-    keywords: ["ressources"],
-  },
-  {
-    title: "Mes Modules",
-    to: "/student/my-modules",
-    icon: "bx-book-open",
-    keywords: ["apprentissage", "modules"],
-  },
-  {
-    title: "Historique",
-    to: "/student/history",
-    icon: "bx-history",
-    keywords: ["progression"],
-  },
-  {
-    title: "Mon Profil",
-    to: "/student/account-settings",
-    icon: "bx-user",
-    keywords: ["profil", "compte", "parametres"],
-  },
-  {
-    title: "Bibliothèque",
-    to: "/student/cards",
-    icon: "bx-library",
-    keywords: ["ressources", "bibliotheque"],
-  },
-  {
-    title: "Centre d'aide",
-    to: "/student/help-center",
-    icon: "bx-help-circle",
-    keywords: ["aide", "faq", "support"],
-  },
-];
+const navSearchItems = computed(() => {
+  // Build suggestions from router routes to avoid stale hard-coded links
+  const routes = router.getRoutes();
+
+  const items = routes
+    .filter((r) => {
+      // keep only readable app routes (exclude root, redirects, wildcard, parametric)
+      if (!r.path) return false;
+      if (r.path === "/") return false;
+      if (r.path.includes(":")) return false;
+      if (r.redirect) return false;
+      // skip internal debug or API-like paths
+      if (r.meta && r.meta.internal) return false;
+      return true;
+    })
+    .map((r) => {
+      const title =
+        r.meta?.title ||
+        r.name ||
+        r.path.split("/").filter(Boolean).slice(-1)[0] ||
+        r.path;
+
+      const keywords = Array.isArray(r.meta?.keywords)
+        ? r.meta.keywords
+        : title
+          ? String(title)
+              .toString()
+              .split(/[-_\s\/]+/)
+          : [];
+
+      return {
+        title: String(title),
+        to: r.path,
+        icon: r.meta?.icon || "bx-link",
+        keywords,
+      };
+    });
+
+  // Return top items, de-duplicated by `to`
+  const seen = new Set();
+  const deduped = [];
+  for (const it of items) {
+    if (seen.has(it.to)) continue;
+    seen.add(it.to);
+    deduped.push(it);
+  }
+
+  return deduped.slice(0, 40);
+});
 
 const normalizedSearch = computed(() => searchValue.value.trim().toLowerCase());
 const filteredSearchItems = computed(() => {
   const query = normalizedSearch.value;
 
-  if (!query) return navSearchItems.slice(0, 8);
+  const source = navSearchItems.value || [];
 
-  return navSearchItems
+  if (!query) return source.slice(0, 8);
+
+  return source
     .filter((item) => {
       const haystack =
         `${item.title} ${item.to} ${(item.keywords || []).join(" ")}`.toLowerCase();
@@ -263,7 +250,12 @@ onMounted(() => {
 
     <template #vertical-nav-header="{ toggleIsOverlayNavActive }">
       <RouterLink to="/" class="app-logo app-title-wrapper">
-        <img :src="logoAuxo" alt="AUXO Logo" class="app-logo-img" height="32" />
+        <img
+          :src="logoAuxo"
+          alt="ISIS-U Logo"
+          class="app-logo-img"
+          height="32"
+        />
       </RouterLink>
 
       <IconBtn

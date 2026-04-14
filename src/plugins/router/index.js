@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/auth'
+import { useQuizStore } from '@/stores/quizStore'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from './routes'
 
@@ -9,6 +10,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
+  const quizStore = useQuizStore()
 
   console.log(`[Router Guard] Navigation vers: ${to.path}`)
   console.log(`[Router Guard] Etat connexion store: ${authStore.isAuthenticated}`)
@@ -41,6 +43,17 @@ router.beforeEach(async (to, from, next) => {
       console.log('[Router Guard] Redirection manuelle: echec correspondance role')
       return next('/login') 
     }
+  }
+
+  const lockedByStore = quizStore.sessionActive
+  const lockedByStorage = localStorage.getItem('quiz-session-active') === '1'
+  const isQuizLocked = lockedByStore || lockedByStorage
+  const isQuizSessionRoute = to.path.startsWith('/student/quiz/session')
+  const isQuizResultsRoute = to.path.startsWith('/student/quiz/results')
+
+  if (isQuizLocked && !isQuizSessionRoute && !isQuizResultsRoute) {
+    console.log('[Router Guard] Session quiz active: navigation bloquee hors evaluation')
+    return next('/student/quiz/session')
   }
 
   next()

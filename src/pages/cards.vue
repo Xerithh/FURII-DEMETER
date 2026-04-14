@@ -3,6 +3,7 @@ import { computed, ref, onMounted } from "vue";
 import { referentielService } from "@/services/referentielService";
 import type { ModuleReferentiel } from "@/services/referentielService";
 import ModuleCard from "@/components/ModuleCard.vue";
+import PageHeader from "@/components/PageHeader.vue";
 
 const modules = ref<ModuleReferentiel[]>([]);
 const isLoading = ref(true);
@@ -52,17 +53,11 @@ const modulesFiltres = computed(() => {
       <VCol cols="12">
         <VCard>
           <VCardText>
-            <div
-              class="d-flex align-center justify-space-between flex-wrap gap-4"
-            >
-              <div>
-                <h4 class="text-h4 mb-2">Bibliothèque de Modules 📚</h4>
-                <p class="text-body-1 text-medium-emphasis">
-                  Explorez l'ensemble des modules disponibles dans le
-                  référentiel.
-                </p>
-              </div>
-            </div>
+            <PageHeader
+              icon="bx-library"
+              title="Bibliothèque de Modules"
+              subtitle="Explorez l'ensemble des modules disponibles dans le référentiel."
+            />
           </VCardText>
         </VCard>
       </VCol>
