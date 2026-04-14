@@ -1,16 +1,16 @@
-import { defineStore } from 'pinia';
 import { adminService } from '@/@admin/services/adminService';
 import { questionsService } from '@/@admin/services/questionsService';
-import { useToastStore } from '@/stores/toast';
 import type {
-  AdminDashboardDTO,
-  UtilisateurDashboardDTO,
-  SessionStatisticsDTO,
-  QuestionDTO,
-  CreateQuestionDTO,
-  Role,
-  StatutCompte,
+    AdminDashboardDTO,
+    CreateQuestionDTO,
+    QuestionDTO,
+    Role,
+    SessionStatisticsDTO,
+    StatutCompte,
+    UtilisateurDashboardDTO,
 } from '@/@admin/types/admin';
+import { useToastStore } from '@/stores/toast';
+import { defineStore } from 'pinia';
 
 interface AdminState {
   dashboard: AdminDashboardDTO | null;

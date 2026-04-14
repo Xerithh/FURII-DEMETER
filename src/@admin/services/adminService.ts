@@ -1,15 +1,15 @@
-import api from '@/services/api';
 import type {
-  AdminDashboardDTO,
-  UtilisateurDashboardDTO,
-  SessionStatisticsDTO,
-  QuestionDTO,
-  ApiResponse,
-  Role,
-  StatutCompte,
-  TypeQuestion,
-  NiveauDifficulte,
+    AdminDashboardDTO,
+    ApiResponse,
+    NiveauDifficulte,
+    QuestionDTO,
+    Role,
+    SessionStatisticsDTO,
+    StatutCompte,
+    TypeQuestion,
+    UtilisateurDashboardDTO,
 } from '@/@admin/types/admin';
+import api from '@/services/api';
 
 /**
  * Admin Service - API calls for admin dashboard

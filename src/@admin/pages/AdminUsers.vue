@@ -42,7 +42,8 @@
         <VCardText class="pa-6">
           <p v-if="selectedUser" class="text-body-2">
             <strong>Email:</strong> {{ selectedUser.email }} <br />
-            <strong>Nom:</strong> {{ selectedUser.nom }} {{ selectedUser.prenom }}
+            <strong>Nom:</strong> {{ selectedUser.nom }}
+            {{ selectedUser.prenom }}
             <br />
             <strong>Rôle:</strong> {{ selectedUser.role }} <br />
             <strong>Statut:</strong> {{ selectedUser.statut }} <br />
@@ -78,11 +79,7 @@
         <VCardActions>
           <VSpacer />
           <VBtn text @click="showConfirmDeleteDialog = false">Annuler</VBtn>
-          <VBtn
-            color="error"
-            @click="confirmDelete"
-            :loading="isDeleting"
-          >
+          <VBtn color="error" @click="confirmDelete" :loading="isDeleting">
             Supprimer
           </VBtn>
         </VCardActions>
@@ -92,11 +89,11 @@
 </template>
 
 <script setup lang="ts">
+import UsersTable from "@/@admin/components/tables/UsersTable.vue";
 import { useAdminStore } from "@/@admin/stores/admin";
+import type { UtilisateurDashboardDTO } from "@/@admin/types/admin";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref } from "vue";
-import UsersTable from "@/@admin/components/tables/UsersTable.vue";
-import type { UtilisateurDashboardDTO } from "@/@admin/types/admin";
 
 const adminStore = useAdminStore();
 const toastStore = useToastStore();
@@ -177,4 +174,3 @@ const confirmDelete = async () => {
   }
 };
 </script>
-

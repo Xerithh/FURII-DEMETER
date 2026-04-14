@@ -62,11 +62,7 @@
         <VCardActions>
           <VSpacer />
           <VBtn text @click="showConfirmDeleteDialog = false">Annuler</VBtn>
-          <VBtn
-            color="error"
-            @click="confirmDelete"
-            :loading="isDeleting"
-          >
+          <VBtn color="error" @click="confirmDelete" :loading="isDeleting">
             Supprimer
           </VBtn>
         </VCardActions>
@@ -91,7 +87,8 @@
             <strong>Durée:</strong> {{ selectedQuestion.dureeSecondes }}s <br />
             <strong>Actif:</strong> {{ selectedQuestion.actif ? "Oui" : "Non" }}
             <br />
-            <strong>Créée:</strong> {{ formatDate(selectedQuestion.dateCreation) }}
+            <strong>Créée:</strong>
+            {{ formatDate(selectedQuestion.dateCreation) }}
           </p>
         </VCardText>
         <VDivider />
@@ -105,12 +102,12 @@
 </template>
 
 <script setup lang="ts">
+import QuestionForm from "@/@admin/components/forms/QuestionForm.vue";
+import QuestionsTable from "@/@admin/components/tables/QuestionsTable.vue";
 import { useAdminStore } from "@/@admin/stores/admin";
+import type { QuestionDTO } from "@/@admin/types/admin";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref } from "vue";
-import QuestionsTable from "@/@admin/components/tables/QuestionsTable.vue";
-import QuestionForm from "@/@admin/components/forms/QuestionForm.vue";
-import type { QuestionDTO } from "@/@admin/types/admin";
 
 const adminStore = useAdminStore();
 const toastStore = useToastStore();
@@ -234,4 +231,3 @@ const formatDate = (dateStr: string) => {
   }).format(date);
 };
 </script>
-
