@@ -73,10 +73,26 @@
     >
       <!-- Email Column (Clickable) -->
       <template #item.email="{ item }">
-        <div class="email-cell" @click="emitShowDetail(item)">
-          {{ item.email }}
-        </div>
-      </template>
+  <div class="d-flex align-center gap-3" @click="emitShowDetail(item)" style="cursor: pointer">
+    <VAvatar
+      :color="item.role === 'CANDIDAT_VAE' ? 'success' : 'primary'"
+      variant="tonal"
+      size="36"
+    >
+      <span class="text-sm font-weight-bold">
+        {{ (item.prenom?.charAt(0) || item.email?.charAt(0) || '?').toUpperCase() }}
+      </span>
+    </VAvatar>
+    <div>
+      <p class="text-sm font-weight-medium text-primary mb-0">
+        {{ item.email }}
+      </p>
+      <p class="text-xs text-disabled mb-0">
+        {{ item.nombreSessions }} session(s)
+      </p>
+    </div>
+  </div>
+</template>
 
       <!-- Nom Column (Clickable) -->
       <template #item.nom="{ item }">

@@ -21,6 +21,69 @@
       indeterminate
       class="mb-6"
     />
+    <!-- Stats rapides -->
+<VRow class="mb-6">
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="d-flex align-center gap-3 pa-4">
+        <VAvatar color="primary" variant="tonal" rounded size="48">
+          <VIcon icon="bx-group" size="24" />
+        </VAvatar>
+        <div>
+          <p class="text-h5 font-weight-bold mb-0">
+            {{ adminStore.users.length }}
+          </p>
+          <p class="text-xs text-disabled mb-0">Total</p>
+        </div>
+      </VCardText>
+    </VCard>
+  </VCol>
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="d-flex align-center gap-3 pa-4">
+        <VAvatar color="success" variant="tonal" rounded size="48">
+          <VIcon icon="bx-user-check" size="24" />
+        </VAvatar>
+        <div>
+          <p class="text-h5 font-weight-bold mb-0 text-success">
+            {{ adminStore.users.filter(u => u.statut === 'ACTIF').length }}
+          </p>
+          <p class="text-xs text-disabled mb-0">Actifs</p>
+        </div>
+      </VCardText>
+    </VCard>
+  </VCol>
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="d-flex align-center gap-3 pa-4">
+        <VAvatar color="warning" variant="tonal" rounded size="48">
+          <VIcon icon="bx-time" size="24" />
+        </VAvatar>
+        <div>
+          <p class="text-h5 font-weight-bold mb-0 text-warning">
+            {{ adminStore.users.filter(u => u.statut === 'EN_ATTENTE_OTP').length }}
+          </p>
+          <p class="text-xs text-disabled mb-0">En attente</p>
+        </div>
+      </VCardText>
+    </VCard>
+  </VCol>
+  <VCol cols="6" sm="3">
+    <VCard>
+      <VCardText class="d-flex align-center gap-3 pa-4">
+        <VAvatar color="info" variant="tonal" rounded size="48">
+          <VIcon icon="bx-briefcase" size="24" />
+        </VAvatar>
+        <div>
+          <p class="text-h5 font-weight-bold mb-0 text-info">
+            {{ adminStore.users.filter(u => u.role === 'CANDIDAT_VAE').length }}
+          </p>
+          <p class="text-xs text-disabled mb-0">Candidats VAE</p>
+        </div>
+      </VCardText>
+    </VCard>
+  </VCol>
+</VRow>
 
     <!-- Users Table -->
     <UsersTable
