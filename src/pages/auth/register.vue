@@ -399,12 +399,6 @@ const sideImage = "/images/auth-placeholder.jpg";
               >
               ·
               <RouterLink
-                :to="{ name: 'help' }"
-                class="text-primary text-decoration-none"
-                >Aide</RouterLink
-              >
-              ·
-              <RouterLink
                 :to="{ name: 'support' }"
                 class="text-primary text-decoration-none"
                 >Support</RouterLink

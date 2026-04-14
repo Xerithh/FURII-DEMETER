@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import logoAuxo from "@/assets/images/logo-auxo.png";
+import { useAuthStore } from "@/stores/auth";
 
 defineProps<{
   isPastHero: boolean;
 }>();
 
 const isMobileMenuOpen = ref(false);
+const authStore = useAuthStore();
 
 const syncBodyScrollLock = (isLocked: boolean) => {
   document.body.style.overflow = isLocked ? "hidden" : "";
@@ -62,10 +65,11 @@ onBeforeUnmount(() => {
             class="flex items-center gap-3 text-sm font-semibold"
             :class="isPastHero ? 'text-slate-900' : 'text-white'"
           >
-            <span
-              class="icon-box inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--isis-blue)] text-white"
-              >I</span
-            >
+            <img
+              :src="logoAuxo"
+              alt="logo-ISIS-U"
+              class="h-6 w-6 object-contain"
+            />
           </a>
         </div>
 
@@ -103,17 +107,21 @@ onBeforeUnmount(() => {
             >
           </div>
 
-          <a
-            href="/login"
-            class="btn-small hidden items-center rounded-xl border bg-transparent px-4 py-1 text-sm transition-colors sm:inline-flex"
-            :class="
-              isPastHero
-                ? 'border-slate-300 text-slate-900 hover:bg-slate-100/80'
-                : 'border-white/80 text-white hover:bg-white/5 force-white-border'
-            "
+          <RouterLink
+            v-if="!authStore.isAuthenticated"
+            to="/login"
+            class="hidden items-center rounded-xl bg-[#1d4ed8] px-4 py-1 text-sm font-semibold text-white shadow-sm sm:inline-flex"
           >
             Connexion
-          </a>
+          </RouterLink>
+
+          <RouterLink
+            v-else
+            to="/student/dashboard"
+            class="hidden items-center rounded-xl bg-[#1d4ed8] px-4 py-1 text-sm font-semibold text-white shadow-sm sm:inline-flex"
+          >
+            Dashboard
+          </RouterLink>
 
           <button
             type="button"
@@ -194,12 +202,23 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="mobile-login-cta mt-auto pt-5 px-6">
-        <a
-          href="/login"
-          class="inline-flex h-14 w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-6 text-lg font-semibold text-[var(--isis-blue)] transition hover:bg-slate-50"
+        <RouterLink
+          v-if="!authStore.isAuthenticated"
+          to="/login"
+          class="inline-flex h-14 w-full items-center justify-center rounded-xl bg-[#1d4ed8] px-6 text-lg font-semibold text-white transition hover:bg-[#1e40af]"
           @click="closeMobileMenu"
-          >Se connecter</a
         >
+          Se connecter
+        </RouterLink>
+
+        <RouterLink
+          v-else
+          to="/student/dashboard"
+          class="inline-flex h-14 w-full items-center justify-center rounded-xl bg-[#1d4ed8] px-6 text-lg font-semibold text-white transition hover:bg-[#1e40af]"
+          @click="closeMobileMenu"
+        >
+          Dashboard
+        </RouterLink>
       </div>
     </div>
   </div>

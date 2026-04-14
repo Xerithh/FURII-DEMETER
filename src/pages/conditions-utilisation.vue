@@ -1,25 +1,16 @@
 <script setup lang="ts">
+import LandingFooter from "@/components/landing/LandingFooter.vue";
+import LandingHeader from "@/components/landing/LandingHeader.vue";
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 
 const router = useRouter();
-
-const sections = [
-  {
-    title: "Acceptation des CGU",
-    text: "L'utilisation d'ISISU implique l'acceptation des présentes conditions d'utilisation.",
-  },
-  {
-    title: "Usage du service",
-    text: "Les services sont destinés à un usage pédagogique personnel. Toute tentative de fraude est interdite.",
-  },
-  {
-    title: "Propriété des contenus",
-    text: "Les contenus, quiz et supports restent la propriété d'ISISU et de leurs auteurs.",
-  },
-  {
-    title: "Suspension de compte",
-    text: "En cas de non-respect des règles, ISISU peut suspendre l'accès au compte utilisateur.",
-  },
+const currentYear = new Date().getFullYear();
+const paragraphs = [
+  "L'utilisation d'ISISU implique l'acceptation des conditions generales de la plateforme et des regles de bon usage applicables aux fonctionnalites pedagogiques proposees.",
+  "Le service est destine a un usage personnel d'apprentissage. Toute tentative de contournement des evaluations, de fraude ou de detournement technique est strictement interdite.",
+  "Les contenus pedagogiques, quiz, modules et supports d'accompagnement restent proteges par les droits de propriete intellectuelle de leurs auteurs et des entites contributrices.",
+  "En cas de non-respect des conditions d'utilisation, ISISU peut suspendre temporairement ou definitivement l'acces au compte, dans le respect des procedures internes en vigueur.",
 ];
 
 const goBack = () => {
@@ -28,39 +19,24 @@ const goBack = () => {
     return;
   }
 
-  router.push({ name: "help" });
+  router.push({ path: "/" });
 };
+
+onMounted(() => {
+  window.scrollTo({ top: 0 });
+});
 </script>
 
 <template>
-  <VContainer class="legal-page py-12 px-6">
-    <VRow justify="center">
-      <VCol cols="12" md="10" lg="8">
-        <header class="text-center mb-10">
-          <h1 class="text-h3 font-weight-bold isis-title mb-3">
-            Conditions d'Utilisation
-          </h1>
-          <p class="text-body-1 text-medium-emphasis mx-auto legal-intro">
-            Règles de fonctionnement de la plateforme et engagements mutuels.
-          </p>
-        </header>
+  <div class="landing-premium min-h-screen bg-white text-slate-900">
+    <LandingHeader :is-past-hero="true" />
 
-        <section class="legal-sections">
-          <article
-            v-for="section in sections"
-            :key="section.title"
-            class="legal-block"
-          >
-            <h2 class="text-h6 font-weight-bold isis-title mb-2">
-              {{ section.title }}
-            </h2>
-            <p class="text-body-1 text-medium-emphasis mb-0">
-              {{ section.text }}
-            </p>
-          </article>
-        </section>
-
-        <div class="d-flex justify-center mt-10">
+    <section
+      class="section-block section-white px-6 py-16 lg:px-10"
+      data-reveal
+    >
+      <div class="section-inner mx-auto w-full max-w-4xl">
+        <div class="mb-6">
           <VBtn
             variant="outlined"
             color="primary"
@@ -71,37 +47,54 @@ const goBack = () => {
             Retour
           </VBtn>
         </div>
-      </VCol>
-    </VRow>
-  </VContainer>
+        <div class="mb-12 space-y-6 text-left">
+          <p
+            class="ui-subtitle text-sm uppercase tracking-[0.16em] text-[#1d4ed8]"
+          >
+            Cadre d'Utilisation
+          </p>
+          <h1 class="section-title text-3xl sm:text-4xl font-bold">
+            Conditions d'Utilisation
+          </h1>
+          <div class="space-y-6 text-lg leading-relaxed text-slate-700">
+            <div class="space-y-4">
+              <p
+                v-for="(paragraph, index) in paragraphs"
+                :key="`terms-${index}`"
+                class="desc-text text-lg text-slate-600"
+              >
+                {{ paragraph }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <LandingFooter :current-year="currentYear" />
+  </div>
 </template>
 
 <style scoped>
-.legal-page {
-  background: #fff;
+.section-block {
   min-height: 100vh;
+  display: flex;
+  align-items: center;
 }
 
-.isis-title {
+.section-inner {
+  width: 100%;
+}
+
+.section-white {
+  background: #fff;
+}
+
+.ui-subtitle {
   color: #1d4ed8;
 }
 
-.legal-intro {
-  max-width: 760px;
-  line-height: 1.8;
-}
-
-.legal-sections {
-  display: grid;
-  gap: 1rem;
-}
-
-.legal-block {
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 1.25rem;
-  background: #fff;
-}
+/* section-title color removed to inherit default color */
 
 .back-btn {
   border-color: #1d4ed8;

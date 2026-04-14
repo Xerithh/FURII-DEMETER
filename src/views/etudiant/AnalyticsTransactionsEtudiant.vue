@@ -34,7 +34,10 @@ const moreList = [
 </script>
 
 <template>
-  <VCard title="Activités d'Apprentissage" class="h-100">
+  <VCard
+    title="Activités d'Apprentissage"
+    class="h-100 flex-grow-1 d-flex flex-column"
+  >
     <template #append>
       <MoreBtn :menu-list="moreList" />
     </template>

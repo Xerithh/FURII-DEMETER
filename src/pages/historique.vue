@@ -1,19 +1,11 @@
 ﻿<script setup lang="ts">
-import {
-  Award,
-  Book,
-  Brain,
-  Calendar,
-  Award as Certification,
-  Check,
-  Code,
-  PlayCircle,
-  Star,
-  X,
-} from "lucide-vue-next";
+import { Award, Brain, Calendar, Check, Star, X } from "lucide-vue-next";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { dashboardService } from "@/services/dashboardService";
+import PageHeader from "@/components/PageHeader.vue";
+import { storeToRefs } from "pinia";
+import { useHistoryStore, type HistoryEventType } from "@/stores/history";
+import { useToastStore } from "@/stores/toast";
 
 const undrawSvgModules = import.meta.glob("/public/images/svg/*.svg", {
   eager: true,
@@ -26,57 +18,83 @@ const undrawSvgPool = Object.keys(undrawSvgModules)
   .filter(Boolean);
 
 const undrawMap: Record<string, string> = {
-  Évaluation: "undraw_certificate.svg",
-  Module: "undraw_online_learning.svg",
-  Projet: "undraw_project.svg",
-  Badge: "undraw_awards.svg",
-  Quiz: "undraw_quiz.svg",
-  Compétence: "undraw_problem_solving.svg",
-  Certificat: "undraw_certificate.svg",
+  Session: "undraw_certificate.svg",
+  "Validation de compétence": "undraw_problem_solving.svg",
+  "Palier franchi": "undraw_awards.svg",
 };
 
-const historique = ref<any[]>([]);
+const historyStore = useHistoryStore();
+const toastStore = useToastStore();
+const { events, isLoading, isLoadingDetails, sessionDrawerDetail } =
+  storeToRefs(historyStore);
 
 const isDrawerOpen = ref(false);
 const activeItem = ref<any>(null);
-const isLoading = ref(true);
-const isLoadingDetails = ref(false);
-const detailsData = ref<any>(null);
 
 const router = useRouter();
 
+const eventTypeLabel: Record<HistoryEventType, string> = {
+  SESSION: "Session",
+  COMPETENCE_VALIDATION: "Validation de compétence",
+  MILESTONE_REACHED: "Palier franchi",
+};
+
+const eventTypeIcon = (eventType: HistoryEventType, status?: string) => {
+  if (eventType === "SESSION") return status === "COMPLETED" ? Check : Brain;
+  if (eventType === "MILESTONE_REACHED") return Award;
+  return Star;
+};
+
+const eventTypeColor = (eventType: HistoryEventType, status?: string) => {
+  if (eventType === "SESSION")
+    return status === "COMPLETED"
+      ? { color: "text-green-600", bg: "bg-green-600" }
+      : { color: "text-blue-600", bg: "bg-blue-600" };
+
+  if (eventType === "MILESTONE_REACHED")
+    return { color: "text-amber-600", bg: "bg-amber-600" };
+
+  return { color: "text-indigo-600", bg: "bg-indigo-600" };
+};
+
+const historique = computed(() => {
+  return events.value.map((event) => {
+    const { color, bg } = eventTypeColor(event.eventType, event.status);
+    return {
+      id: event.id,
+      date: historyStore.formatDateAbsolute(event.occurredAt),
+      relativeDate: historyStore.formatDateRelative(event.occurredAt),
+      preciseDate: historyStore.formatDatePrecise(event.occurredAt),
+      type: eventTypeLabel[event.eventType],
+      eventType: event.eventType,
+      action: event.title,
+      details: event.details,
+      icon: eventTypeIcon(event.eventType, event.status),
+      color,
+      bg,
+      note: event.score,
+      status: event.status,
+      sessionId: event.sessionId,
+      competenceId: event.competenceId,
+      competenceName: event.competenceName,
+      competenceDescription: event.competenceDescription,
+      levelBefore: event.levelBefore,
+      levelAfter: event.levelAfter,
+      progressPercentage:
+        event.score !== undefined
+          ? historyStore.scoreToPercent(event.score)
+          : 0,
+    };
+  });
+});
+
 const fetchHistory = async () => {
-  isLoading.value = true;
-  try {
-    const data = await dashboardService.getSessions();
-    historique.value = data.map((session: any) => {
-      // Map API to Historique format
-      return {
-        id: session.id,
-        date: new Date(session.dateDebut).toLocaleDateString("fr-FR", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        }),
-        type: "Évaluation",
-        action: `Session #${session.numeroSession || session.id}`,
-        details:
-          session.statut === "COMPLETED"
-            ? "Session terminée"
-            : "Session en cours",
-        icon: session.statut === "COMPLETED" ? Check : Brain,
-        color:
-          session.statut === "COMPLETED" ? "text-green-600" : "text-blue-600",
-        bg: session.statut === "COMPLETED" ? "bg-green-600" : "bg-blue-600",
-        // Default properties that will be fetched dynamically
-        note: undefined,
-        progressPercentage: session.statut === "COMPLETED" ? 100 : 50,
-      };
+  await historyStore.fetchHistory();
+  if (historyStore.error) {
+    toastStore.addToast({
+      message: "Impossible de charger l'historique pour le moment.",
+      type: "error",
     });
-  } catch (err) {
-    console.error("Failed to load history sessions", err);
-  } finally {
-    isLoading.value = false;
   }
 };
 
@@ -93,35 +111,27 @@ const continueToModules = (item: any) => {
 const openDrawer = async (item: any) => {
   activeItem.value = item;
   isDrawerOpen.value = true;
-  isLoadingDetails.value = true;
-  detailsData.value = null;
 
-  try {
-    const details = await dashboardService.getSessionDetails(item.id);
-    const recs = await dashboardService.getSessionRecommendations(item.id);
-
-    // Provide the details to our active binding
-    detailsData.value = {
-      scoreGlobal: details.scoreGlobal,
-      moduleScores: details.competencesEvaluees?.map((c: any) => ({
-        name: c.nomCompetence || "Compétence",
-        percentage: Math.round((c.score || 0) * 100),
-        color: "bg-blue-600",
-      })),
-      aiInsight: recs?.map((r: any) => r.texte).join("\n\n") || "",
-    };
-  } catch (err) {
-    console.error("Failed to load side drawer details", err);
-  } finally {
-    isLoadingDetails.value = false;
+  if (item.eventType === "SESSION" && item.sessionId) {
+    try {
+      await historyStore.fetchSessionDrawerDetail(item.sessionId);
+    } catch {
+      toastStore.addToast({
+        message: "Impossible de charger le détail de cette session.",
+        type: "error",
+      });
+    }
+    return;
   }
+
+  historyStore.clearSessionDrawerDetail();
 };
 
 const closeDrawer = () => {
   isDrawerOpen.value = false;
+  historyStore.clearSessionDrawerDetail();
   setTimeout(() => {
     activeItem.value = null;
-    detailsData.value = null;
   }, 200);
 };
 
@@ -132,16 +142,12 @@ const filtreResultat = ref("Tous");
 
 const types = computed(() => [
   "Tous",
-  ...new Set(historique.value.map((item) => item.type)),
+  ...new Set(historique.value.map((item) => item.type).filter(Boolean)),
 ]);
 const resultats = ["Tous", "Avec note", "Sans note"];
 
 // Date du jour
-const today = new Date().toLocaleDateString("fr-FR", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
+const today = historyStore.formatDateAbsolute(new Date());
 
 // Historique filtré
 const historiqueFiltres = computed(() => {
@@ -154,6 +160,7 @@ const historiqueFiltres = computed(() => {
       item.type.toLowerCase().includes(terme) ||
       item.details.toLowerCase().includes(terme) ||
       item.date.toLowerCase().includes(terme) ||
+      item.relativeDate.toLowerCase().includes(terme) ||
       item.moduleScores?.some((m) => m.name.toLowerCase().includes(terme));
 
     const matchType =
@@ -389,7 +396,23 @@ const getMarkerStyle = (index) => {
 };
 </script>
 <template>
-  <div v-if="historique && historique.length > 0">
+  <VRow v-if="isLoading">
+    <VCol cols="12">
+      <VCard>
+        <VCardText>
+          <VSkeletonLoader type="heading, text, actions" class="mb-4" />
+          <VSkeletonLoader
+            v-for="i in 5"
+            :key="`history-skeleton-${i}`"
+            type="list-item-avatar, list-item-two-line"
+            class="mb-2"
+          />
+        </VCardText>
+      </VCard>
+    </VCol>
+  </VRow>
+
+  <div v-else-if="historique && historique.length > 0">
     <VRow class="mb-6">
       <VCol cols="12" md="6" lg="5">
         <VTextField
@@ -532,182 +555,6 @@ const getMarkerStyle = (index) => {
                   </div>
                 </div>
               </div>
-
-              <VNavigationDrawer
-                v-model="isDrawerOpen"
-                location="right"
-                temporary
-                width="450"
-                class="module-drawer bg-white border-l border-slate-200"
-              >
-                <div class="h-full flex flex-col text-slate-800">
-                  <div class="p-6 pb-2 relative shrink-0">
-                    <button
-                      @click="closeDrawer"
-                      class="absolute top-4 right-4 z-20 p-2 rounded-lg hover:bg-slate-100 transition-colors"
-                    >
-                      <X class="w-5 h-5 text-slate-500" />
-                    </button>
-
-                    <template v-if="activeItem">
-                      <div class="flex items-center gap-4 mb-4 mt-2">
-                        <div
-                          class="w-14 h-14 rounded-full flex items-center justify-center shrink-0 text-white"
-                          :class="activeItem.bg"
-                        >
-                          <component :is="activeItem.icon" class="w-7 h-7" />
-                        </div>
-                        <div>
-                          <div
-                            class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1"
-                          >
-                            {{ activeItem.type }}
-                          </div>
-                          <h3 class="text-xl font-bold leading-tight">
-                            {{ activeItem.action }}
-                          </h3>
-                          <p class="text-sm text-slate-500 mt-1">
-                            {{ activeItem.date }}
-                          </p>
-                        </div>
-                      </div>
-                      <p
-                        class="text-slate-700 font-medium text-sm border-b border-slate-100 pb-4"
-                      >
-                        {{ activeItem.details }}
-                      </p>
-                    </template>
-                  </div>
-
-                  <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6">
-                    <!-- Loading State -->
-                    <div
-                      v-if="isLoadingDetails"
-                      class="d-flex justify-center my-8"
-                    >
-                      <VProgressCircular
-                        indeterminate
-                        color="primary"
-                        size="32"
-                      />
-                    </div>
-
-                    <template v-else-if="detailsData">
-                      <!-- Overview Metrics -->
-                      <div class="grid grid-cols-2 gap-4">
-                        <div
-                          v-if="detailsData.scoreGlobal !== undefined"
-                          class="bg-slate-50 p-4 rounded-xl border border-slate-100"
-                        >
-                          <div
-                            class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2"
-                          >
-                            Score Global
-                          </div>
-                          <div class="text-3xl font-bold text-blue-600">
-                            {{ detailsData.scoreGlobal
-                            }}<span class="text-base text-slate-400 font-medium"
-                              >/20</span
-                            >
-                          </div>
-                        </div>
-
-                        <div
-                          v-else-if="
-                            activeItem?.progressPercentage !== undefined
-                          "
-                          class="bg-slate-50 p-4 rounded-xl border border-slate-100"
-                        >
-                          <div
-                            class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2"
-                          >
-                            Progression
-                          </div>
-                          <div class="text-3xl font-bold text-blue-600">
-                            {{ activeItem.progressPercentage
-                            }}<span class="text-base text-slate-400 font-medium"
-                              >%</span
-                            >
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- AI Insights / Recommendations -->
-                      <div
-                        v-if="detailsData.aiInsight"
-                        class="bg-blue-50/50 border border-blue-100 p-4 rounded-xl text-blue-900 text-sm leading-relaxed flex gap-3 shadow-sm"
-                      >
-                        <Brain class="w-5 h-5 shrink-0 text-blue-600 mt-0.5" />
-                        <p class="whitespace-pre-line">
-                          {{ detailsData.aiInsight }}
-                        </p>
-                      </div>
-
-                      <!-- Competencies/Modules list -->
-                      <div
-                        v-if="
-                          detailsData.moduleScores &&
-                          detailsData.moduleScores.length > 0
-                        "
-                      >
-                        <div
-                          class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 flex items-center justify-between"
-                        >
-                          <span>Compétences Évaluées</span>
-                          <span
-                            class="bg-slate-100 text-slate-600 py-1 px-2 rounded-full"
-                            >{{ detailsData.moduleScores.length }}</span
-                          >
-                        </div>
-
-                        <div class="space-y-4">
-                          <div
-                            v-for="(module, idx) in detailsData.moduleScores"
-                            :key="idx"
-                            class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"
-                          >
-                            <div
-                              class="flex items-start justify-between text-sm mb-2 gap-4"
-                            >
-                              <span
-                                class="font-medium text-slate-700 leading-snug"
-                                >{{ module.name }}</span
-                              >
-                              <span class="font-bold text-slate-900 shrink-0"
-                                >{{ module.percentage }}%</span
-                              >
-                            </div>
-                            <div
-                              class="w-full bg-slate-100 h-2 rounded-full overflow-hidden"
-                            >
-                              <div
-                                :class="module.color"
-                                class="h-full rounded-full transition-all duration-500"
-                                :style="{ width: module.percentage + '%' }"
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                  </div>
-
-                  <div
-                    class="shrink-0 p-6 pt-4 border-t border-slate-100 bg-slate-50 flex gap-3"
-                  >
-                    <VBtn
-                      block
-                      color="primary"
-                      variant="flat"
-                      @click="continueToModules(activeItem)"
-                      prepend-icon="bx-right-arrow-alt"
-                      class="font-weight-bold"
-                    >
-                      Voir le module
-                    </VBtn>
-                  </div>
-                </div>
-              </VNavigationDrawer>
             </div>
           </VCardText>
         </VCard>
@@ -715,15 +562,16 @@ const getMarkerStyle = (index) => {
     </VRow>
   </div>
 
-  <VRow v-else-if="!isLoading" class="mt-4">
+  <VRow v-else>
     <!-- EMPTY STATE -->
     <VCol cols="12">
       <VCard>
         <VCardText>
-          <h4 class="text-h4 mb-2">Votre Historique</h4>
-          <p class="text-body-1 text-medium-emphasis">
-            Aucune session trouvée dans votre historique
-          </p>
+          <PageHeader
+            icon="bx-history"
+            title="Votre Historique"
+            subtitle="Aucune session trouvée dans votre historique"
+          />
         </VCardText>
       </VCard>
     </VCol>
@@ -755,9 +603,186 @@ const getMarkerStyle = (index) => {
       </VCard>
     </VCol>
   </VRow>
-  <VRow v-else class="mt-4 justify-center">
-    <VProgressCircular indeterminate color="primary" />
-  </VRow>
+
+  <!-- Navigation Drawer positioned at page level for proper stacking context -->
+  <VNavigationDrawer
+    v-model="isDrawerOpen"
+    location="right"
+    temporary
+    width="450"
+    class="module-drawer bg-white border-l border-slate-200 history-drawer"
+  >
+    <div class="pa-5 d-flex flex-column h-100">
+      <div class="d-flex align-center justify-space-between mb-6">
+        <h2 class="text-h5 font-weight-bold module-title">
+          {{ activeItem?.type || "Historique" }}
+        </h2>
+        <VBtn icon="bx-x" variant="text" size="small" @click="closeDrawer" />
+      </div>
+
+      <h3 class="text-h6 font-weight-bold mb-2">
+        {{ activeItem?.action || "Détail de l'activité" }}
+      </h3>
+      <p class="text-body-2 text-medium-emphasis mb-6">
+        {{ activeItem?.details || "Aucun détail disponible." }}
+      </p>
+
+      <div class="mb-6">
+        <h4
+          class="text-subtitle-2 font-weight-bold mb-2 text-uppercase letter-space-1"
+        >
+          Informations
+        </h4>
+        <div class="d-flex gap-4 flex-wrap">
+          <VChip size="small" variant="outlined" color="primary">
+            {{ activeItem?.type || "Historique" }}
+          </VChip>
+          <VChip size="small" variant="tonal" color="primary">
+            {{ activeItem?.date || "-" }}
+          </VChip>
+          <VChip
+            v-if="activeItem?.eventType === 'SESSION' && sessionDrawerDetail"
+            size="small"
+            variant="tonal"
+            color="primary"
+          >
+            Score {{ sessionDrawerDetail.scorePercent }}%
+          </VChip>
+          <VChip
+            v-if="activeItem?.eventType === 'SESSION' && sessionDrawerDetail"
+            size="small"
+            variant="tonal"
+            color="primary"
+          >
+            Durée {{ sessionDrawerDetail.duration }}
+          </VChip>
+        </div>
+      </div>
+
+      <div class="flex-grow-1 overflow-y-auto">
+        <div v-if="isLoadingDetails" class="d-flex justify-center my-4">
+          <VProgressCircular indeterminate color="primary" size="24" />
+        </div>
+
+        <template
+          v-else-if="activeItem?.eventType === 'SESSION' && sessionDrawerDetail"
+        >
+          <h4
+            class="text-subtitle-2 font-weight-bold mb-3 text-uppercase letter-space-1"
+          >
+            Compétences Traitées ({{
+              sessionDrawerDetail.treatedCompetences.length
+            }})
+          </h4>
+
+          <div
+            v-if="sessionDrawerDetail.treatedCompetences.length"
+            class="d-flex gap-2 flex-wrap mb-5"
+          >
+            <VChip
+              v-for="name in sessionDrawerDetail.treatedCompetences"
+              :key="name"
+              size="small"
+              variant="outlined"
+              color="primary"
+            >
+              {{ name }}
+            </VChip>
+          </div>
+
+          <h4
+            class="text-subtitle-2 font-weight-bold mb-3 text-uppercase letter-space-1"
+          >
+            Détails par compétence ({{
+              sessionDrawerDetail.competences.length
+            }})
+          </h4>
+
+          <div
+            v-if="sessionDrawerDetail.competences.length > 0"
+            class="d-flex flex-column gap-3"
+          >
+            <VCard
+              v-for="(comp, idx) in sessionDrawerDetail.competences"
+              :key="idx"
+              variant="outlined"
+              class="competence-list-item pa-4"
+            >
+              <div class="d-flex align-start justify-space-between mb-1 gap-2">
+                <span class="font-weight-medium text-body-2 text-primary">
+                  {{ comp.competenceName }}
+                </span>
+                <span class="text-caption font-weight-bold">
+                  {{ comp.afterLabel }}
+                </span>
+              </div>
+              <p class="text-caption text-medium-emphasis mb-1">
+                Évolution : {{ comp.beforeLabel }} →
+                {{ comp.afterLabel }}
+              </p>
+              <div class="text-caption text-disabled">
+                Niveau : {{ comp.levelBefore ?? "N/A" }} →
+                {{ comp.levelAfter ?? "N/A" }}
+              </div>
+            </VCard>
+          </div>
+
+          <p v-else class="text-body-2 text-medium-emphasis">
+            Aucune compétence détaillée pour cette évaluation.
+          </p>
+        </template>
+
+        <template
+          v-else-if="
+            activeItem?.eventType === 'MILESTONE_REACHED' ||
+            activeItem?.eventType === 'COMPETENCE_VALIDATION'
+          "
+        >
+          <h4
+            class="text-subtitle-2 font-weight-bold mb-3 text-uppercase letter-space-1"
+          >
+            Détail du palier
+          </h4>
+
+          <VCard variant="outlined" class="competence-list-item pa-4 mb-4">
+            <div class="d-flex align-start mb-1">
+              <span class="font-weight-medium text-body-2 text-primary">
+                {{ activeItem?.competenceName || activeItem?.action }}
+              </span>
+            </div>
+            <p class="text-caption text-medium-emphasis mb-1">
+              {{
+                activeItem?.competenceDescription ||
+                "Aucune description détaillée fournie."
+              }}
+            </p>
+            <div class="text-caption text-disabled">
+              Niveau : {{ activeItem?.levelBefore ?? "N/A" }} →
+              {{ activeItem?.levelAfter ?? "N/A" }}
+            </div>
+          </VCard>
+
+          <div class="text-body-2 text-medium-emphasis">
+            Validé {{ activeItem?.relativeDate }} ({{
+              activeItem?.preciseDate
+            }})
+          </div>
+        </template>
+      </div>
+
+      <div class="mt-4 pt-4 border-top">
+        <VBtn
+          block
+          color="primary"
+          variant="flat"
+          @click="continueToModules(activeItem)"
+          append-icon="bx-right-arrow-alt"
+        >
+          Voir le module
+        </VBtn>
+      </div>
+    </div>
+  </VNavigationDrawer>
 </template>
 
 <style scoped>
@@ -787,5 +812,26 @@ const getMarkerStyle = (index) => {
 .continue-module-btn:hover {
   background-color: #2563eb !important;
   color: #ffffff !important;
+}
+
+.module-title {
+  color: rgb(var(--v-theme-on-surface));
+}
+
+.letter-space-1 {
+  letter-spacing: 0.08em;
+}
+
+.border-top {
+  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.competence-list-item {
+  border-color: rgba(37, 99, 235, 0.2);
+  background-color: rgba(37, 99, 235, 0.02);
+}
+
+.history-drawer {
+  z-index: 3000 !important;
 }
 </style>

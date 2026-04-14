@@ -4,11 +4,17 @@
     <div class="relative mx-auto w-full max-w-7xl px-6 py-20 lg:px-10">
       <div class="grid gap-12 md:grid-cols-[1.2fr_1fr_1fr]">
         <div class="space-y-5">
-          <div
-            class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-white text-slate-900 font-semibold"
+          <RouterLink
+            to="/"
+            class="inline-block"
+            aria-label="Aller à l'accueil"
           >
-            I
-          </div>
+            <img
+              src="/src/assets/images/logo-auxo.png"
+              alt="logo-auxo"
+              class="h-8 w-8 object-contain"
+            />
+          </RouterLink>
           <p class="desc-text max-w-md text-base leading-7 text-slate-300">
             Plateforme d evaluation adaptive pour accompagner les parcours
             academiques avec mesure fiable et recommandations ciblées.
@@ -53,16 +59,23 @@
             class="block text-base text-slate-200 transition hover:text-white"
             >FAQ</a
           >
+          <RouterLink
+            v-if="authStore?.isAuthenticated"
+            to="/student/dashboard"
+            class="block text-base text-slate-200 transition hover:text-white"
+          >
+            Dashboard
+          </RouterLink>
         </div>
 
         <div class="space-y-3">
           <h4 class="text-sm uppercase tracking-[0.16em] text-slate-400">
             Contact
           </h4>
-          <a
-            href="mailto:contact@isisu.fr"
+          <RouterLink
+            :to="{ name: 'support' }"
             class="block text-base text-slate-200 transition hover:text-white"
-            >contact@isisu.fr</a
+            >Contacter le Support</RouterLink
           >
           <RouterLink
             :to="{ name: 'terms' }"
@@ -85,6 +98,10 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore();
+
 defineProps<{
   currentYear: number;
 }>();

@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import PageHeader from "@/components/PageHeader.vue";
 
 defineProps({
   title: {
@@ -18,6 +19,14 @@ defineProps({
     type: String,
     default: "Commencer",
   },
+  icon: {
+    type: String,
+    default: null,
+  },
+  image: {
+    type: String,
+    default: "/images/undraw_waiting-for-you.svg",
+  },
 });
 
 const emit = defineEmits(["start"]);
@@ -35,8 +44,7 @@ const startQuiz = () => {
     <VCol cols="12">
       <VCard>
         <VCardText>
-          <h4 class="text-h4 mb-2">{{ title }}</h4>
-          <p class="text-body-1 text-medium-emphasis">{{ subtitle }}</p>
+          <PageHeader :icon="icon" :title="title" :subtitle="subtitle" />
         </VCardText>
       </VCard>
     </VCol>
@@ -49,7 +57,7 @@ const startQuiz = () => {
           </p>
 
           <img
-            src="/images/undraw_waiting-for-you.svg"
+            :src="image"
             alt="Pre-quiz illustration"
             class="mb-6"
             style="max-width: 320px; width: 100%; height: auto"

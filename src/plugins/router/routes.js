@@ -28,10 +28,6 @@ export const routes = [
     redirect: '/student/cards',
   },
   {
-    path: '/centre-aide',
-    redirect: '/student/help-center',
-  },
-  {
     path: '/confidentialite',
     redirect: '/privacy',
   },
@@ -97,6 +93,16 @@ export const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: 'quiz/session',
+        component: () => import('@/pages/quiz/session.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['STUDENT', 'etudiant', 'Etudiant', 'ETUDIANT', 'ROLE_ETUDIANT', 'CANDIDAT_VAE', 'ROLE_CANDIDAT_VAE'] },
+      },
+      {
+        path: 'quiz/results',
+        component: () => import('@/pages/quiz/results.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['STUDENT', 'etudiant', 'Etudiant', 'ETUDIANT', 'ROLE_ETUDIANT', 'CANDIDAT_VAE', 'ROLE_CANDIDAT_VAE'] },
+      },
+      {
         path: 'form-layouts',
         component: () => import('@/pages/form-layouts.vue'),
         meta: { requiresAuth: true },
@@ -109,12 +115,6 @@ export const routes = [
       {
         path: 'history',
         component: () => import('@/pages/historique.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
-        path: 'help-center',
-        name: 'student-help-center',
-        component: () => import('@/pages/centre-aide.vue'),
         meta: { requiresAuth: true },
       },
     ],
@@ -144,11 +144,6 @@ export const routes = [
         path: 'terms',
         name: 'terms',
         component: () => import('@/pages/conditions-utilisation.vue'),
-      },
-      {
-        path: 'help',
-        name: 'help',
-        component: () => import('@/pages/help.vue'),
       },
       {
         path: 'support',

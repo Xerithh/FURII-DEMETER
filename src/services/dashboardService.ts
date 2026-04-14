@@ -33,6 +33,19 @@ export interface ActiviteRecenteDTO {
   resultat: string;
 }
 
+export interface Activite7JoursDTO {
+  id?: number | string;
+  date: string;
+  type: string;
+  titre: string;
+  resultat?: string;
+  sessionId?: number;
+  competenceId?: number;
+  competenceNom?: string;
+  niveauAvant?: number | string;
+  niveauApres?: number | string;
+}
+
 export interface ApprenantDashboardDTO {
   utilisateur: UtilisateurDTO;
   progression: ProgressionDTO;
@@ -75,11 +88,65 @@ export interface RecommendationDTO {
   moduleId?: number;
 }
 
+export interface RecommendationStudentProfileDTO {
+  niveau: string;
+  parcours: string;
+  nbSessions: number;
+}
+
+export interface RecommendationModuleScoreDTO {
+  module: string;
+  score: number;
+  status: string;
+}
+
+export interface RecommendationProgressSessionDTO {
+  sessionNum: number;
+  date: string;
+  scoreGlobal: number;
+}
+
+export interface RecommendationProgressionDTO {
+  sessions: RecommendationProgressSessionDTO[];
+  tendance: string;
+  velocite: string;
+}
+
+export interface RecommendationBlockingDependencyDTO {
+  bloque: string[];
+  severite: string;
+}
+
+export interface RecommendationStrengthDTO {
+  module: string;
+  score: number;
+}
+
+export interface RecommendationCriticalGapDTO {
+  module: string;
+  score: number;
+  raison: string;
+}
+
+export interface SessionRecommendationAnalysisDTO {
+  studentProfile: RecommendationStudentProfileDTO;
+  scoresByModule: RecommendationModuleScoreDTO[];
+  progression: RecommendationProgressionDTO;
+  blockingDependencies: Record<string, RecommendationBlockingDependencyDTO>;
+  strengths: RecommendationStrengthDTO[];
+  criticalGaps: RecommendationCriticalGapDTO[];
+}
+
 export interface CompetenceProgressDTO {
   id: number;
   nom: string;
   score: number;
   niveau?: string;
+  description?: string;
+  niveauAtteint?: string | number;
+  niveauPrecedent?: string | number;
+  dateValidation?: string;
+  derniereValidation?: string;
 }
 
 // ─── Service ──────────────────────────────────────────────────────────────────
@@ -104,6 +171,14 @@ export const dashboardService = {
   },
 
   /**
+   * Récupère le flux d'activité des 7 derniers jours
+   */
+  async getRecentActivity7Days(): Promise<Activite7JoursDTO[]> {
+    const response = await api.get('/api/v1/dashboard/apprenant/activite/7-jours');
+    return response.data.data ?? response.data;
+  },
+
+  /**
    * Récupère le détail complet d'une session (pour le drawer)
    */
   async getSessionDetails(sessionId: number): Promise<SessionDetailDTO> {
@@ -114,8 +189,8 @@ export const dashboardService = {
   /**
    * Récupère les recommandations pour une session
    */
-  async getSessionRecommendations(sessionId: number): Promise<RecommendationDTO[]> {
-    const response = await api.get(`/api/v1/eval/sessions/${sessionId}/recommendations`);
+  async getSessionRecommendations(sessionId: number): Promise<SessionRecommendationAnalysisDTO> {
+    const response = await api.get(`/api/v1/eval/sessions/${sessionId}/recommendations-llm`);
     return response.data.data ?? response.data;
   },
 
