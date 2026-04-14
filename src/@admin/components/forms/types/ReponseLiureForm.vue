@@ -13,21 +13,19 @@
       <VLabel class="mb-2">Réponses acceptables (variations autorisées)</VLabel>
       <VRow>
         <VCol cols="12" v-for="(choix, index) in modelValue.choix" :key="index">
-          <VCard class="pa-3 answer-card">
+          <VCard class="pa-4 answer-card free-answer">
             <VRow class="align-center">
               <VCol cols="1" class="d-flex justify-center">
-                <VIcon size="small" class="text-success">bx:check-circle</VIcon>
+                <div class="status-icon correct-icon">✓</div>
               </VCol>
               <VCol cols="9">
                 <VTextField
                   v-model="choix.contenu"
-                  label="Variante de réponse acceptable"
-                  placeholder="Ex: Guerre mondiale, WWI, 14-18, etc."
-                  variant="outlined"
-                  dense
+                  placeholder="Variante acceptable (ex: Guerre mondiale, WWI, 14-18, 1914...)"
+                  variant="plain"
+                  density="compact"
                   full-width
-                  multi-line
-                  rows="2"
+                  @click.stop
                 />
               </VCol>
               <VCol cols="2" class="d-flex align-center gap-1">
@@ -109,11 +107,35 @@ const removeVariant = (index: number) => {
 
 <style scoped lang="scss">
 .answer-card {
-  border-left: 3px solid #66bb6a;
-  transition: all 0.2s;
+  border: 2px solid #4caf50;
+  background-color: #f1f8f4;
+  transition: all 0.3s;
+  position: relative;
 
   &:hover {
-    border-left-color: #2e7d32;
+    border-color: #388e3c;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+    background-color: #e8f5e9;
+  }
+}
+
+.free-answer {
+  border-left-width: 4px;
+}
+
+.status-icon {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  &.correct-icon {
+    color: white;
+    background-color: #4caf50;
   }
 }
 

@@ -161,12 +161,12 @@ const handleDelete = (question: QuestionDTO) => {
   showConfirmDeleteDialog.value = true;
 };
 
-const handleToggleActive = (question: QuestionDTO, active: boolean) => {
-  toastStore.addToast({
-    message: `Question ${active ? "activée" : "désactivée"} (TODO: API call)`,
-    type: "info",
-  });
-  // TODO: Implémenter l'appel API pour activer/désactiver
+const handleToggleActive = async (question: QuestionDTO, active: boolean) => {
+  try {
+    await adminStore.toggleQuestion(question.id, active);
+  } catch (error) {
+    console.error("handleToggleActive error:", error);
+  }
 };
 
 const confirmDelete = async () => {
@@ -174,18 +174,11 @@ const confirmDelete = async () => {
 
   isDeleting.value = true;
   try {
-    // TODO: Implémenter l'appel API pour supprimer
-    toastStore.addToast({
-      message: "Question supprimée (TODO: API call)",
-      type: "success",
-    });
+    await adminStore.deleteQuestion(questionToDelete.value.id);
     showConfirmDeleteDialog.value = false;
     questionToDelete.value = null;
   } catch (error) {
-    toastStore.addToast({
-      message: "Erreur lors de la suppression",
-      type: "error",
-    });
+    console.error("confirmDelete error:", error);
   } finally {
     isDeleting.value = false;
   }
@@ -199,24 +192,16 @@ const closeForm = () => {
 const submitForm = async (data: any) => {
   try {
     if (data.id) {
-      // Edit
-      toastStore.addToast({
-        message: "Question mise à jour (TODO: API call)",
-        type: "success",
-      });
+      // Edit existing question
+      const { id, ...payload } = data;
+      await adminStore.updateQuestion(id, payload);
     } else {
-      // Create
-      toastStore.addToast({
-        message: "Question créée (TODO: API call)",
-        type: "success",
-      });
+      // Create new question
+      await adminStore.createQuestion(data);
     }
     closeForm();
   } catch (error) {
-    toastStore.addToast({
-      message: "Erreur lors de la sauvegarde",
-      type: "error",
-    });
+    console.error("submitForm error:", error);
   }
 };
 
