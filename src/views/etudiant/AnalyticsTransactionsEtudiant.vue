@@ -1,63 +1,33 @@
-<script setup>
-const transactions = [
-  {
-    amount: 'Complété',
-    paymentMethod: 'Algorithmes',
-    description: 'Module sur les structures de données',
-    icon: 'bx-check-circle',
-    color: 'success',
-  },
-  {
-    paymentMethod: 'Web Dev',
-    amount: 'En cours',
-    description: 'Framework Vue.js - 75% complété',
-    icon: 'bx-code-alt',
-    color: 'primary',
-  },
-  {
-    amount: 'Recommandé',
-    paymentMethod: 'Base de Données',
-    description: 'SQL Avancé et optimisation',
-    icon: 'bx-data',
-    color: 'info',
-  },
-  {
-    paymentMethod: 'DevOps',
-    amount: 'Recommandé',
-    description: 'CI/CD et déploiement cloud',
-    icon: 'bx-cloud',
-    color: 'warning',
-  },
-  {
-    paymentMethod: 'Machine Learning',
-    amount: 'En cours',
-    description: 'Introduction au Deep Learning',
-    icon: 'bx-brain',
-    color: 'primary',
-  },
-  {
-    paymentMethod: 'Sécurité',
-    amount: 'Recommandé',
-    description: 'Cybersécurité et bonnes pratiques',
-    icon: 'bx-shield',
-    color: 'warning',
-  },
-]
+<script setup lang="ts">
+import { useDashboardStore } from '@/stores/dashboard';
+import type { ActiviteRecenteDTO } from '@/services/dashboardService';
+
+const dashboardStore = useDashboardStore();
+
+// Mapping type API → icône + couleur visuelle
+const getActivityVisuals = (type: string): { icon: string; color: string } => {
+  const t = (type || '').toLowerCase();
+  if (t.includes('quiz') || t.includes('evaluation')) return { icon: 'bx-brain', color: 'primary' };
+  if (t.includes('module') || t.includes('cours')) return { icon: 'bx-book-open', color: 'info' };
+  if (t.includes('complet')) return { icon: 'bx-check-circle', color: 'success' };
+  if (t.includes('recommand')) return { icon: 'bx-bulb', color: 'warning' };
+  return { icon: 'bx-history', color: 'secondary' };
+};
+
+const activities = computed(() => {
+  const list = dashboardStore.data?.activiteRecente ?? [];
+  // Limiter à 6 pour l'affichage
+  return list.slice(0, 6).map((item: ActiviteRecenteDTO) => ({
+    ...item,
+    ...getActivityVisuals(item.type),
+  }));
+});
 
 const moreList = [
-  {
-    title: 'Voir Tout',
-    value: 'ViewAll',
-  },
-  {
-    title: 'Actualiser',
-    value: 'Refresh',
-  },
-  {
-    title: 'Filtrer',
-    value: 'Filter',
-  },
-]
+  { title: 'Voir Tout', value: 'ViewAll' },
+  { title: 'Actualiser', value: 'Refresh' },
+  { title: 'Filtrer', value: 'Filter' },
+];
 </script>
 
 <template>
@@ -67,36 +37,31 @@ const moreList = [
     </template>
 
     <VCardText>
-      <VList class="card-list">
-        <VListItem
-          v-for="item in transactions"
-          :key="item.paymentMethod"
-        >
+      <!-- LOADING -->
+      <div v-if="dashboardStore.isLoading" class="py-4">
+        <VSkeletonLoader v-for="i in 4" :key="i" type="list-item-avatar" class="mb-2" />
+      </div>
+
+      <!-- VIDE -->
+      <div v-else-if="!activities.length" class="text-center py-6 text-medium-emphasis">
+        <VIcon icon="bx-history" size="32" class="mb-2" />
+        <p class="text-body-2">Aucune activité récente</p>
+      </div>
+
+      <!-- LISTE RÉELLE -->
+      <VList v-else class="card-list">
+        <VListItem v-for="item in activities" :key="item.titre + item.date">
           <template #prepend>
-            <VAvatar
-              rounded
-              variant="tonal"
-              :color="item.color"
-              :icon="item.icon"
-              size="40"
-            />
+            <VAvatar rounded variant="tonal" :color="item.color" :icon="item.icon" size="40" />
           </template>
 
-          <VListItemSubtitle>
-            {{ item.paymentMethod }}
-          </VListItemSubtitle>
-          <VListItemTitle>
-            {{ item.description }}
-          </VListItemTitle>
+          <VListItemTitle>{{ item.titre }}</VListItemTitle>
+          <VListItemSubtitle>{{ item.type }}</VListItemSubtitle>
 
           <template #append>
             <VListItemAction>
-              <VChip
-                :color="item.color"
-                size="small"
-                variant="tonal"
-              >
-                {{ item.amount }}
+              <VChip :color="item.color" size="small" variant="tonal">
+                {{ item.resultat }}
               </VChip>
             </VListItemAction>
           </template>
@@ -107,7 +72,7 @@ const moreList = [
 </template>
 
 <style lang="scss" scoped>
-  .card-list {
-    --v-card-list-gap: 1.5rem;
-  }
+.card-list {
+  --v-card-list-gap: 1.5rem;
+}
 </style>

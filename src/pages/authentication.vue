@@ -13,7 +13,7 @@ const isLogin = computed(() => route.path === "/login");
 const loginForm = reactive({
   email: "",
   password: "",
-  remember: false,
+  // remember removed per design
 });
 
 const isPasswordVisible = ref(false);
@@ -42,7 +42,7 @@ const handleLogin = async () => {
 <template>
   <div class="auth-split-layout">
     <VRow no-gutters class="auth-split-row">
-      <VCol cols="12" md="6" class="auth-left-panel">
+      <VCol cols="12" md="6" class="auth-left-panel d-none d-md-flex">
         <VImg :src="sideImage" cover class="auth-left-image" />
       </VCol>
 
@@ -75,15 +75,7 @@ const handleLogin = async () => {
               @click:append-inner="isPasswordVisible = !isPasswordVisible"
             />
 
-            <div class="form-actions">
-              <div class="fa-left">
-                <VCheckbox
-                  v-model="loginForm.remember"
-                  label="Se souvenir de moi"
-                />
-              </div>
-              <div class="fa-right" />
-            </div>
+            <!-- 'Se souvenir de moi' removed -->
 
             <VBtn
               block
@@ -126,12 +118,14 @@ const handleLogin = async () => {
 
 .auth-split-row {
   min-height: 100vh;
+  flex-wrap: wrap;
 }
 
 .auth-left-panel {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
+  display: none;
 }
 
 .auth-left-image {
@@ -145,8 +139,10 @@ const handleLogin = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 1.25rem;
+  padding: 1rem;
   background: #fff;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .auth-form-wrap {
@@ -156,16 +152,24 @@ const handleLogin = async () => {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
-.auth-form-wrap h3,
+.auth-form-wrap h3 {
+  text-align: center;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
 .auth-form-wrap p {
   text-align: center;
 }
 
 .auth-intro {
-  min-height: 3rem;
+  min-height: auto;
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+  line-height: 1.5;
 }
 
 .auth-form-wrap :deep(form),
@@ -178,20 +182,27 @@ const handleLogin = async () => {
   width: 100%;
   text-align: center;
   margin-bottom: 1rem;
+  margin-top: 0.5rem;
   text-decoration: none;
   color: #6b7280; /* gray-500 */
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.back-to-site:hover {
+  color: #4f46e5;
 }
 
 .back-to-site-inner {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.95rem;
+  font-size: inherit;
   color: inherit;
 }
 
 .back-to-site-inner i {
-  font-size: 1.05rem;
+  font-size: 1rem;
   line-height: 1;
 }
 
@@ -203,6 +214,8 @@ const handleLogin = async () => {
   width: 100%;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .form-actions .fa-left {
@@ -218,6 +231,7 @@ const handleLogin = async () => {
 .form-actions a {
   text-decoration: underline;
   white-space: nowrap;
+  font-size: 0.875rem;
 }
 
 .form-actions .v-checkbox {
@@ -233,10 +247,99 @@ const handleLogin = async () => {
   box-sizing: border-box;
 }
 
-@media (max-width: 959px) {
-  .auth-left-panel,
-  .auth-left-image {
-    min-height: 260px;
+.auth-form-wrap .v-btn {
+  height: 44px;
+  font-size: 1rem;
+}
+
+/* Responsive adjustments for tablets */
+@media (min-width: 768px) {
+  .auth-right-panel {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .auth-form-wrap {
+    gap: 2rem;
+  }
+
+  .auth-intro {
+    min-height: 3rem;
+  }
+
+  .auth-form-wrap h3 {
+    font-size: 2rem;
+  }
+}
+
+/* Desktop layout with side image */
+@media (min-width: 960px) {
+  .auth-left-panel {
+    display: flex;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .auth-right-panel {
+    width: 50%;
+    min-height: auto;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .auth-split-row {
+    min-height: 100vh;
+  }
+}
+
+/* Small mobile phones */
+@media (max-width: 600px) {
+  .auth-right-panel {
+    padding: 2rem 2rem;
+    min-height: auto;
+  }
+
+  .auth-form-wrap {
+    gap: 1.25rem;
+    padding: 0 1rem;
+  }
+
+  .auth-form-wrap h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .auth-intro {
+    min-height: auto;
+    margin-bottom: 1rem;
+  }
+
+  .auth-form-wrap :deep(.v-text-field) {
+    margin-bottom: 1rem !important;
+  }
+
+  .auth-form-wrap .v-btn {
+    height: 40px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .auth-right-panel {
+    padding: 1.5rem;
+  }
+
+  .auth-form-wrap {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .auth-intro {
+    font-size: 0.875rem;
+  }
+
+  .back-to-site {
+    font-size: 0.8rem;
   }
 }
 </style>

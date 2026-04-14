@@ -335,8 +335,7 @@ const sideImage = "/images/auth-placeholder.jpg";
               >
                 <template #label>
                   <span class="text-body-2 text-high-emphasis ms-2"
-                    >Je consens au traitement de mes données (Modèle de Rasch)
-                    *</span
+                    >Je consens au traitement de mes données *</span
                   >
                 </template>
               </VCheckbox>
@@ -377,15 +376,22 @@ const sideImage = "/images/auth-placeholder.jpg";
               {{ authStore.error }}
             </div>
 
-            <p class="text-center text-body-2 mt-4">
+            <p class="text-center text-body-1 mt-4">
               Vous avez déjà un compte ?
               <RouterLink
                 to="/login"
-                class="text-primary ms-1 text-decoration-none font-weight-medium"
+                class="text-primary ms-1 text-decoration-none"
                 >Se connecter</RouterLink
               >
             </p>
           </VForm>
+
+          <RouterLink to="/" class="back-to-site" aria-label="Retour au site">
+            <span class="back-to-site-inner">
+              <i class="bx bx-globe"></i>
+              <span>Retour au site</span>
+            </span>
+          </RouterLink>
         </div>
       </VCol>
     </VRow>
@@ -400,6 +406,8 @@ const sideImage = "/images/auth-placeholder.jpg";
 }
 
 .auth-split-row {
+  min-height: auto;
+  flex-wrap: wrap;
   min-height: 100vh;
 }
 
@@ -407,6 +415,7 @@ const sideImage = "/images/auth-placeholder.jpg";
   position: relative;
   min-height: 100vh;
   overflow: hidden;
+  display: none;
 }
 
 .auth-left-image {
@@ -418,11 +427,15 @@ const sideImage = "/images/auth-placeholder.jpg";
 
 .auth-right-panel {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 2rem 1.25rem;
+  padding: 1rem;
   background: #fff;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 1.5rem;
   overflow-y: auto;
+  padding-bottom: 2rem;
 }
 
 .auth-form-wrap {
@@ -430,16 +443,26 @@ const sideImage = "/images/auth-placeholder.jpg";
   max-width: 480px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-start;
 }
 
-.auth-form-wrap h3,
+.auth-form-wrap h3 {
+  text-align: center;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
 .auth-form-wrap p.auth-intro {
   text-align: center;
+  font-size: clamp(0.875rem, 3.5vw, 1rem);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
 }
 
 .auth-intro {
-  min-height: 3rem;
+  min-height: auto;
 }
 
 /* Shadcn-like styling overrides */
@@ -465,13 +488,16 @@ const sideImage = "/images/auth-placeholder.jpg";
   text-transform: none;
   font-weight: 500;
   letter-spacing: 0;
-  height: 48px;
+  height: 44px;
+  font-size: 1rem;
 }
 
 .minimalist-toggle {
   border-radius: 8px;
   background: transparent;
   border-color: rgba(var(--v-theme-on-surface), 0.12);
+  width: 100%;
+  margin-bottom: 1.5rem;
 }
 
 .minimalist-toggle :deep(.v-btn) {
@@ -479,6 +505,7 @@ const sideImage = "/images/auth-placeholder.jpg";
   letter-spacing: normal;
   font-weight: 500;
   height: 40px !important;
+  font-size: 0.95rem;
 }
 
 .minimalist-checkbox {
@@ -497,6 +524,191 @@ const sideImage = "/images/auth-placeholder.jpg";
   display: flex;
   flex-direction: column;
   gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.back-to-site {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  text-decoration: none;
+  color: #6b7280;
+  font-size: 0.875rem;
+  transition: color 0.2s;
+}
+
+.back-to-site:hover {
+  color: #4f46e5;
+}
+
+.back-to-site-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: inherit;
+  color: inherit;
+}
+
+.back-to-site-inner i {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Responsive adjustments for tablets */
+@media (min-width: 768px) {
+  .auth-right-panel {
+    padding: 2rem 1.25rem;
+    padding-bottom: 2rem;
+    align-items: center;
+    min-height: auto;
+  }
+
+  .auth-form-wrap h3 {
+    font-size: 2rem;
+  }
+
+  .minimalist-btn {
+    height: 48px;
+  }
+}
+
+/* Desktop layout with side image */
+@media (min-width: 960px) {
+  .auth-left-panel {
+    display: flex;
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .auth-right-panel {
+    width: 50%;
+    min-height: auto;
+    padding: 2rem 1.25rem;
+    align-items: center;
+  }
+
+  .auth-split-row {
+    min-height: 100vh;
+  }
+}
+
+/* Small mobile phones */
+@media (max-width: 600px) {
+  .auth-right-panel {
+    padding: 2rem 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+    min-height: auto;
+  }
+
+  .auth-form-wrap {
+    gap: 0;
+    padding: 0 1rem;
+  }
+
+  .auth-form-wrap h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .auth-form-wrap p.auth-intro {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .minimalist-toggle {
+    margin-bottom: 1rem;
+  }
+
+  .minimalist-toggle :deep(.v-btn) {
+    font-size: 0.85rem;
+    height: 36px !important;
+  }
+
+  .auth-form-wrap :deep(.v-text-field),
+  .auth-form-wrap :deep(.v-select),
+  .auth-form-wrap :deep(.text-caption) {
+    font-size: 0.875rem;
+  }
+
+  .auth-form-wrap :deep(.v-row) {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .auth-form-wrap :deep(.v-col) {
+    padding: 0 !important;
+    margin-bottom: 0.75rem;
+  }
+
+  .auth-form-wrap :deep(.v-divider) {
+    margin: 1rem 0 !important;
+  }
+
+  .text-subtitle-2 {
+    font-size: 0.875rem;
+  }
+
+  .minimalist-btn {
+    height: 40px;
+    font-size: 0.95rem;
+  }
+
+  .consent-group {
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .auth-right-panel {
+    padding: 1.5rem;
+  }
+
+  .auth-form-wrap {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .auth-form-wrap h3 {
+    font-size: 1.375rem;
+  }
+
+  .auth-intro {
+    font-size: 0.8125rem;
+  }
+
+  .text-caption {
+    font-size: 0.75rem;
+  }
+
+  .text-subtitle-2 {
+    font-size: 0.8125rem;
+  }
+
+  .minimalist-toggle :deep(.v-btn) {
+    font-size: 0.8rem;
+    padding: 0 0.5rem !important;
+  }
+
+  .back-to-site {
+    font-size: 0.8rem;
+  }
+
+  .back-to-site-inner {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .back-to-site {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
 }
 
 @media (max-width: 959px) {

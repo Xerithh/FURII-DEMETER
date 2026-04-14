@@ -26,6 +26,7 @@ declare module 'vue' {
     LandingNewsletter: typeof import('./src/components/landing/LandingNewsletter.vue')['default']
     LandingProcess: typeof import('./src/components/landing/LandingProcess.vue')['default']
     LandingRecommendations: typeof import('./src/components/landing/LandingRecommendations.vue')['default']
+    ModuleCard: typeof import('./src/components/ModuleCard.vue')['default']
     MoreBtn: typeof import('./src/@core/components/MoreBtn.vue')['default']
     PreQuizIntro: typeof import('./src/components/PreQuizIntro.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
