@@ -91,7 +91,7 @@ export const useAdminStore = defineStore('admin', {
       const toast = useToastStore();
       this.loading.questions = true;
       try {
-        this.questions = await questionsService.getAll();
+        this.questions = await questionsService.getAllAdmin();
         this.error = null;
       } catch (err) {
         this.error = 'Erreur lors du chargement des questions';

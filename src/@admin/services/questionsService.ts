@@ -11,11 +11,22 @@ import type {
 export const questionsService = {
   /**
    * GET /api/v1/questions
-   * Récupère toutes les questions (estCorrect masqué)
+   * Récupère toutes les questions PUBLIC (estCorrect masqué)
    */
   async getAll(): Promise<QuestionDTO[]> {
     const response = await api.get<ApiResponse<QuestionDTO[]>>(
       '/api/v1/questions'
+    );
+    return response.data.data;
+  },
+
+  /**
+   * GET /api/v1/admin/questions
+   * Récupère TOUTES les questions (actives + inactives, admin seulement)
+   */
+  async getAllAdmin(): Promise<QuestionDTO[]> {
+    const response = await api.get<ApiResponse<QuestionDTO[]>>(
+      '/api/v1/admin/questions'
     );
     return response.data.data;
   },
