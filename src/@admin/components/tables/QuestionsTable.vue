@@ -16,11 +16,7 @@
             @click:clear="search = ''"
           />
           <!-- Add Button -->
-          <VBtn
-            color="primary"
-            prepend-icon="bx:plus"
-            @click="emitCreate"
-          >
+          <VBtn color="primary" prepend-icon="bx:plus" @click="emitCreate">
             Ajouter
           </VBtn>
         </div>
@@ -207,6 +203,7 @@ interface Emits {
 
 const props = withDefaults(defineProps<Props>(), {
   loading: false,
+  questions: () => [],
 });
 
 const emit = defineEmits<Emits>();
