@@ -12,7 +12,6 @@
     <span class="d-md-flex gap-x-4 text-primary d-none">
       <RouterLink :to="{ name: 'privacy' }">Confidentialité</RouterLink>
       <RouterLink :to="{ name: 'terms' }">Conditions d'utilisation</RouterLink>
-      <RouterLink :to="{ name: 'help' }">Centre d'aide</RouterLink>
       <RouterLink :to="{ name: 'support' }">Contacter le Support</RouterLink>
     </span>
   </div>

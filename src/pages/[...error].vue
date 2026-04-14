@@ -1,29 +1,29 @@
 <script setup>
-import misc404 from '@images/pages/404.png'
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const goBack = () => {
+  router.back();
+};
 </script>
 
 <template>
   <div class="misc-wrapper">
     <ErrorHeader
-      status-code="404"
-      title="Page Not Found ⚠️"
-      description="We couldn't find the page you are looking for."
+      title="Page non trouvée"
+      description="La page que vous recherchez n'existe pas."
     />
 
-    <VBtn
-      to="/"
-      class="mb-6"
-    >
-      Back to Home
-    </VBtn>
+    <VBtn @click="goBack" class="mb-12"> Retour </VBtn>
 
     <!-- 👉 Image -->
     <div class="misc-avatar w-100 text-center">
-      <VImg
-        :src="misc404"
-        alt="Page Not Found"
-        :max-width="500"
+      <img
+        src="/images/svg/undraw_page-not-found.svg"
+        alt="Page non trouvée"
         class="mx-auto"
+        style="max-width: 400px; width: 100%"
       />
     </div>
   </div>

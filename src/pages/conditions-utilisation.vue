@@ -1,25 +1,15 @@
 <script setup lang="ts">
+import LandingFooter from "@/components/landing/LandingFooter.vue";
+import LandingHeader from "@/components/landing/LandingHeader.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
-const sections = [
-  {
-    title: "Acceptation des CGU",
-    text: "L'utilisation d'ISISU implique l'acceptation des présentes conditions d'utilisation.",
-  },
-  {
-    title: "Usage du service",
-    text: "Les services sont destinés à un usage pédagogique personnel. Toute tentative de fraude est interdite.",
-  },
-  {
-    title: "Propriété des contenus",
-    text: "Les contenus, quiz et supports restent la propriété d'ISISU et de leurs auteurs.",
-  },
-  {
-    title: "Suspension de compte",
-    text: "En cas de non-respect des règles, ISISU peut suspendre l'accès au compte utilisateur.",
-  },
+const currentYear = new Date().getFullYear();
+const paragraphs = [
+  "L'utilisation d'ISISU implique l'acceptation des conditions generales de la plateforme et des regles de bon usage applicables aux fonctionnalites pedagogiques proposees.",
+  "Le service est destine a un usage personnel d'apprentissage. Toute tentative de contournement des evaluations, de fraude ou de detournement technique est strictement interdite.",
+  "Les contenus pedagogiques, quiz, modules et supports d'accompagnement restent proteges par les droits de propriete intellectuelle de leurs auteurs et des entites contributrices.",
+  "En cas de non-respect des conditions d'utilisation, ISISU peut suspendre temporairement ou definitivement l'acces au compte, dans le respect des procedures internes en vigueur.",
 ];
 
 const goBack = () => {
@@ -28,79 +18,56 @@ const goBack = () => {
     return;
   }
 
-  router.push({ name: "help" });
+  router.push({ path: "/" });
 };
 </script>
 
 <template>
-  <VContainer class="legal-page py-12 px-6">
-    <VRow justify="center">
-      <VCol cols="12" md="10" lg="8">
-        <header class="text-center mb-10">
-          <h1 class="text-h3 font-weight-bold isis-title mb-3">
+  <div class="landing-premium min-h-screen bg-white text-slate-900">
+    <LandingHeader :is-past-hero="true" />
+
+    <main class="pt-28 pb-16">
+      <section class="mx-auto w-full max-w-5xl px-6 lg:px-10">
+        <article
+          class="content-card rounded-2xl border border-slate-200 bg-white p-6 md:p-10"
+        >
+          <h1 class="text-3xl md:text-4xl font-bold mb-5 isis-title">
             Conditions d'Utilisation
           </h1>
-          <p class="text-body-1 text-medium-emphasis mx-auto legal-intro">
-            Règles de fonctionnement de la plateforme et engagements mutuels.
+          <p
+            v-for="(paragraph, index) in paragraphs"
+            :key="`terms-${index}`"
+            class="text-base md:text-lg text-slate-600 leading-8 mb-4"
+          >
+            {{ paragraph }}
           </p>
-        </header>
 
-        <section class="legal-sections">
-          <article
-            v-for="section in sections"
-            :key="section.title"
-            class="legal-block"
-          >
-            <h2 class="text-h6 font-weight-bold isis-title mb-2">
-              {{ section.title }}
-            </h2>
-            <p class="text-body-1 text-medium-emphasis mb-0">
-              {{ section.text }}
-            </p>
-          </article>
-        </section>
+          <div class="mt-8">
+            <VBtn
+              variant="outlined"
+              color="primary"
+              prepend-icon="bx-arrow-back"
+              class="back-btn"
+              @click="goBack"
+            >
+              Retour
+            </VBtn>
+          </div>
+        </article>
+      </section>
+    </main>
 
-        <div class="d-flex justify-center mt-10">
-          <VBtn
-            variant="outlined"
-            color="primary"
-            prepend-icon="bx-arrow-back"
-            class="back-btn"
-            @click="goBack"
-          >
-            Retour
-          </VBtn>
-        </div>
-      </VCol>
-    </VRow>
-  </VContainer>
+    <LandingFooter :current-year="currentYear" />
+  </div>
 </template>
 
 <style scoped>
-.legal-page {
-  background: #fff;
-  min-height: 100vh;
-}
-
 .isis-title {
   color: #1d4ed8;
 }
 
-.legal-intro {
-  max-width: 760px;
-  line-height: 1.8;
-}
-
-.legal-sections {
-  display: grid;
-  gap: 1rem;
-}
-
-.legal-block {
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 1.25rem;
-  background: #fff;
+.content-card {
+  box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
 }
 
 .back-btn {

@@ -162,13 +162,6 @@ onBeforeUnmount(() => {
           <VListItemTitle>Parametres</VListItemTitle>
         </VListItem>
 
-        <VListItem to="/student/help-center" link>
-          <template #prepend>
-            <VIcon class="me-2" icon="bx-help-circle" size="22" />
-          </template>
-          <VListItemTitle>Aide</VListItemTitle>
-        </VListItem>
-
         <VDivider class="my-2" />
 
         <VListItem link @click.prevent="openLogoutDialog">

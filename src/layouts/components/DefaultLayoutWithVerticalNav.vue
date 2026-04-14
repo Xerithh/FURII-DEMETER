@@ -73,12 +73,6 @@ const navSearchItems = [
     icon: "bx-library",
     keywords: ["ressources", "bibliotheque"],
   },
-  {
-    title: "Centre d'aide",
-    to: "/student/help-center",
-    icon: "bx-help-circle",
-    keywords: ["aide", "faq", "support"],
-  },
 ];
 
 const normalizedSearch = computed(() => searchValue.value.trim().toLowerCase());

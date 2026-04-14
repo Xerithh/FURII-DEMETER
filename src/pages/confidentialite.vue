@@ -1,25 +1,15 @@
 <script setup lang="ts">
+import LandingFooter from "@/components/landing/LandingFooter.vue";
+import LandingHeader from "@/components/landing/LandingHeader.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-
-const sections = [
-  {
-    title: "Collecte des données",
-    text: "Nous collectons uniquement les informations nécessaires au bon fonctionnement d'ISISU: identité académique, progression et résultats d'évaluation.",
-  },
-  {
-    title: "Utilisation",
-    text: "Ces données servent exclusivement à personnaliser votre parcours d'apprentissage et améliorer la pertinence des recommandations.",
-  },
-  {
-    title: "Vos droits",
-    text: "Vous disposez d'un droit d'accès, de rectification et de suppression de vos données, conformément au RGPD.",
-  },
-  {
-    title: "Sécurité",
-    text: "ISISU applique des mesures techniques et organisationnelles pour protéger vos données contre tout accès non autorisé.",
-  },
+const currentYear = new Date().getFullYear();
+const paragraphs = [
+  "ISISU collecte uniquement les donnees utiles au fonctionnement de la plateforme, notamment les informations d'identification academique, les resultats d'evaluation et les traces de progression pedagogique.",
+  "Ces informations sont utilisees pour personnaliser les recommandations de modules, adapter le parcours d'apprentissage et assurer un suivi coherent de la montee en competences.",
+  "Conformement au RGPD, chaque utilisateur peut exercer ses droits d'acces, de rectification et de suppression des donnees qui le concernent, selon les modalites de contact prevues par la plateforme.",
+  "ISISU met en oeuvre des mesures de securite techniques et organisationnelles proportionnees afin de limiter les risques d'acces non autorise, de perte et d'alteration des informations traitees.",
 ];
 
 const goBack = () => {
@@ -28,80 +18,56 @@ const goBack = () => {
     return;
   }
 
-  router.push({ name: "help" });
+  router.push({ path: "/" });
 };
 </script>
 
 <template>
-  <VContainer class="legal-page py-12 px-6">
-    <VRow justify="center">
-      <VCol cols="12" md="10" lg="8">
-        <header class="text-center mb-10">
-          <h1 class="text-h3 font-weight-bold isis-title mb-3">
-            Politique de Confidentialité
+  <div class="landing-premium min-h-screen bg-white text-slate-900">
+    <LandingHeader :is-past-hero="true" />
+
+    <main class="pt-28 pb-16">
+      <section class="mx-auto w-full max-w-5xl px-6 lg:px-10">
+        <article
+          class="content-card rounded-2xl border border-slate-200 bg-white p-6 md:p-10"
+        >
+          <h1 class="text-3xl md:text-4xl font-bold mb-5 isis-title">
+            Politique de Confidentialite
           </h1>
-          <p class="text-body-1 text-medium-emphasis mx-auto legal-intro">
-            Transparence sur la gestion de vos données au sein de la plateforme
-            ISISU.
+          <p
+            v-for="(paragraph, index) in paragraphs"
+            :key="`privacy-${index}`"
+            class="text-base md:text-lg text-slate-600 leading-8 mb-4"
+          >
+            {{ paragraph }}
           </p>
-        </header>
 
-        <section class="legal-sections">
-          <article
-            v-for="section in sections"
-            :key="section.title"
-            class="legal-block"
-          >
-            <h2 class="text-h6 font-weight-bold isis-title mb-2">
-              {{ section.title }}
-            </h2>
-            <p class="text-body-1 text-medium-emphasis mb-0">
-              {{ section.text }}
-            </p>
-          </article>
-        </section>
+          <div class="mt-8">
+            <VBtn
+              variant="outlined"
+              color="primary"
+              prepend-icon="bx-arrow-back"
+              class="back-btn"
+              @click="goBack"
+            >
+              Retour
+            </VBtn>
+          </div>
+        </article>
+      </section>
+    </main>
 
-        <div class="d-flex justify-center mt-10">
-          <VBtn
-            variant="outlined"
-            color="primary"
-            prepend-icon="bx-arrow-back"
-            class="back-btn"
-            @click="goBack"
-          >
-            Retour
-          </VBtn>
-        </div>
-      </VCol>
-    </VRow>
-  </VContainer>
+    <LandingFooter :current-year="currentYear" />
+  </div>
 </template>
 
 <style scoped>
-.legal-page {
-  background: #fff;
-  min-height: 100vh;
-}
-
 .isis-title {
   color: #1d4ed8;
 }
 
-.legal-intro {
-  max-width: 760px;
-  line-height: 1.8;
-}
-
-.legal-sections {
-  display: grid;
-  gap: 1rem;
-}
-
-.legal-block {
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 1.25rem;
-  background: #fff;
+.content-card {
+  box-shadow: 0 14px 38px rgba(15, 23, 42, 0.06);
 }
 
 .back-btn {

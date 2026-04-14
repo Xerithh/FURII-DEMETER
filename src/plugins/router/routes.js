@@ -28,10 +28,6 @@ export const routes = [
     redirect: '/student/cards',
   },
   {
-    path: '/centre-aide',
-    redirect: '/student/help-center',
-  },
-  {
     path: '/confidentialite',
     redirect: '/privacy',
   },
@@ -111,12 +107,6 @@ export const routes = [
         component: () => import('@/pages/historique.vue'),
         meta: { requiresAuth: true },
       },
-      {
-        path: 'help-center',
-        name: 'student-help-center',
-        component: () => import('@/pages/centre-aide.vue'),
-        meta: { requiresAuth: true },
-      },
     ],
   },
   {
@@ -144,11 +134,6 @@ export const routes = [
         path: 'terms',
         name: 'terms',
         component: () => import('@/pages/conditions-utilisation.vue'),
-      },
-      {
-        path: 'help',
-        name: 'help',
-        component: () => import('@/pages/help.vue'),
       },
       {
         path: 'support',

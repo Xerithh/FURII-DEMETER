@@ -77,20 +77,6 @@ const handleLogout = () => {
     }"
   />
 
-  <!-- 👉 Communauté -->
-  <VerticalNavSectionTitle
-    :item="{
-      heading: 'Communauté',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Centre d\'aide',
-      icon: 'bx-group',
-      to: '/student/help-center',
-    }"
-  />
-
   <!-- 👉 Compte -->
   <VerticalNavSectionTitle
     :item="{

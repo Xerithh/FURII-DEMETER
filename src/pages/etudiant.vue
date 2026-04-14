@@ -31,9 +31,6 @@ onMounted(() => {
           size="56"
           class="mb-4"
         />
-        <p class="text-body-1 text-medium-emphasis">
-          Chargement de votre tableau de bord...
-        </p>
       </div>
     </VCol>
 
