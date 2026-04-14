@@ -88,6 +88,55 @@ export interface RecommendationDTO {
   moduleId?: number;
 }
 
+export interface RecommendationStudentProfileDTO {
+  niveau: string;
+  parcours: string;
+  nbSessions: number;
+}
+
+export interface RecommendationModuleScoreDTO {
+  module: string;
+  score: number;
+  status: string;
+}
+
+export interface RecommendationProgressSessionDTO {
+  sessionNum: number;
+  date: string;
+  scoreGlobal: number;
+}
+
+export interface RecommendationProgressionDTO {
+  sessions: RecommendationProgressSessionDTO[];
+  tendance: string;
+  velocite: string;
+}
+
+export interface RecommendationBlockingDependencyDTO {
+  bloque: string[];
+  severite: string;
+}
+
+export interface RecommendationStrengthDTO {
+  module: string;
+  score: number;
+}
+
+export interface RecommendationCriticalGapDTO {
+  module: string;
+  score: number;
+  raison: string;
+}
+
+export interface SessionRecommendationAnalysisDTO {
+  studentProfile: RecommendationStudentProfileDTO;
+  scoresByModule: RecommendationModuleScoreDTO[];
+  progression: RecommendationProgressionDTO;
+  blockingDependencies: Record<string, RecommendationBlockingDependencyDTO>;
+  strengths: RecommendationStrengthDTO[];
+  criticalGaps: RecommendationCriticalGapDTO[];
+}
+
 export interface CompetenceProgressDTO {
   id: number;
   nom: string;
@@ -140,8 +189,8 @@ export const dashboardService = {
   /**
    * Récupère les recommandations pour une session
    */
-  async getSessionRecommendations(sessionId: number): Promise<RecommendationDTO[]> {
-    const response = await api.get(`/api/v1/eval/sessions/${sessionId}/recommendations`);
+  async getSessionRecommendations(sessionId: number): Promise<SessionRecommendationAnalysisDTO> {
+    const response = await api.get(`/api/v1/eval/sessions/${sessionId}/recommendations-llm`);
     return response.data.data ?? response.data;
   },
 

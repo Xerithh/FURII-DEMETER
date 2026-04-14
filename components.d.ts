@@ -30,6 +30,8 @@ declare module 'vue' {
     MoreBtn: typeof import('./src/@core/components/MoreBtn.vue')['default']
     PageHeader: typeof import('./src/components/PageHeader.vue')['default']
     PreQuizIntro: typeof import('./src/components/PreQuizIntro.vue')['default']
+    QuestionRenderer: typeof import('./src/components/quiz/QuestionRenderer.vue')['default']
+    QuizResultsPanel: typeof import('./src/components/quiz/QuizResultsPanel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     TeamSection: typeof import('./src/components/TeamSection.vue')['default']

@@ -93,6 +93,16 @@ export const routes = [
         meta: { requiresAuth: true },
       },
       {
+        path: 'quiz/session',
+        component: () => import('@/pages/quiz/session.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['STUDENT', 'etudiant', 'Etudiant', 'ETUDIANT', 'ROLE_ETUDIANT', 'CANDIDAT_VAE', 'ROLE_CANDIDAT_VAE'] },
+      },
+      {
+        path: 'quiz/results',
+        component: () => import('@/pages/quiz/results.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['STUDENT', 'etudiant', 'Etudiant', 'ETUDIANT', 'ROLE_ETUDIANT', 'CANDIDAT_VAE', 'ROLE_CANDIDAT_VAE'] },
+      },
+      {
         path: 'form-layouts',
         component: () => import('@/pages/form-layouts.vue'),
         meta: { requiresAuth: true },

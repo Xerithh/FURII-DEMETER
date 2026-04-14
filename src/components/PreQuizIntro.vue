@@ -23,6 +23,10 @@ defineProps({
     type: String,
     default: null,
   },
+  image: {
+    type: String,
+    default: "/images/undraw_waiting-for-you.svg",
+  },
 });
 
 const emit = defineEmits(["start"]);
@@ -53,7 +57,7 @@ const startQuiz = () => {
           </p>
 
           <img
-            src="/images/undraw_waiting-for-you.svg"
+            :src="image"
             alt="Pre-quiz illustration"
             class="mb-6"
             style="max-width: 320px; width: 100%; height: auto"
