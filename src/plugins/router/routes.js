@@ -161,4 +161,36 @@ export const routes = [
       },
     ],
   },
+  // ─── ADMIN ROUTES ───────────────────────────────────────────
+  {
+    path: '/admin',
+    component: () => import('@/@admin/layouts/AdminLayout.vue'),
+    meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+    children: [
+      {
+        path: '',
+        name: 'admin-dashboard',
+        component: () => import('@/@admin/pages/AdminDashboard.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+      },
+      {
+        path: 'users',
+        name: 'admin-users',
+        component: () => import('@/@admin/pages/AdminUsers.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+      },
+      {
+        path: 'questions',
+        name: 'admin-questions',
+        component: () => import('@/@admin/pages/AdminQuestions.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+      },
+      {
+        path: 'statistiques',
+        name: 'admin-statistiques',
+        component: () => import('@/@admin/pages/AdminStatistiques.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+      },
+    ],
+  },
 ]
