@@ -1,5 +1,16 @@
 import api from './api';
 
+export interface RecommendationModuleItem {
+  moduleId?: number;
+  idModule?: number;
+  module?: {
+    id?: number;
+  };
+  id?: number;
+}
+
+type RecommendationCandidate = RecommendationModuleItem | number;
+
 export interface UniteEnseignement {
   id: number;
   code: string;
@@ -35,6 +46,31 @@ export interface ModuleReferentiel {
 }
 
 export const referentielService = {
+  /**
+   * Récupère les IDs de modules recommandés depuis l'évaluation globale.
+   */
+  async getCrossSessionRecommendedModuleIds(): Promise<number[]> {
+    const response = await api.get('/api/v1/eval/recommendations/cross-session');
+    const payload = response.data?.data ?? response.data;
+
+    const candidates: RecommendationCandidate[] = Array.isArray(payload)
+      ? payload
+      : Array.isArray(payload?.recommendations)
+        ? payload.recommendations
+        : Array.isArray(payload?.moduleIds)
+          ? payload.moduleIds
+          : [];
+
+    const ids = candidates
+      .map((item) => {
+        if (typeof item === 'number') return item;
+        return item?.moduleId ?? item?.idModule ?? item?.module?.id ?? item?.id;
+      })
+      .filter((id): id is number => Number.isFinite(id) && id > 0);
+
+    return Array.from(new Set(ids));
+  },
+
   /**
    * Récupère la liste de tous les modules du référentiel
    */

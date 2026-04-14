@@ -170,7 +170,7 @@ const moreList = [
 </script>
 
 <template>
-  <VCard class="h-100">
+  <VCard class="h-100 flex-grow-1 d-flex flex-column">
     <VRow no-gutters>
       <!-- Graphique Radar dynamique -->
       <VCol

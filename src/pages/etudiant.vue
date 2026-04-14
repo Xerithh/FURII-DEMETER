@@ -102,12 +102,12 @@ onMounted(() => {
       </VCol>
 
       <!-- 👉 Activités d'Apprentissage -->
-      <VCol cols="12" md="6" class="d-flex">
+      <VCol cols="12" md="4" class="d-flex">
         <AnalyticsTransactions />
       </VCol>
 
       <!-- 👉 Compétences ISIS -->
-      <VCol cols="12" md="6" class="d-flex">
+      <VCol cols="12" md="8" class="d-flex">
         <AnalyticsISISCompetencies />
       </VCol>
 

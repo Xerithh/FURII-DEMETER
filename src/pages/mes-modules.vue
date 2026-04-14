@@ -1,25 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { referentielService } from "@/services/referentielService";
 import type { ModuleReferentiel } from "@/services/referentielService";
+import { useModuleStore } from "@/stores/module";
 import ModuleCard from "@/components/ModuleCard.vue";
 import PageHeader from "@/components/PageHeader.vue";
 
-const modules = ref<ModuleReferentiel[]>([]);
-const isLoading = ref(true);
+const moduleStore = useModuleStore();
 const recherche = ref("");
 const filtreSemestre = ref("Tous");
 
 onMounted(async () => {
-  try {
-    isLoading.value = true;
-    modules.value = await referentielService.getAllModules();
-  } catch (error) {
-    console.error("Erreur lors du chargement des modules", error);
-  } finally {
-    isLoading.value = false;
-  }
+  await moduleStore.fetchRecommendedModules();
 });
+
+const modules = computed<ModuleReferentiel[]>(() => moduleStore.modules);
+const isLoading = computed(() => moduleStore.isLoading);
 
 const semestres = computed(() => {
   const s = new Set(modules.value.map((m) => m.semestre));
@@ -42,6 +37,13 @@ const modulesFiltres = computed(() => {
     return matchRecherche && matchSemestre;
   });
 });
+
+const hasNoRecommendations = computed(
+  () =>
+    moduleStore.hasFetched &&
+    !moduleStore.isLoading &&
+    modules.value.length === 0,
+);
 </script>
 
 <template>
@@ -90,11 +92,26 @@ const modulesFiltres = computed(() => {
       </VCol>
     </VRow>
 
+    <VRow v-else-if="moduleStore.error">
+      <VCol cols="12">
+        <VAlert color="error" variant="tonal">{{ moduleStore.error }}</VAlert>
+      </VCol>
+    </VRow>
+
+    <VRow v-else-if="hasNoRecommendations">
+      <VCol cols="12">
+        <VAlert color="info" variant="tonal">
+          Réalisez une évaluation globale pour obtenir vos premières
+          recommandations de modules.
+        </VAlert>
+      </VCol>
+    </VRow>
+
     <VRow v-else-if="modulesFiltres.length === 0">
       <VCol cols="12">
-        <VAlert color="info" variant="tonal"
-          >Aucun module trouvé pour cette recherche.</VAlert
-        >
+        <VAlert color="info" variant="tonal">
+          Aucun module recommandé ne correspond à votre recherche.
+        </VAlert>
       </VCol>
     </VRow>
 

@@ -32,6 +32,11 @@ const totalHours = computed(
 );
 
 onMounted(async () => {
+  if (props.module.competences?.length) {
+    competences.value = props.module.competences;
+    return;
+  }
+
   try {
     isLoading.value = true;
     const comps = await referentielService.getModuleCompetences(
