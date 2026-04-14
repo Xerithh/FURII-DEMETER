@@ -31,22 +31,8 @@ const handleLogout = () => {
   />
   <VerticalNavLink
     :item="{
-      title: 'Quiz sur une UE',
+      title: 'Évaluation Globale',
       icon: 'bx-brain',
-      to: '/student/tables',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Quiz sur une matière',
-      icon: 'bx-book-open',
-      to: '/student/icons',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Quiz Aléatoire',
-      icon: 'bx-shuffle',
       to: '/student/random-quiz',
     }"
   />

@@ -5,11 +5,11 @@ export const routes = [
   },
   {
     path: '/tables',
-    redirect: '/student/tables',
+    redirect: '/student/random-quiz',
   },
   {
     path: '/icons',
-    redirect: '/student/icons',
+    redirect: '/student/random-quiz',
   },
   {
     path: '/quiz-aleatoire',
@@ -30,6 +30,18 @@ export const routes = [
   {
     path: '/centre-aide',
     redirect: '/student/help-center',
+  },
+  {
+    path: '/confidentialite',
+    redirect: '/privacy',
+  },
+  {
+    path: '/conditions-utilisation',
+    redirect: '/terms',
+  },
+  {
+    path: '/contact-support',
+    redirect: '/support',
   },
   {
     path: '/account-settings',
@@ -66,7 +78,7 @@ export const routes = [
       },
       {
         path: 'icons',
-        component: () => import('@/pages/icons.vue'),
+        redirect: '/student/random-quiz',
         meta: { requiresAuth: true },
       },
       {
@@ -76,7 +88,7 @@ export const routes = [
       },
       {
         path: 'tables',
-        component: () => import('@/pages/tables.vue'),
+        redirect: '/student/random-quiz',
         meta: { requiresAuth: true },
       },
       {
@@ -101,6 +113,7 @@ export const routes = [
       },
       {
         path: 'help-center',
+        name: 'student-help-center',
         component: () => import('@/pages/centre-aide.vue'),
         meta: { requiresAuth: true },
       },
@@ -121,6 +134,26 @@ export const routes = [
       {
         path: 'auth/otp',
         component: () => import('@/pages/auth/otp.vue'),
+      },
+      {
+        path: 'privacy',
+        name: 'privacy',
+        component: () => import('@/pages/confidentialite.vue'),
+      },
+      {
+        path: 'terms',
+        name: 'terms',
+        component: () => import('@/pages/conditions-utilisation.vue'),
+      },
+      {
+        path: 'help',
+        name: 'help',
+        component: () => import('@/pages/help.vue'),
+      },
+      {
+        path: 'support',
+        name: 'support',
+        component: () => import('@/pages/contact-support.vue'),
       },
       {
         path: '/:pathMatch(.*)*',

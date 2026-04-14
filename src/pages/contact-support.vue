@@ -1,63 +1,117 @@
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const supportChannels = [
+  "Assistance compte et authentification",
+  "Problèmes d'évaluation et de progression",
+  "Questions pédagogiques et orientation",
+];
+
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.back();
+    return;
+  }
+
+  router.push({ name: "help" });
+};
+</script>
+
 <template>
-  <VContainer class="py-12 px-6">
+  <VContainer class="legal-page py-12 px-6">
     <VRow justify="center">
       <VCol cols="12" md="10" lg="8">
-        <div class="text-center mb-10">
-          <h1 class="text-h3 font-weight-bold text-primary mb-4">
-            Contacter notre support
+        <header class="text-center mb-10">
+          <h1 class="text-h3 font-weight-bold isis-title mb-3">
+            Contacter le Support
           </h1>
-          <p
-            class="text-h6 text-medium-emphasis mx-auto"
-            style="max-width: 800px; line-height: 1.6"
-          >
-            Une difficulté ? Une question technique ou pédagogique ? Notre
-            équipe est prête à vous assister au plus vite.
+          <p class="text-body-1 text-medium-emphasis mx-auto legal-intro">
+            Une question technique ou pédagogique ? Notre équipe vous
+            accompagne.
           </p>
-        </div>
+        </header>
 
-        <VCard elevation="2" class="pa-8 pb-10">
-          <VCardText
-            class="text-body-1 text-center"
-            style="line-height: 1.8; color: var(--v-theme-on-surface)"
+        <section class="legal-block text-center">
+          <VIcon icon="bx-envelope" size="72" color="primary" class="mb-4" />
+
+          <h2 class="text-h6 font-weight-bold isis-title mb-3">
+            Canaux d'assistance
+          </h2>
+
+          <p class="text-body-1 text-medium-emphasis mb-4">
+            Nous répondons sous 48h ouvrées.
+          </p>
+
+          <ul class="support-list">
+            <li v-for="channel in supportChannels" :key="channel">
+              {{ channel }}
+            </li>
+          </ul>
+
+          <VBtn
+            size="large"
+            color="primary"
+            variant="elevated"
+            class="font-weight-bold px-8 mt-3"
+            href="mailto:support@isisu.test"
           >
-            <VIcon
-              icon="bx-envelope"
-              size="80"
-              color="primary"
-              class="mb-6 opacity-80"
-            />
+            Envoyer un message
+          </VBtn>
+        </section>
 
-            <h2 class="text-h5 font-weight-bold mb-4 text-primary">
-              Comment pouvons-nous aider ?
-            </h2>
-
-            <p class="mb-10 text-body-1 mx-auto" style="max-width: 600px">
-              Que ce soit pour un problème de connexion au compte, pour ajuster
-              vos modules recommandés, ou si un quiz ne fonctionne pas
-              correctement, n'hésitez pas à nous envoyer un mail.
-            </p>
-
-            <VBtn
-              size="x-large"
-              color="primary"
-              variant="elevated"
-              class="font-weight-bold px-8 mb-6"
-              href="mailto:support@isisu.test"
-            >
-              Envoyer un message au support
-            </VBtn>
-
-            <p class="text-body-2 text-medium-emphasis mt-6 mb-0">
-              Notre équipe s'engage à vous répondre sous 48 heures ouvrées.<br />
-              Heures d'ouverture du support : Lundi - Vendredi, 9h à 18h.
-            </p>
-          </VCardText>
-        </VCard>
+        <div class="d-flex justify-center mt-10">
+          <VBtn
+            variant="outlined"
+            color="primary"
+            prepend-icon="bx-arrow-back"
+            class="back-btn"
+            @click="goBack"
+          >
+            Retour
+          </VBtn>
+        </div>
       </VCol>
     </VRow>
   </VContainer>
 </template>
 
-<script setup>
-// Page de contact / support
-</script>
+<style scoped>
+.legal-page {
+  background: #fff;
+  min-height: 100vh;
+}
+
+.isis-title {
+  color: #1d4ed8;
+}
+
+.legal-intro {
+  max-width: 760px;
+  line-height: 1.8;
+}
+
+.legal-block {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 2rem 1.25rem;
+  background: #fff;
+}
+
+.support-list {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+  color: #475569;
+}
+
+.back-btn {
+  border-color: #1d4ed8;
+  color: #1d4ed8;
+  text-transform: none;
+  font-weight: 600;
+}
+</style>

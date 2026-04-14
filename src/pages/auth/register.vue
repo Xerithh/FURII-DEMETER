@@ -316,10 +316,10 @@ const sideImage = "/images/auth-placeholder.jpg";
                 <template #label>
                   <span class="text-body-2 text-high-emphasis ms-2"
                     >J'accepte les
-                    <a
-                      href="javascript:void(0)"
+                    <RouterLink
+                      :to="{ name: 'terms' }"
                       class="text-primary text-decoration-none"
-                      >Conditions Générales d'Utilisation</a
+                      >Conditions Générales d'Utilisation</RouterLink
                     >
                     *</span
                   >
@@ -382,6 +382,32 @@ const sideImage = "/images/auth-placeholder.jpg";
                 to="/login"
                 class="text-primary ms-1 text-decoration-none"
                 >Se connecter</RouterLink
+              >
+            </p>
+
+            <p class="text-center text-body-2 text-medium-emphasis mt-2 mb-0">
+              <RouterLink
+                :to="{ name: 'privacy' }"
+                class="text-primary text-decoration-none"
+                >Confidentialité</RouterLink
+              >
+              ·
+              <RouterLink
+                :to="{ name: 'terms' }"
+                class="text-primary text-decoration-none"
+                >Conditions</RouterLink
+              >
+              ·
+              <RouterLink
+                :to="{ name: 'help' }"
+                class="text-primary text-decoration-none"
+                >Aide</RouterLink
+              >
+              ·
+              <RouterLink
+                :to="{ name: 'support' }"
+                class="text-primary text-decoration-none"
+                >Support</RouterLink
               >
             </p>
           </VForm>

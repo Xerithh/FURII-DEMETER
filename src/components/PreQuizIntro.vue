@@ -20,12 +20,13 @@ defineProps({
   },
 });
 
+const emit = defineEmits(["start"]);
+
 const isModalOpen = ref(false);
 
 const startQuiz = () => {
   isModalOpen.value = false;
-  // Add logic to effectively start the quiz
-  console.log("Quiz started!");
+  emit("start");
 };
 </script>
 

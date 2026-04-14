@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { useDashboardStore } from '@/stores/dashboard';
-import type { ActiviteRecenteDTO } from '@/services/dashboardService';
+import { useDashboardStore } from "@/stores/dashboard";
+import type { ActiviteRecenteDTO } from "@/services/dashboardService";
 
 const dashboardStore = useDashboardStore();
 
 // Mapping type API → icône + couleur visuelle
 const getActivityVisuals = (type: string): { icon: string; color: string } => {
-  const t = (type || '').toLowerCase();
-  if (t.includes('quiz') || t.includes('evaluation')) return { icon: 'bx-brain', color: 'primary' };
-  if (t.includes('module') || t.includes('cours')) return { icon: 'bx-book-open', color: 'info' };
-  if (t.includes('complet')) return { icon: 'bx-check-circle', color: 'success' };
-  if (t.includes('recommand')) return { icon: 'bx-bulb', color: 'warning' };
-  return { icon: 'bx-history', color: 'secondary' };
+  const t = (type || "").toLowerCase();
+  if (t.includes("quiz") || t.includes("evaluation"))
+    return { icon: "bx-brain", color: "primary" };
+  if (t.includes("module") || t.includes("cours"))
+    return { icon: "bx-book-open", color: "info" };
+  if (t.includes("complet"))
+    return { icon: "bx-check-circle", color: "success" };
+  if (t.includes("recommand")) return { icon: "bx-bulb", color: "warning" };
+  return { icon: "bx-history", color: "secondary" };
 };
 
 const activities = computed(() => {
@@ -24,14 +27,14 @@ const activities = computed(() => {
 });
 
 const moreList = [
-  { title: 'Voir Tout', value: 'ViewAll' },
-  { title: 'Actualiser', value: 'Refresh' },
-  { title: 'Filtrer', value: 'Filter' },
+  { title: "Voir Tout", value: "ViewAll" },
+  { title: "Actualiser", value: "Refresh" },
+  { title: "Filtrer", value: "Filter" },
 ];
 </script>
 
 <template>
-  <VCard title="Activités d'Apprentissage">
+  <VCard title="Activités d'Apprentissage" class="h-100">
     <template #append>
       <MoreBtn :menu-list="moreList" />
     </template>
@@ -39,11 +42,19 @@ const moreList = [
     <VCardText>
       <!-- LOADING -->
       <div v-if="dashboardStore.isLoading" class="py-4">
-        <VSkeletonLoader v-for="i in 4" :key="i" type="list-item-avatar" class="mb-2" />
+        <VSkeletonLoader
+          v-for="i in 4"
+          :key="i"
+          type="list-item-avatar"
+          class="mb-2"
+        />
       </div>
 
       <!-- VIDE -->
-      <div v-else-if="!activities.length" class="text-center py-6 text-medium-emphasis">
+      <div
+        v-else-if="!activities.length"
+        class="text-center py-6 text-medium-emphasis"
+      >
         <VIcon icon="bx-history" size="32" class="mb-2" />
         <p class="text-body-2">Aucune activité récente</p>
       </div>
@@ -52,7 +63,13 @@ const moreList = [
       <VList v-else class="card-list">
         <VListItem v-for="item in activities" :key="item.titre + item.date">
           <template #prepend>
-            <VAvatar rounded variant="tonal" :color="item.color" :icon="item.icon" size="40" />
+            <VAvatar
+              rounded
+              variant="tonal"
+              :color="item.color"
+              :icon="item.icon"
+              size="40"
+            />
           </template>
 
           <VListItemTitle>{{ item.titre }}</VListItemTitle>

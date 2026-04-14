@@ -66,9 +66,12 @@ const startSession = () => {
     >
       <VCardText class="d-flex flex-column h-100 pa-6">
         <div class="d-flex align-start justify-space-between gap-3 mb-5">
-          <div class="min-w-0 flex-grow-1">
+          <div class="min-w-0 flex-grow-1 position-relative">
+            <span class="module-bg-word" aria-hidden="true">{{
+              module.nom.toUpperCase()
+            }}</span>
             <h3
-              class="module-title text-h6 font-weight-bold mb-1 text-truncate"
+              class="module-title text-h6 font-weight-bold mb-1 text-truncate position-relative z-10"
             >
               {{ module.nom }}
             </h3>
@@ -305,5 +308,29 @@ const startSession = () => {
 .competence-list-item {
   border-color: rgba(37, 99, 235, 0.2);
   background-color: rgba(37, 99, 235, 0.02);
+}
+.module-bg-word {
+  position: absolute;
+  top: -100%;
+  left: -8%;
+  z-index: 0;
+  color: transparent;
+  font-size: clamp(32px, 7vw, 72px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 0.85;
+  pointer-events: none;
+  text-transform: uppercase;
+  user-select: none;
+  -webkit-text-stroke: 1px rgba(15, 23, 42, 0.05);
+  word-break: break-word;
+  max-width: 200%;
+}
+.z-10 {
+  position: relative;
+  z-index: 10;
+}
+.position-relative {
+  position: relative;
 }
 </style>

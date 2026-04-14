@@ -5,20 +5,16 @@ const router = useRouter();
 
 const sections = [
   {
-    title: "Acceptation des CGU",
-    text: "L'utilisation d'ISISU implique l'acceptation des présentes conditions d'utilisation.",
+    title: "Démarrer rapidement",
+    text: "Commencez par une évaluation globale, puis consultez vos modules suggérés pour avancer sur vos priorités.",
   },
   {
-    title: "Usage du service",
-    text: "Les services sont destinés à un usage pédagogique personnel. Toute tentative de fraude est interdite.",
+    title: "Questions fréquentes",
+    text: "Le centre d'aide détaille le fonctionnement des recommandations, des quiz et du suivi de progression.",
   },
   {
-    title: "Propriété des contenus",
-    text: "Les contenus, quiz et supports restent la propriété d'ISISU et de leurs auteurs.",
-  },
-  {
-    title: "Suspension de compte",
-    text: "En cas de non-respect des règles, ISISU peut suspendre l'accès au compte utilisateur.",
+    title: "Besoin d'assistance",
+    text: "En cas de blocage technique ou pédagogique, contactez directement le support ISISU.",
   },
 ];
 
@@ -28,7 +24,7 @@ const goBack = () => {
     return;
   }
 
-  router.push({ name: "help" });
+  router.push({ path: "/" });
 };
 </script>
 
@@ -38,10 +34,11 @@ const goBack = () => {
       <VCol cols="12" md="10" lg="8">
         <header class="text-center mb-10">
           <h1 class="text-h3 font-weight-bold isis-title mb-3">
-            Conditions d'Utilisation
+            Centre d'aide
           </h1>
           <p class="text-body-1 text-medium-emphasis mx-auto legal-intro">
-            Règles de fonctionnement de la plateforme et engagements mutuels.
+            Retrouvez les ressources essentielles pour utiliser ISISU
+            sereinement.
           </p>
         </header>
 
@@ -54,11 +51,24 @@ const goBack = () => {
             <h2 class="text-h6 font-weight-bold isis-title mb-2">
               {{ section.title }}
             </h2>
-            <p class="text-body-1 text-medium-emphasis mb-0">
+            <p class="text-body-1 text-medium-emphasis mb-3">
               {{ section.text }}
             </p>
           </article>
         </section>
+
+        <div class="d-flex flex-wrap justify-center gap-3 mt-8">
+          <VBtn
+            color="primary"
+            variant="elevated"
+            :to="{ name: 'student-help-center' }"
+          >
+            Ouvrir la FAQ complète
+          </VBtn>
+          <VBtn variant="outlined" color="primary" :to="{ name: 'support' }">
+            Contacter le support
+          </VBtn>
+        </div>
 
         <div class="d-flex justify-center mt-10">
           <VBtn

@@ -26,22 +26,10 @@ const navSearchItems = [
     keywords: ["tableau", "dashboard", "etudiant"],
   },
   {
-    title: "Quiz sur une UE",
-    to: "/student/tables",
-    icon: "bx-brain",
-    keywords: ["quiz", "ue"],
-  },
-  {
-    title: "Quiz sur une matière",
-    to: "/student/icons",
-    icon: "bx-brain",
-    keywords: ["quiz", "matiere"],
-  },
-  {
-    title: "Quiz Aléatoire",
+    title: "Évaluation Globale",
     to: "/student/random-quiz",
     icon: "bx-brain",
-    keywords: ["quiz", "aleatoire"],
+    keywords: ["quiz", "evaluation", "globale", "fie3"],
   },
   {
     title: "Modules Suggérés",

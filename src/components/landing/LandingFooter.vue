@@ -64,15 +64,15 @@
             class="block text-base text-slate-200 transition hover:text-white"
             >contact@isisu.fr</a
           >
-          <a
-            href="#"
+          <RouterLink
+            :to="{ name: 'terms' }"
             class="block text-base text-slate-200 transition hover:text-white"
-            >Mentions legales</a
+            >Mentions legales</RouterLink
           >
-          <a
-            href="#"
+          <RouterLink
+            :to="{ name: 'privacy' }"
             class="block text-base text-slate-200 transition hover:text-white"
-            >Politique de confidentialite</a
+            >Politique de confidentialite</RouterLink
           >
         </div>
       </div>
