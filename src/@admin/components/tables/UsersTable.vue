@@ -50,11 +50,7 @@
           >
             Appliquer Filtres
           </VBtn>
-          <VBtn
-            variant="tonal"
-            size="small"
-            @click="resetFilters"
-          >
+          <VBtn variant="tonal" size="small" @click="resetFilters">
             Réinitialiser
           </VBtn>
           <span class="text-caption text-medium-emphasis">
@@ -185,8 +181,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import type { UtilisateurDashboardDTO, Role, StatutCompte } from "@/@admin/types/admin";
+import type {
+  Role,
+  StatutCompte,
+  UtilisateurDashboardDTO,
+} from "@/@admin/types/admin";
+import { computed, ref } from "vue";
 
 interface Props {
   users: UtilisateurDashboardDTO[];
@@ -217,7 +217,6 @@ const itemsPerPage = ref(25);
 const roleOptions = [
   { title: "Étudiants FIE3", value: "ETUDIANT_FIE3" },
   { title: "Candidats VAE", value: "CANDIDAT_VAE" },
-  { title: "Admins", value: "ADMIN" },
 ];
 
 const statutOptions = [
@@ -241,6 +240,11 @@ const headers = [
 // Filtered & Paginated Data
 const filteredUsers = computed(() => {
   return props.users.filter((user) => {
+    // Exclude admin users
+    if (user.role === "ADMIN") {
+      return false;
+    }
+
     // Search filter
     const searchLower = search.value.toLowerCase();
     const matchesSearch =
