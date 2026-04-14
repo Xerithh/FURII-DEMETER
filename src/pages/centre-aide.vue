@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
+import PageHeader from "@/components/PageHeader.vue";
 
 const recherche = ref("");
 const filtreCategorie = ref("");
@@ -137,17 +138,11 @@ const filteredFaqItems = computed(() => {
     <VCol cols="12">
       <VCard>
         <VCardText>
-          <div
-            class="d-flex align-center justify-space-between flex-wrap gap-4"
-          >
-            <div>
-              <h4 class="text-h4 mb-2">Comment pouvons-nous vous aider ?</h4>
-              <p class="text-body-1 text-medium-emphasis">
-                Consultez notre base de connaissances pour comprendre le projet,
-                activer les recommandations et avancer sur votre parcours.
-              </p>
-            </div>
-          </div>
+          <PageHeader
+            icon="bx-help-circle"
+            title="Comment pouvons-nous vous aider ?"
+            subtitle="Consultez notre base de connaissances pour comprendre le projet, activer les recommandations et avancer sur votre parcours."
+          />
         </VCardText>
       </VCard>
     </VCol>

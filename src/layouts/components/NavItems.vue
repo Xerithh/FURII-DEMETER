@@ -15,6 +15,11 @@ const handleLogout = () => {
 
 <template>
   <!-- 👉 Tableau de Bord -->
+  <VerticalNavSectionTitle
+    :item="{
+      heading: 'Vue d\'ensemble',
+    }"
+  />
   <VerticalNavLink
     :item="{
       title: 'Mon Tableau de Bord',

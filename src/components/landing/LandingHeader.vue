@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import logoAuxo from "@/assets/images/logo-auxo.png";
 
 defineProps<{
   isPastHero: boolean;
@@ -62,10 +63,11 @@ onBeforeUnmount(() => {
             class="flex items-center gap-3 text-sm font-semibold"
             :class="isPastHero ? 'text-slate-900' : 'text-white'"
           >
-            <span
-              class="icon-box inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--isis-blue)] text-white"
-              >I</span
-            >
+            <img
+              :src="logoAuxo"
+              alt="logo-auxo"
+              class="h-6 w-6 object-contain"
+            />
           </a>
         </div>
 

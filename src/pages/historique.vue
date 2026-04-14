@@ -14,6 +14,7 @@ import {
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { dashboardService } from "@/services/dashboardService";
+import PageHeader from "@/components/PageHeader.vue";
 
 const undrawSvgModules = import.meta.glob("/public/images/svg/*.svg", {
   eager: true,
@@ -715,15 +716,16 @@ const getMarkerStyle = (index) => {
     </VRow>
   </div>
 
-  <VRow v-else-if="!isLoading" class="mt-4">
+  <VRow v-else-if="!isLoading">
     <!-- EMPTY STATE -->
     <VCol cols="12">
       <VCard>
         <VCardText>
-          <h4 class="text-h4 mb-2">Votre Historique</h4>
-          <p class="text-body-1 text-medium-emphasis">
-            Aucune session trouvée dans votre historique
-          </p>
+          <PageHeader
+            icon="bx-history"
+            title="Votre Historique"
+            subtitle="Aucune session trouvée dans votre historique"
+          />
         </VCardText>
       </VCard>
     </VCol>

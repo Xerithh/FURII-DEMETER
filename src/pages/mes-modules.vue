@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from "vue";
 import { referentielService } from "@/services/referentielService";
 import type { ModuleReferentiel } from "@/services/referentielService";
 import ModuleCard from "@/components/ModuleCard.vue";
+import PageHeader from "@/components/PageHeader.vue";
 
 const modules = ref<ModuleReferentiel[]>([]);
 const isLoading = ref(true);
@@ -49,17 +50,11 @@ const modulesFiltres = computed(() => {
       <VCol cols="12">
         <VCard>
           <VCardText>
-            <div
-              class="d-flex align-center justify-space-between flex-wrap gap-4"
-            >
-              <div>
-                <h4 class="text-h4 mb-2">Mes Modules 📚</h4>
-                <p class="text-body-1 text-medium-emphasis">
-                  Consultez les modules de la formation et explorez vos
-                  évaluations.
-                </p>
-              </div>
-            </div>
+            <PageHeader
+              icon="bx-book-open"
+              title="Mes Modules"
+              subtitle="Consultez les modules de la formation et explorez vos évaluations."
+            />
           </VCardText>
         </VCard>
       </VCol>

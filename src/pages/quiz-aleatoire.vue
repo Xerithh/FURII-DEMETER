@@ -26,6 +26,7 @@ const handleStartGlobalEvaluation = async () => {
 <template>
   <PreQuizIntro
     title="Évaluation Globale"
+    icon="bx-brain"
     subtitle="Mesurez votre niveau sur l'ensemble du référentiel FIE3"
     description="Testez vos connaissances sur l'ensemble des compétences du référentiel FIE3 via notre algorithme adaptatif."
     button-label="Commencer l'évaluation globale"
