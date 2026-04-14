@@ -191,13 +191,28 @@ const closeForm = () => {
 
 const submitForm = async (data: any) => {
   try {
+    // Clean payload to match CreateQuestionDTO schema
+    const cleanedData = {
+      enonce: data.enonce,
+      type: data.type,
+      difficulte: data.difficulte,
+      dureeSecondes: data.dureeSecondes,
+      competenceIds: data.competenceIds || [],
+      choix: data.choix.map((choice: any) => ({
+        contenu: choice.contenu,
+        estCorrect: choice.estCorrect,
+        ordre: choice.ordre,
+      })),
+    };
+
     if (data.id) {
       // Edit existing question
-      const { id, ...payload } = data;
-      await adminStore.updateQuestion(id, payload);
+      await adminStore.updateQuestion(data.id, cleanedData);
     } else {
       // Create new question
-      await adminStore.createQuestion(data);
+      await adminStore.createQuestion(cleanedData);
+      // Refresh to ensure we have latest data from server
+      await adminStore.fetchQuestions();
     }
     closeForm();
   } catch (error) {

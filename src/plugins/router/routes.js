@@ -180,6 +180,12 @@ export const routes = [
         meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
       },
       {
+        path: 'users/:id',
+        name: 'admin-user-history',
+        component: () => import('@/@admin/pages/AdminUserHistory.vue'),
+        meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+      },
+      {
         path: 'questions',
         name: 'admin-questions',
         component: () => import('@/@admin/pages/AdminQuestions.vue'),
@@ -188,7 +194,7 @@ export const routes = [
       {
         path: 'statistiques',
         name: 'admin-statistiques',
-        component: () => import('@/@admin/pages/AdminStatistiques.vue'),
+        component: () => import('@/@admin/pages/AdminStatistics.vue'),
         meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
       },
     ],

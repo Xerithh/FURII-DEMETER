@@ -94,9 +94,11 @@ import { useAdminStore } from "@/@admin/stores/admin";
 import type { UtilisateurDashboardDTO } from "@/@admin/types/admin";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const adminStore = useAdminStore();
 const toastStore = useToastStore();
+const router = useRouter();
 
 // Dialog states
 const showDetailDialog = ref(false);
@@ -127,8 +129,7 @@ const refresh = () => {
 
 // Action handlers
 const handleViewDetail = (user: UtilisateurDashboardDTO) => {
-  selectedUser.value = user;
-  showDetailDialog.value = true;
+  router.push(`/admin/users/${user.id}`);
 };
 
 const handleSuspend = (user: UtilisateurDashboardDTO) => {

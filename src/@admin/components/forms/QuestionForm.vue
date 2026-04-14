@@ -71,6 +71,36 @@
           <ReponseLiureForm v-model="formData" />
         </div>
 
+        <!-- Compétences -->
+        <VDivider class="my-6" />
+        <h3 class="text-subtitle-2 font-weight-bold mb-4">Compétences</h3>
+
+        <div v-if="competencesLoading" class="text-center pa-4">
+          <VProgressCircular indeterminate></VProgressCircular>
+          <p class="mt-2">Chargement des compétences...</p>
+        </div>
+
+        <div v-else-if="competences.length === 0" class="text-center pa-4">
+          <p class="text-error">⚠️ Aucune compétence trouvée</p>
+        </div>
+
+        <VRow v-else>
+          <VCol
+            v-for="comp in competences"
+            :key="comp.id"
+            cols="12"
+            sm="6"
+            md="4"
+          >
+            <VCheckbox
+              :label="comp.intitule"
+              :model-value="formData.competenceIds.includes(comp.id)"
+              @update:model-value="toggleCompetence(comp.id)"
+              class="mt-2"
+            />
+          </VCol>
+        </VRow>
+
         <!-- Metadata (common) -->
         <VDivider class="my-6" />
         <h3 class="text-subtitle-2 font-weight-bold mb-4">Métadonnées</h3>
@@ -145,7 +175,8 @@ import type {
   QuestionDTO,
   TypeQuestion,
 } from "@/@admin/types/admin";
-import { computed, ref, watch } from "vue";
+import api from "@/services/api";
+import { computed, onMounted, ref, watch } from "vue";
 import QCMMultipleForm from "./types/QCMMultipleForm.vue";
 import QCMSimpleForm from "./types/QCMSimpleForm.vue";
 import ReponseLiureForm from "./types/ReponseLiureForm.vue";
@@ -169,6 +200,8 @@ const emit = defineEmits<Emits>();
 
 const isOpen = ref(false);
 const isSubmitting = ref(false);
+const competences = ref<any[]>([]);
+const competencesLoading = ref(false);
 
 const typeOptions = [
   {
@@ -272,6 +305,11 @@ const validationErrors = computed(() => {
     errors.push("✗ Durée doit être entre 5 et 600 secondes");
   }
 
+  // Compétences - Ensure at least one is selected
+  if (formData.value.competenceIds.length === 0) {
+    errors.push("✗ Sélectionnez au moins une compétence");
+  }
+
   return errors;
 });
 
@@ -280,6 +318,33 @@ const required = (field: string) => (v: any) =>
 
 const minMax = (field: string, min: number, max: number) => (v: any) =>
   v >= min && v <= max ? true : `${field} doit être entre ${min} et ${max}`;
+
+const toggleCompetence = (id: number) => {
+  const idx = formData.value.competenceIds.indexOf(id);
+  if (idx > -1) {
+    formData.value.competenceIds.splice(idx, 1);
+  } else {
+    formData.value.competenceIds.push(id);
+  }
+};
+
+const loadCompetences = async () => {
+  if (competences.value.length > 0) return; // Already loaded
+  competencesLoading.value = true;
+  try {
+    const response = await api.get("/api/v1/referentiel/competences");
+    // API returns array directly, not wrapped in {data: [...]}
+    competences.value = Array.isArray(response.data)
+      ? response.data
+      : response.data.data || [];
+    console.log("Competences loaded:", competences.value.length);
+  } catch (err) {
+    console.error("Error loading competences:", err);
+    competences.value = [];
+  } finally {
+    competencesLoading.value = false;
+  }
+};
 
 const selectType = (type: TypeQuestion) => {
   formData.value.type = type;
@@ -378,9 +443,16 @@ watch(
   (newVal) => {
     if (!newVal) {
       close();
+    } else {
+      // Load competences when form opens
+      loadCompetences();
     }
   },
 );
+
+onMounted(() => {
+  loadCompetences();
+});
 </script>
 
 <style scoped lang="scss">

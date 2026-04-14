@@ -69,10 +69,24 @@
       :loading="loading"
       :items-per-page.sync="itemsPerPage"
       :page.sync="currentPage"
-      class="elevation-1 data-table"
+      class="elevation-1 data-table clickable-table"
       density="comfortable"
       item-key="id"
     >
+      <!-- Email Column (Clickable) -->
+      <template #item.email="{ item }">
+        <div class="email-cell" @click="emitShowDetail(item)">
+          {{ item.email }}
+        </div>
+      </template>
+
+      <!-- Nom Column (Clickable) -->
+      <template #item.nom="{ item }">
+        <div class="name-cell" @click="emitShowDetail(item)">
+          {{ item.nom }} {{ item.prenom }}
+        </div>
+      </template>
+
       <!-- Role Column -->
       <template #item.role="{ item }">
         <VChip
@@ -351,6 +365,21 @@ const emitDelete = (user: UtilisateurDashboardDTO) => {
 
 .search-field {
   max-width: 300px;
+}
+
+.email-cell,
+.name-cell {
+  cursor: pointer;
+  color: rgb(var(--v-theme-primary));
+  font-weight: 500;
+  transition: all 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  &:hover {
+    background-color: rgba(var(--v-theme-primary), 0.1);
+    text-decoration: underline;
+  }
 }
 
 :deep(.data-table) {

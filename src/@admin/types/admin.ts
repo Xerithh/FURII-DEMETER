@@ -114,8 +114,7 @@ export interface CreateQuestionDTO {
 
 export interface DailySessionCount {
   date: string; // YYYY-MM-DD
-  count: number;
-  scoreAverage: number;
+  nombre: number;
 }
 
 export interface SessionStatisticsDTO {
@@ -125,4 +124,100 @@ export interface SessionStatisticsDTO {
   dureeParMoyenne: number; // minutes
   scoreParMoyenne: number;
   sessionsParJour: DailySessionCount[];
+}
+
+// ─── INTERFACES - COMPETENCES STATS ─────────────────────────────────
+
+export interface TopCompetence {
+  id: number;
+  nom: string;
+  scoreMoyen: number;
+  nombreApprenants: number;
+  tauxReussite: number;
+  evolution?: string; // MOMENTUM | REGRESSION
+}
+
+export interface CompetenceTendance {
+  id: number;
+  nom: string;
+  semaine1: { score: number };
+  semaine2: { score: number };
+  semaine3: { score: number };
+}
+
+export interface CompetencesStatsDTO {
+  topCompetences: TopCompetence[];
+  competencesTendances: CompetenceTendance[];
+}
+
+// ─── INTERFACES - QUESTIONS STATS ───────────────────────────────────
+
+export interface QuestionTypeStats {
+  nombre: number;
+  tauxReussite: number;
+}
+
+export interface QuestionsTypeStatsDTO {
+  parType: {
+    QCM_SIMPLE: QuestionTypeStats;
+    QCM_MULTIPLE: QuestionTypeStats;
+    VRAI_FAUX: QuestionTypeStats;
+    REPONSE_LIBRE: QuestionTypeStats;
+  };
+  parDifficulte: {
+    FACILE: QuestionTypeStats;
+    MOYEN: QuestionTypeStats;
+    DIFFICILE: QuestionTypeStats;
+  };
+}
+
+// ─── INTERFACES - PERFORMANCES STATS ────────────────────────────────
+
+export interface ScoreDistribution {
+  range: string; // "0-20%", "20-40%", etc
+  nombre: number;
+}
+
+export interface TypeApprenantStats {
+  scoreMoyen: number;
+  nombreApprenants: number;
+}
+
+export interface PerformancesStatsDTO {
+  distributionScore: ScoreDistribution[];
+  parTypApprenant: {
+    ETUDIANT_FIE3: TypeApprenantStats;
+    CANDIDAT_VAE: TypeApprenantStats;
+  };
+}
+
+// ─── INTERFACES - ACTIVITE STATS ────────────────────────────────────
+
+export interface ActivityDayStats {
+  date: string;
+  nombre: number;
+  dureeParMoyenne: number;
+}
+
+export interface ActivityUserStats {
+  date: string;
+  nombre: number;
+}
+
+export interface ActiviteStatsDTO {
+  sessionsParJour: ActivityDayStats[];
+  apprenantsActifs: ActivityUserStats[];
+}
+
+// ─── INTERFACES - HEATMAP STATS ─────────────────────────────────────
+
+export interface HeatmapRow {
+  competence: string;
+  FACILE: number;
+  MOYEN: number;
+  DIFFICILE: number;
+}
+
+export interface HeatmapStatsDTO {
+  competenceParDifficulte: HeatmapRow[];
 }

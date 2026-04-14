@@ -69,10 +69,10 @@
     <!-- Table -->
     <VDataTable
       :headers="headers"
-      :items="paginatedQuestions"
+      :items="filteredQuestions"
       :loading="loading"
-      :items-per-page.sync="itemsPerPage"
-      :page.sync="currentPage"
+      v-model:items-per-page="itemsPerPage"
+      v-model:page="currentPage"
       class="elevation-1 data-table"
       density="comfortable"
       item-key="id"
@@ -186,7 +186,7 @@ import type {
   QuestionDTO,
   TypeQuestion,
 } from "@/@admin/types/admin";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 interface Props {
   questions: QuestionDTO[];
@@ -207,6 +207,19 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<Emits>();
+
+// Debug: Log questions data flow
+watch(
+  () => props.questions,
+  (newQuestions) => {
+    console.log(
+      "QuestionsTable received questions:",
+      newQuestions.length,
+      newQuestions,
+    );
+  },
+  { immediate: true, deep: true },
+);
 
 // State
 const search = ref("");
