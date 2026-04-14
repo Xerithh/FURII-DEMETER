@@ -1,7 +1,7 @@
 <template>
   <VAppBar app fixed :color="isDark ? 'grey-900' : 'primary'">
     <VAppBarTitle class="font-weight-bold">
-      <Icon icon="bx:dashboard" class="mr-2" width="24" />
+      <VIcon icon="bx:dashboard" class="mr-2" />
       ISISU Admin
     </VAppBarTitle>
 
@@ -11,7 +11,7 @@
     <VMenu v-if="authStore.user">
       <template #activator="{ props }">
         <VBtn icon v-bind="props">
-          <Icon icon="bx:user-circle" width="28" />
+          <VIcon icon="bx:user-circle" />
         </VBtn>
       </template>
       <VList min-width="200">
@@ -28,9 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@/stores/auth';
-import { useTheme } from 'vuetify';
-import Icon from '@iconify/vue';
+import { useAuthStore } from "@/stores/auth";
+import { useTheme } from "vuetify";
 
 const authStore = useAuthStore();
 const theme = useTheme();
@@ -39,6 +38,6 @@ const isDark = () => theme.global.current.value.dark;
 
 const logout = () => {
   authStore.logout();
-  window.location.href = '/login';
+  window.location.href = "/login";
 };
 </script>
