@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useDashboardStore } from "@/stores/dashboard";
+import AnalyticsCompetenceDistribution from "@/views/etudiant/AnalyticsCompetenceDistributionEtudiant.vue";
 import AnalyticsCongratulations from "@/views/etudiant/AnalyticsCongratulationsEtudiant.vue";
-import AnalyticsFinanceTabs from "@/views/etudiant/AnalyticsFinanceTabEtudiant.vue";
 import AnalyticsISISCompetencies from "@/views/etudiant/AnalyticsISISCompetenciesEtudiant.vue";
 import AnalyticsOrderStatistics from "@/views/etudiant/AnalyticsOrderStatisticsEtudiant.vue";
 import AnalyticsProfitReport from "@/views/etudiant/AnalyticsProfitReportEtudiant.vue";
 import AnalyticsTransactions from "@/views/etudiant/AnalyticsTransactionsEtudiant.vue";
+import { onMounted } from "vue";
 
 const dashboardStore = useDashboardStore();
 
@@ -118,7 +119,7 @@ onMounted(() => {
 
       <!-- 👉 Analyse de Performance -->
       <VCol cols="12" md="4" sm="6">
-        <AnalyticsFinanceTabs />
+        <AnalyticsCompetenceDistribution />
       </VCol>
 
       <!-- 👉 Statistiques - 4 cartes -->

@@ -332,7 +332,7 @@ const loadCompetences = async () => {
   if (competences.value.length > 0) return; // Already loaded
   competencesLoading.value = true;
   try {
-    const response = await api.get("/api/v1/referentiel/competences");
+    const response = await api.get("/v1/referentiel/competences");
     // API returns array directly, not wrapped in {data: [...]}
     competences.value = Array.isArray(response.data)
       ? response.data

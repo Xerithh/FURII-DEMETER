@@ -2,15 +2,15 @@
 import { useDashboardStore } from "@/stores/dashboard";
 import { hexToRgb } from "@core/utils/colorConverter";
 import { computed } from "vue";
+import { useRouter } from "vue-router";
 import { useTheme } from "vuetify";
 
 const vuetifyTheme = useTheme();
 const dashboardStore = useDashboardStore();
+const router = useRouter();
 
 // ─── Données dynamiques depuis le store ──────────────────────────────────────
 
-const competenceLabels = computed(() => dashboardStore.competenceLabels);
-const competenceScores = computed(() => dashboardStore.competenceScores);
 const progressionPercent = computed(() => {
   const scores =
     dashboardStore.data?.competences?.map((competence) => competence.score) ??
@@ -22,33 +22,81 @@ const progressionPercent = computed(() => {
   return Math.round(Math.max(0, Math.min(100, average)));
 });
 
-// Niveau requis fixé à 60% (seuil pédagogique)
-const SEUIL = 60;
+const normalizeLevel = (
+  competence: any,
+): "ACQUIS" | "EN_COURS" | "NON_DEMARRE" => {
+  const rawLevel = competence?.niveau ?? competence?.niveauAtteint;
 
-const series = computed(() => [
-  {
-    name: "Votre niveau",
-    data: competenceScores.value.length > 0 ? competenceScores.value : [0],
-  },
-  {
-    name: "Minimum requis",
-    data:
-      competenceScores.value.length > 0
-        ? Array(competenceScores.value.length).fill(SEUIL)
-        : [SEUIL],
-  },
-]);
+  if (typeof rawLevel === "number") {
+    if (rawLevel >= 2) return "ACQUIS";
+    if (rawLevel === 1) return "EN_COURS";
 
-const categories = computed(() =>
-  competenceLabels.value.length > 0 ? competenceLabels.value : ["—"],
-);
+    return "NON_DEMARRE";
+  }
+
+  const normalized = String(rawLevel || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "_");
+
+  if (normalized === "ACQUIS" || normalized === "ACQUIRED") return "ACQUIS";
+  if (
+    normalized === "EN_COURS" ||
+    normalized === "EN-COURS" ||
+    normalized === "IN_PROGRESS" ||
+    normalized === "A_RENFORCER"
+  ) {
+    return "EN_COURS";
+  }
+
+  return "NON_DEMARRE";
+};
+
+const criticalAndLearningCompetences = computed(() => {
+  const competences = dashboardStore.data?.competences ?? [];
+
+  return competences
+    .map((c) => {
+      const level = normalizeLevel(c);
+      return { ...c, _normalizedLevel: level };
+    })
+    .filter(
+      (c) =>
+        c._normalizedLevel === "EN_COURS" ||
+        c._normalizedLevel === "NON_DEMARRE",
+    )
+    .map((c) => ({
+      nom: c.nom,
+      score: Number((c.score ?? 0).toFixed(1)),
+      lacunes: c.lacunes ?? (c as any).description,
+      niveau: c._normalizedLevel,
+      severity:
+        c._normalizedLevel === "NON_DEMARRE" || c.score < 40
+          ? "Critique"
+          : "En apprentissage",
+      color:
+        c._normalizedLevel === "NON_DEMARRE" || c.score < 40
+          ? "error"
+          : "warning",
+      icon:
+        c._normalizedLevel === "NON_DEMARRE" || c.score < 40
+          ? "bx-error-circle"
+          : "bx-time-five",
+    }))
+    .sort((a, b) => a.score - b.score);
+});
+
+const goToModulesForCompetence = (competenceName: string) => {
+  router.push({ path: "/student/my-modules", query: { q: competenceName } });
+};
 
 // ─── Statistiques badge/modules ──────────────────────────────────────────────
 
 const nbAcquis = computed(
   () =>
-    dashboardStore.data?.competences?.filter((c) => c.niveau === "ACQUIS")
-      .length ?? 0,
+    dashboardStore.data?.competences?.filter(
+      (c) => normalizeLevel(c) === "ACQUIS",
+    ).length ?? 0,
 );
 
 const balanceData = computed(() => [
@@ -76,52 +124,6 @@ const chartOptions = computed(() => {
   const drawColor = "rgba(34,48,62,0.7)";
 
   return {
-    radar: {
-      chart: { height: 400, type: "radar", toolbar: { show: false } },
-      colors: [
-        `rgba(${hexToRgb(String(currentTheme.primary))}, 1)`,
-        `rgba(${hexToRgb(String(currentTheme.warning))}, 1)`,
-      ],
-      stroke: { width: 2 },
-      fill: { opacity: 0.15 },
-      markers: { size: 0, hover: { size: 6 } },
-      xaxis: {
-        categories: categories.value,
-        labels: {
-          style: {
-            colors: Array(categories.value.length).fill(drawColor),
-            fontSize: "13px",
-            fontFamily: "Public Sans",
-          },
-        },
-      },
-      yaxis: {
-        show: true,
-        min: 0,
-        max: 100,
-        tickAmount: 5,
-        labels: { style: { colors: drawColor, fontSize: "12px" } },
-      },
-      legend: {
-        position: "top",
-        horizontalAlign: "left",
-        fontSize: "13px",
-        fontFamily: "Public Sans",
-        labels: { colors: drawColor },
-        markers: { width: 11, height: 11, radius: 10 },
-      },
-      plotOptions: {
-        radar: {
-          polygons: {
-            strokeColors: `rgba(${hexToRgb(String(variableTheme["border-color"]))},${variableTheme["border-opacity"]})`,
-            connectorColors: `rgba(${hexToRgb(String(variableTheme["border-color"]))},${variableTheme["border-opacity"]})`,
-          },
-        },
-      },
-      responsive: [
-        { breakpoint: 768, options: { xaxis: { labels: { show: false } } } },
-      ],
-    },
     radial: {
       chart: { sparkline: { enabled: true } },
       labels: ["Progression"],
@@ -178,7 +180,7 @@ const chartOptions = computed(() => {
 <template>
   <VCard class="h-100 flex-grow-1 d-flex flex-column">
     <VRow no-gutters>
-      <!-- Graphique Radar dynamique -->
+      <!-- Liste compétences critiques / en apprentissage -->
       <VCol
         cols="12"
         sm="7"
@@ -189,20 +191,53 @@ const chartOptions = computed(() => {
           <VCardTitle>Référentiel ISIS</VCardTitle>
         </VCardItem>
 
-        <VCardText class="pb-0">
+        <VCardText class="pb-4">
           <div
             v-if="dashboardStore.isLoading"
             class="d-flex justify-center align-center py-16"
           >
             <VProgressCircular indeterminate color="primary" />
           </div>
-          <VueApexCharts
-            v-else
-            type="radar"
-            :height="400"
-            :options="chartOptions.radar"
-            :series="series"
-          />
+
+          <template v-else-if="criticalAndLearningCompetences.length">
+            <div class="scrollable-list">
+              <VList class="card-list">
+                <VListItem
+                  v-for="item in criticalAndLearningCompetences"
+                  :key="item.nom"
+                  class="cursor-pointer"
+                  @click="goToModulesForCompetence(item.nom)"
+                >
+                  <template #prepend>
+                    <VAvatar
+                      rounded
+                      variant="tonal"
+                      :color="item.color"
+                      :icon="item.icon"
+                      size="40"
+                    />
+                  </template>
+
+                  <VListItemTitle>{{ item.nom }}</VListItemTitle>
+                  <VListItemSubtitle>
+                    {{ item.severity }}
+                  </VListItemSubtitle>
+
+                  <template #append>
+                    <VListItemAction>
+                      <VChip :color="item.color" size="small" variant="tonal">
+                        {{ item.score }}
+                      </VChip>
+                    </VListItemAction>
+                  </template>
+                </VListItem>
+              </VList>
+            </div>
+          </template>
+
+          <VAlert v-else type="success" variant="tonal" class="mt-4">
+            Aucune compétence critique ou en apprentissage. Excellent travail.
+          </VAlert>
         </VCardText>
       </VCol>
 
@@ -255,6 +290,25 @@ const chartOptions = computed(() => {
   </VCard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use "@core/scss/template/libs/apex-chart.scss";
+
+.scrollable-list {
+  max-height: 360px;
+  overflow-y: auto;
+  margin-top: 1.25rem;
+}
+
+.card-list {
+  --v-card-list-gap: 1.5rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(var(--v-theme-primary-rgb), 0.05);
+  }
+}
 </style>

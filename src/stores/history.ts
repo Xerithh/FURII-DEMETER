@@ -1,18 +1,18 @@
-import { defineStore } from 'pinia';
 import {
-  dashboardService,
-  type Activite7JoursDTO,
-  type CompetenceProgressDTO,
-  type SessionDetailDTO,
-  type SessionTest,
+    dashboardService,
+    type Activite7JoursDTO,
+    type CompetenceProgressDTO,
+    type SessionDetailDTO,
+    type SessionTest,
 } from '@/services/dashboardService';
 import {
-  computeDurationLabel,
-  formatHistoryDateAbsolute,
-  formatHistoryDatePrecise,
-  formatHistoryDateRelative,
-  toSortableTimestamp,
+    computeDurationLabel,
+    formatHistoryDateAbsolute,
+    formatHistoryDatePrecise,
+    formatHistoryDateRelative,
+    toSortableTimestamp,
 } from '@/utils/historyDate';
+import { defineStore } from 'pinia';
 
 export type HistoryEventType =
   | 'SESSION'
@@ -182,16 +182,38 @@ const mapCompetenceMilestoneEvent = (
 const dedupeEvents = (events: HistoryEvent[]): HistoryEvent[] => {
   const uniq = new Map<string, HistoryEvent>();
 
-  for (const event of events) {
-    const dedupeKey = [
-      event.eventType,
-      event.sessionId ?? event.competenceId ?? event.title,
-      event.occurredAt,
-      event.origin,
-    ].join('::');
+  // Conserver uniquement les sessions terminées et filtrer "EN_COURS"
+  const finishedEvents = events.filter(e => {
+    if (e.eventType === 'SESSION') {
+      const s = (e.status || e.result || e.details || '').toUpperCase();
+      if (s.includes('EN_COURS') || s.includes('EN COURS') || s === 'STARTED') {
+        return false;
+      }
+    }
+    return true;
+  });
 
-    if (!uniq.has(dedupeKey))
+  for (const event of finishedEvents) {
+    let dedupeKey: string;
+
+    // Pour les sessions, on se base uniquement sur le sessionId pour n'avoir qu'un seul point
+    if (event.eventType === 'SESSION' && event.sessionId != null) {
+      dedupeKey = `SESSION::${event.sessionId}`;
+    } else {
+      dedupeKey = [
+        event.eventType,
+        event.sessionId ?? event.competenceId ?? event.title,
+        event.occurredAt,
+        event.origin,
+      ].join('::');
+    }
+
+    if (!uniq.has(dedupeKey)) {
       uniq.set(dedupeKey, event);
+    } else if (event.eventType === 'SESSION' && event.origin === 'sessions') {
+      // Prioriser l'événement provenant de l'API /sessions s'il est plus détaillé
+      uniq.set(dedupeKey, event);
+    }
   }
 
   return [...uniq.values()];
@@ -224,22 +246,23 @@ const coerceArray = <T>(input: unknown, source: string): T[] => {
 };
 
 const mapSessionDrawerDetails = (details: SessionDetailDTO): SessionDrawerDetail => {
-  const competences = (details.competencesEvaluees || []).map((item: Record<string, unknown>) => {
-    const scoreAfter = parseNumber(readAny(item, ['scoreApres', 'score_after', 'score', 'afterScore']));
-    const scoreBefore = parseNumber(readAny(item, ['scoreAvant', 'score_before', 'beforeScore']));
+  const competencesRaw = details.competencesEvaluees || (details as any).competences || [];
+  const competences = competencesRaw.map((item: Record<string, unknown>) => {
+    const scoreAfter = parseNumber(readAny(item, ['scoreApres', 'score_apres', 'score_after', 'score', 'afterScore']));
+    const scoreBefore = parseNumber(readAny(item, ['scoreAvant', 'score_avant', 'score_before', 'beforeScore']));
 
     const beforeLabel = scoreBefore !== undefined ? `${toPercentScore(scoreBefore)}%` : 'N/A';
     const afterLabel = scoreAfter !== undefined ? `${toPercentScore(scoreAfter)}%` : 'N/A';
 
     return {
       competenceId: parseNumber(readAny(item, ['competenceId', 'id'])),
-      competenceName: String(readAny(item, ['nomCompetence', 'nom', 'name']) || 'Competence'),
+      competenceName: String(readAny(item, ['nomCompetence', 'nom', 'name']) || 'Compétence'),
       scoreAfter,
       scoreBefore,
       beforeLabel,
       afterLabel,
-      levelBefore: readAny(item, ['niveauAvant', 'niveau_before', 'levelBefore']),
-      levelAfter: readAny(item, ['niveauAtteint', 'niveauApres', 'levelAfter']),
+      levelBefore: readAny(item, ['niveauAvant', 'niveau_avant', 'niveau_before', 'levelBefore']),
+      levelAfter: readAny(item, ['niveauAtteint', 'niveauApres', 'niveau_apres', 'levelAfter']),
     };
   });
 

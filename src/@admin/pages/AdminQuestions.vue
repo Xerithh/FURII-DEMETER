@@ -1,9 +1,21 @@
 <template>
   <div class="admin-questions">
-    <VBreadcrumbs :items="breadcrumbs" class="mb-6" />
+    <VRow class="mb-6">
+      <VCol cols="12">
+        <VCard>
+          <VCardText>
+            <PageHeader
+              icon="bx-help-circle"
+              title="Gestion des Questions"
+              subtitle="Créez, modifiez et organisez la banque de questions."
+            />
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
 
     <div class="d-flex justify-space-between align-center mb-6">
-      <h1 class="text-h4 font-weight-bold">Gestion des Questions</h1>
+      <div />
       <VBtn
         color="primary"
         prepend-icon="bx:refresh"
@@ -21,48 +33,51 @@
       class="mb-6"
     />
     <!-- Stats rapides -->
-<VRow class="mb-6">
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="text-center pa-3">
-        <p class="text-h5 font-weight-bold text-primary mb-0">
-          {{ adminStore.questions.length }}
-        </p>
-        <p class="text-xs text-disabled mb-0">Total</p>
-      </VCardText>
-    </VCard>
-  </VCol>
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="text-center pa-3">
-        <p class="text-h5 font-weight-bold text-success mb-0">
-          {{ adminStore.questions.filter(q => q.difficulte === 'FACILE').length }}
-        </p>
-        <p class="text-xs text-disabled mb-0">Facile</p>
-      </VCardText>
-    </VCard>
-  </VCol>
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="text-center pa-3">
-        <p class="text-h5 font-weight-bold text-warning mb-0">
-          {{ adminStore.questions.filter(q => q.difficulte === 'MOYEN').length }}
-        </p>
-        <p class="text-xs text-disabled mb-0">Moyen</p>
-      </VCardText>
-    </VCard>
-  </VCol>
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="text-center pa-3">
-        <p class="text-h5 font-weight-bold text-error mb-0">
-          {{ adminStore.questions.filter(q => q.difficulte === 'DIFFICILE').length }}
-        </p>
-        <p class="text-xs text-disabled mb-0">Difficile</p>
-      </VCardText>
-    </VCard>
-  </VCol>
-</VRow>
+    <VRow class="mb-6">
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="Total"
+          :value="adminStore.questions.length"
+          icon="bx-help-circle"
+          color="primary"
+          format="number"
+        />
+      </VCol>
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="Facile"
+          :value="
+            adminStore.questions.filter((q) => q.difficulte === 'FACILE').length
+          "
+          icon="bx-star"
+          color="success"
+          format="number"
+        />
+      </VCol>
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="Moyen"
+          :value="
+            adminStore.questions.filter((q) => q.difficulte === 'MOYEN').length
+          "
+          icon="bx-bar-chart-alt-2"
+          color="warning"
+          format="number"
+        />
+      </VCol>
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="Difficile"
+          :value="
+            adminStore.questions.filter((q) => q.difficulte === 'DIFFICILE')
+              .length
+          "
+          icon="bx-flame"
+          color="error"
+          format="number"
+        />
+      </VCol>
+    </VRow>
 
     <!-- Questions Table -->
     <QuestionsTable
@@ -145,10 +160,12 @@
 </template>
 
 <script setup lang="ts">
+import StatCard from "@/@admin/components/cards/StatCard.vue";
 import QuestionForm from "@/@admin/components/forms/QuestionForm.vue";
 import QuestionsTable from "@/@admin/components/tables/QuestionsTable.vue";
 import { useAdminStore } from "@/@admin/stores/admin";
 import type { QuestionDTO } from "@/@admin/types/admin";
+import PageHeader from "@/components/PageHeader.vue";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref } from "vue";
 
@@ -162,18 +179,6 @@ const showConfirmDeleteDialog = ref(false);
 const selectedQuestion = ref<QuestionDTO | null>(null);
 const questionToDelete = ref<QuestionDTO | null>(null);
 const isDeleting = ref(false);
-
-const breadcrumbs = [
-  {
-    title: "Admin",
-    href: "/admin",
-    disabled: false,
-  },
-  {
-    title: "Questions",
-    disabled: true,
-  },
-];
 
 onMounted(() => {
   adminStore.fetchQuestions();
