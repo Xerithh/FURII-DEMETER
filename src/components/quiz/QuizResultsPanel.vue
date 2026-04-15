@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { dashboardService } from "@/services/dashboardService";
 import type { SessionRecommendationAnalysisDTO } from "@/services/dashboardService";
+import { dashboardService } from "@/services/dashboardService";
 import type { SessionResultsDTO } from "@/types/quiz";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
   results: SessionResultsDTO;
@@ -102,29 +102,28 @@ const loadAiAnalysis = async () => {
 
       <div class="d-flex flex-column flex-md-row gap-3 mb-4">
         <v-btn
-          color="primary"
           size="large"
-          class="action-btn flex-grow-1"
+          variant="flat"
+          class="v-theme--light v-btn v-btn--density-default v-btn--size-default btn-commencer rounded text-none px-5 flex-grow-1 action-btn"
           @click="emit('restart')"
         >
           Relancer une évaluation
         </v-btn>
 
         <v-btn
-          color="secondary"
-          variant="outlined"
           size="large"
-          class="action-btn flex-grow-1"
+          variant="outlined"
+          class="v-theme--light v-btn v-btn--density-default v-btn--size-default btn-commencer rounded text-none px-5 flex-grow-1 action-btn"
           @click="emit('go-modules')"
         >
           Voir mes modules
         </v-btn>
 
         <v-btn
-          color="info"
-          variant="tonal"
           size="large"
-          class="action-btn flex-grow-1"
+          variant="flat"
+          color="info"
+          class="v-theme--light v-btn v-btn--density-default v-btn--size-default btn-commencer rounded text-none px-5 flex-grow-1 action-btn"
           :disabled="!canAnalyze"
           :loading="aiLoading"
           @click="loadAiAnalysis"

@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from "vue";
 import PageHeader from "@/components/PageHeader.vue";
+import { ref } from "vue";
 
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     required: true,
@@ -27,6 +27,10 @@ defineProps({
     type: String,
     default: "/images/undraw_waiting-for-you.svg",
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(["start"]);
@@ -34,6 +38,7 @@ const emit = defineEmits(["start"]);
 const isModalOpen = ref(false);
 
 const startQuiz = () => {
+  if (props.loading) return;
   isModalOpen.value = false;
   emit("start");
 };
@@ -67,6 +72,8 @@ const startQuiz = () => {
             color="primary"
             size="large"
             prepend-icon="bx-play"
+            :loading="props.loading"
+            :disabled="props.loading"
             @click="isModalOpen = true"
           >
             {{ buttonLabel }}
@@ -94,11 +101,18 @@ const startQuiz = () => {
             variant="tonal"
             color="secondary"
             class="me-2"
+            :disabled="props.loading"
             @click="isModalOpen = false"
           >
             Annuler
           </VBtn>
-          <VBtn color="primary" variant="elevated" @click="startQuiz">
+          <VBtn
+            color="primary"
+            variant="elevated"
+            :loading="props.loading"
+            :disabled="props.loading"
+            @click="startQuiz"
+          >
             Confirmer
           </VBtn>
         </VCardActions>

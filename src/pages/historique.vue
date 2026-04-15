@@ -1,11 +1,11 @@
 ﻿<script setup lang="ts">
-import { Award, Brain, Calendar, Check, Star, X } from "lucide-vue-next";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
 import PageHeader from "@/components/PageHeader.vue";
-import { storeToRefs } from "pinia";
 import { useHistoryStore, type HistoryEventType } from "@/stores/history";
 import { useToastStore } from "@/stores/toast";
+import { Award, Brain, Calendar, Check, Star } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 const undrawSvgModules = import.meta.glob("/public/images/svg/*.svg", {
   eager: true,
