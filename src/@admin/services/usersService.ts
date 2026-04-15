@@ -39,7 +39,7 @@ class UsersService {
   async getHistorique(idEtudiant: number): Promise<UserHistoryDTO> {
     try {
       const response = await api.get(
-        `/api/v1/dashboard/admin/utilisateurs/${idEtudiant}/historique`
+        `/v1/dashboard/admin/utilisateurs/${idEtudiant}/historique`
       );
       // API response structure: { timestamp, status, success, message, data: {...} }
       // We need to extract the nested data field
@@ -52,7 +52,7 @@ class UsersService {
 
   async getAll(): Promise<any[]> {
     try {
-      const response = await api.get('/api/v1/dashboard/admin/utilisateurs');
+      const response = await api.get('/v1/dashboard/admin/utilisateurs');
       return response.data.data || response.data;
     } catch (error) {
       console.error('Erreur lors de la récupération des utilisateurs:', error);
@@ -63,7 +63,7 @@ class UsersService {
   async getUserStats(idEtudiant: number): Promise<any> {
     try {
       const response = await api.get(
-        `/api/v1/dashboard/admin/utilisateurs/${idEtudiant}/statistiques`
+        `/v1/dashboard/admin/utilisateurs/${idEtudiant}/statistiques`
       );
       return response.data.data || response.data;
     } catch (error) {

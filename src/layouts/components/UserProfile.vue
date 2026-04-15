@@ -46,6 +46,19 @@ const confirmLogout = () => {
 
 const externalOpenHandler = () => openLogoutDialog();
 
+const accountSettingsRoute = computed(() => {
+  const role = String(authStore.user?.role || "")
+    .toUpperCase()
+    .replace("ROLE_", "");
+  return role === "ADMIN"
+    ? "/admin/account-settings"
+    : "/student/account-settings";
+});
+
+const isAdminArea = computed(() =>
+  String(route.path || "").startsWith("/admin"),
+);
+
 onMounted(() => {
   window.addEventListener("open-logout-dialog", externalOpenHandler);
 
@@ -127,42 +140,44 @@ onBeforeUnmount(() => {
           <VListItemSubtitle>{{ roleLabel }}</VListItemSubtitle>
         </VListItem>
 
-        <VDivider class="my-2" />
+        <template v-if="!isAdminArea">
+          <VDivider class="my-2" />
 
-        <VListItem
-          :to="{ path: '/student/account-settings', query: { tab: 'account' } }"
-          :class="{
-            'router-link-exact-active':
-              route.path === '/student/account-settings' &&
-              route.query.tab === 'account',
-          }"
-          link
-        >
-          <template #prepend>
-            <VIcon class="me-2" icon="bx-user" size="22" />
-          </template>
-          <VListItemTitle>Mon Profil</VListItemTitle>
-        </VListItem>
+          <VListItem
+            :to="{ path: accountSettingsRoute, query: { tab: 'account' } }"
+            :class="{
+              'router-link-exact-active':
+                route.path.endsWith('/account-settings') &&
+                route.query.tab === 'account',
+            }"
+            link
+          >
+            <template #prepend>
+              <VIcon class="me-2" icon="bx-user" size="22" />
+            </template>
+            <VListItemTitle>Mon Profil</VListItemTitle>
+          </VListItem>
 
-        <VListItem
-          :to="{
-            path: '/student/account-settings',
-            query: { tab: 'settings' },
-          }"
-          :class="{
-            'router-link-exact-active':
-              route.path === '/student/account-settings' &&
-              route.query.tab === 'settings',
-          }"
-          link
-        >
-          <template #prepend>
-            <VIcon class="me-2" icon="bx-cog" size="22" />
-          </template>
-          <VListItemTitle>Parametres</VListItemTitle>
-        </VListItem>
+          <VListItem
+            :to="{
+              path: accountSettingsRoute,
+              query: { tab: 'settings' },
+            }"
+            :class="{
+              'router-link-exact-active':
+                route.path.endsWith('/account-settings') &&
+                route.query.tab === 'settings',
+            }"
+            link
+          >
+            <template #prepend>
+              <VIcon class="me-2" icon="bx-cog" size="22" />
+            </template>
+            <VListItemTitle>Parametres</VListItemTitle>
+          </VListItem>
 
-        <VDivider class="my-2" />
+          <VDivider class="my-2" />
+        </template>
 
         <VListItem link @click.prevent="openLogoutDialog">
           <template #prepend>

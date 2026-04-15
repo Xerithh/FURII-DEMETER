@@ -167,6 +167,12 @@ export const routes = [
       name: 'admin-dashboard',
       component: () => import('@/@admin/pages/AdminDashboard.vue'),
     },
+    {
+      path: 'account-settings',
+      name: 'admin-account-settings',
+      component: () => import('@/pages/account-settings.vue'),
+      meta: { requiresAuth: true, allowedRoles: ['ADMIN'] },
+    },
       {
         path: 'users',
         name: 'admin-users',

@@ -1,9 +1,21 @@
 <template>
   <div class="admin-users">
-    <VBreadcrumbs :items="breadcrumbs" class="mb-6" />
+    <VRow class="mb-6">
+      <VCol cols="12">
+        <VCard>
+          <VCardText>
+            <PageHeader
+              icon="bx-group"
+              title="Gestion des Utilisateurs"
+              subtitle="Consultez et gérez les utilisateurs de la plateforme."
+            />
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
 
     <div class="d-flex justify-space-between align-center mb-6">
-      <h1 class="text-h4 font-weight-bold">Gestion des Utilisateurs</h1>
+      <div />
       <VBtn
         color="primary"
         variant="tonal"
@@ -22,68 +34,48 @@
       class="mb-6"
     />
     <!-- Stats rapides -->
-<VRow class="mb-6">
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="d-flex align-center gap-3 pa-4">
-        <VAvatar color="primary" variant="tonal" rounded size="48">
-          <VIcon icon="bx-group" size="24" />
-        </VAvatar>
-        <div>
-          <p class="text-h5 font-weight-bold mb-0">
-            {{ adminStore.users.length }}
-          </p>
-          <p class="text-xs text-disabled mb-0">Total</p>
-        </div>
-      </VCardText>
-    </VCard>
-  </VCol>
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="d-flex align-center gap-3 pa-4">
-        <VAvatar color="success" variant="tonal" rounded size="48">
-          <VIcon icon="bx-user-check" size="24" />
-        </VAvatar>
-        <div>
-          <p class="text-h5 font-weight-bold mb-0 text-success">
-            {{ adminStore.users.filter(u => u.statut === 'ACTIF').length }}
-          </p>
-          <p class="text-xs text-disabled mb-0">Actifs</p>
-        </div>
-      </VCardText>
-    </VCard>
-  </VCol>
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="d-flex align-center gap-3 pa-4">
-        <VAvatar color="warning" variant="tonal" rounded size="48">
-          <VIcon icon="bx-time" size="24" />
-        </VAvatar>
-        <div>
-          <p class="text-h5 font-weight-bold mb-0 text-warning">
-            {{ adminStore.users.filter(u => u.statut === 'EN_ATTENTE_OTP').length }}
-          </p>
-          <p class="text-xs text-disabled mb-0">En attente</p>
-        </div>
-      </VCardText>
-    </VCard>
-  </VCol>
-  <VCol cols="6" sm="3">
-    <VCard>
-      <VCardText class="d-flex align-center gap-3 pa-4">
-        <VAvatar color="info" variant="tonal" rounded size="48">
-          <VIcon icon="bx-briefcase" size="24" />
-        </VAvatar>
-        <div>
-          <p class="text-h5 font-weight-bold mb-0 text-info">
-            {{ adminStore.users.filter(u => u.role === 'CANDIDAT_VAE').length }}
-          </p>
-          <p class="text-xs text-disabled mb-0">Candidats VAE</p>
-        </div>
-      </VCardText>
-    </VCard>
-  </VCol>
-</VRow>
+    <VRow class="mb-6">
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="Total"
+          :value="adminStore.users.length"
+          icon="bx-group"
+          color="primary"
+          format="number"
+        />
+      </VCol>
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="Actifs"
+          :value="adminStore.users.filter((u) => u.statut === 'ACTIF').length"
+          icon="bx-user-check"
+          color="success"
+          format="number"
+        />
+      </VCol>
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="En attente"
+          :value="
+            adminStore.users.filter((u) => u.statut === 'EN_ATTENTE_OTP').length
+          "
+          icon="bx-time"
+          color="warning"
+          format="number"
+        />
+      </VCol>
+      <VCol cols="6" sm="3">
+        <StatCard
+          label="Candidats VAE"
+          :value="
+            adminStore.users.filter((u) => u.role === 'CANDIDAT_VAE').length
+          "
+          icon="bx-briefcase"
+          color="info"
+          format="number"
+        />
+      </VCol>
+    </VRow>
 
     <!-- Users Table -->
     <UsersTable
@@ -152,9 +144,11 @@
 </template>
 
 <script setup lang="ts">
+import StatCard from "@/@admin/components/cards/StatCard.vue";
 import UsersTable from "@/@admin/components/tables/UsersTable.vue";
 import { useAdminStore } from "@/@admin/stores/admin";
 import type { UtilisateurDashboardDTO } from "@/@admin/types/admin";
+import PageHeader from "@/components/PageHeader.vue";
 import { useToastStore } from "@/stores/toast";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
@@ -169,18 +163,6 @@ const showConfirmDeleteDialog = ref(false);
 const selectedUser = ref<UtilisateurDashboardDTO | null>(null);
 const userToDelete = ref<UtilisateurDashboardDTO | null>(null);
 const isDeleting = ref(false);
-
-const breadcrumbs = [
-  {
-    title: "Admin",
-    href: "/admin",
-    disabled: false,
-  },
-  {
-    title: "Utilisateurs",
-    disabled: true,
-  },
-];
 
 onMounted(() => {
   adminStore.fetchUsers();

@@ -3,67 +3,86 @@ import Footer from "@/layouts/components/Footer.vue";
 import NavbarThemeSwitcher from "@/layouts/components/NavbarThemeSwitcher.vue";
 import NavItems from "@/layouts/components/NavItems.vue";
 import UserProfile from "@/layouts/components/UserProfile.vue";
+import { useQuizStore } from "@/stores/quizStore";
 
 import logoAuxo from "@images/logo-auxo.png";
 import VerticalNavLayout from "@layouts/components/VerticalNavLayout.vue";
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
+const quizStore = useQuizStore();
 const searchContainer = ref(null);
 const searchInput = ref(null);
 const searchValue = ref("");
 const searchFocused = ref(false);
 const isMac = ref(false);
 
+const isQuizEvaluationScreen = computed(() =>
+  route.path.startsWith("/student/quiz/session"),
+);
+const isQuizLocked = computed(
+  () => isQuizEvaluationScreen.value || quizStore.sessionActive,
+);
+
 const navSearchItems = computed(() => {
-  // Build suggestions from router routes to avoid stale hard-coded links
-  const routes = router.getRoutes();
-
-  const items = routes
-    .filter((r) => {
-      // keep only readable app routes (exclude root, redirects, wildcard, parametric)
-      if (!r.path) return false;
-      if (r.path === "/") return false;
-      if (r.path.includes(":")) return false;
-      if (r.redirect) return false;
-      // skip internal debug or API-like paths
-      if (r.meta && r.meta.internal) return false;
-      return true;
-    })
-    .map((r) => {
-      const title =
-        r.meta?.title ||
-        r.name ||
-        r.path.split("/").filter(Boolean).slice(-1)[0] ||
-        r.path;
-
-      const keywords = Array.isArray(r.meta?.keywords)
-        ? r.meta.keywords
-        : title
-          ? String(title)
-              .toString()
-              .split(/[-_\s\/]+/)
-          : [];
-
-      return {
-        title: String(title),
-        to: r.path,
-        icon: r.meta?.icon || "bx-link",
-        keywords,
-      };
-    });
-
-  // Return top items, de-duplicated by `to`
-  const seen = new Set();
-  const deduped = [];
-  for (const it of items) {
-    if (seen.has(it.to)) continue;
-    seen.add(it.to);
-    deduped.push(it);
+  if (isQuizLocked.value) {
+    return [
+      {
+        title: "Évaluation Globale",
+        to: "/student/quiz/session",
+        icon: "bx-brain",
+        section: "Quizz",
+        keywords: ["quiz", "evaluation", "session"],
+      },
+    ];
   }
 
-  return deduped.slice(0, 40);
+  return [
+    {
+      title: "Mon Tableau de Bord",
+      to: "/student/dashboard",
+      icon: "bx-home-smile",
+      section: "Vue d'ensemble",
+      keywords: ["dashboard", "accueil", "tableau"],
+    },
+    {
+      title: "Évaluation Globale",
+      to: "/student/random-quiz",
+      icon: "bx-brain",
+      section: "Quizz",
+      keywords: ["quiz", "evaluation", "test"],
+    },
+    {
+      title: "Mes Modules",
+      to: "/student/my-modules",
+      icon: "bx-book-open",
+      section: "Mon Apprentissage",
+      keywords: ["modules", "cours", "apprentissage"],
+    },
+    {
+      title: "Historique",
+      to: "/student/history",
+      icon: "bx-history",
+      section: "Mon Apprentissage",
+      keywords: ["historique", "sessions", "progression"],
+    },
+    {
+      title: "Bibliothèque",
+      to: "/student/cards",
+      icon: "bx-library",
+      section: "Ressources",
+      keywords: ["bibliotheque", "ressources", "fiches"],
+    },
+    {
+      title: "Mon Profil",
+      to: "/student/account-settings",
+      icon: "bx-user",
+      section: "Compte",
+      keywords: ["profil", "parametres", "compte"],
+    },
+  ];
 });
 
 const normalizedSearch = computed(() => searchValue.value.trim().toLowerCase());
@@ -77,7 +96,7 @@ const filteredSearchItems = computed(() => {
   return source
     .filter((item) => {
       const haystack =
-        `${item.title} ${item.to} ${(item.keywords || []).join(" ")}`.toLowerCase();
+        `${item.title} ${item.section || ""} ${(item.keywords || []).join(" ")}`.toLowerCase();
 
       return haystack.includes(query);
     })
@@ -235,7 +254,7 @@ onMounted(() => {
                 <VIcon :icon="item.icon" size="18" class="me-2" />
                 <span>{{ item.title }}</span>
               </span>
-              <span class="search-suggestion-path">{{ item.to }}</span>
+              <span class="search-suggestion-meta">{{ item.section }}</span>
             </button>
           </div>
         </div>
@@ -417,7 +436,7 @@ onMounted(() => {
   min-width: 0;
 }
 
-.search-suggestion-path {
+.search-suggestion-meta {
   color: rgba(var(--v-theme-on-surface), 0.58);
   font-size: 0.78rem;
   white-space: nowrap;

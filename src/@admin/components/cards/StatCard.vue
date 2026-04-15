@@ -1,29 +1,25 @@
 <template>
-  <div class="kpi-card-wrapper">
-    <VCard class="kpi-card h-100" variant="elevated">
+  <div class="stat-card-wrapper">
+    <VCard class="stat-card h-100" variant="elevated">
       <!-- Icône de fond très grande -->
-      <div class="kpi-bg-icon">
+      <div class="stat-bg-icon">
         <VIcon :icon="icon" size="120" />
       </div>
 
       <!-- Contenu -->
-      <VCardItem class="kpi-card-item">
-        <template #prepend>
-          <VAvatar class="kpi-avatar" :color="color" variant="tonal" size="56">
-            <VIcon :icon="icon" size="28" />
+      <VCardText class="stat-card-content">
+        <div class="d-flex align-center gap-3">
+          <VAvatar class="stat-avatar" :color="color" variant="tonal" size="48">
+            <VIcon :icon="icon" size="24" />
           </VAvatar>
-        </template>
-        <div class="kpi-content">
-          <p class="kpi-label text-body-2 text-medium-emphasis">{{ label }}</p>
-          <p class="kpi-value text-h5 font-weight-bold">{{ formattedValue }}</p>
-          <p
-            v-if="subtitle"
-            class="kpi-subtitle text-caption text-medium-emphasis"
-          >
-            {{ subtitle }}
-          </p>
+          <div class="flex-grow-1">
+            <p class="text-h5 font-weight-bold mb-0" :class="`text-${color}`">
+              {{ formattedValue }}
+            </p>
+            <p class="text-xs text-disabled mb-0">{{ label }}</p>
+          </div>
         </div>
-      </VCardItem>
+      </VCardText>
     </VCard>
   </div>
 </template>
@@ -36,7 +32,6 @@ interface Props {
   value: number | string;
   icon: string;
   color?: string;
-  subtitle?: string;
   format?: "number" | "percent" | "none";
 }
 
@@ -57,11 +52,11 @@ const formattedValue = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.kpi-card-wrapper {
+.stat-card-wrapper {
   position: relative;
 }
 
-.kpi-card {
+.stat-card {
   border-radius: 8px;
   transition: all 0.3s ease;
   position: relative;
@@ -71,13 +66,13 @@ const formattedValue = computed(() => {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px);
 
-    .kpi-bg-icon {
+    .stat-bg-icon {
       opacity: 0.35;
     }
   }
 }
 
-.kpi-bg-icon {
+.stat-bg-icon {
   position: absolute;
   top: -20px;
   right: -20px;
@@ -88,40 +83,14 @@ const formattedValue = computed(() => {
   z-index: 0;
 }
 
-.kpi-card-item {
+.stat-card-content {
   position: relative;
   z-index: 1;
+  padding: 1rem;
 }
 
-.kpi-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 56px;
+.stat-avatar {
+  min-width: 48px;
   box-shadow: none;
-}
-
-.kpi-content {
-  flex: 1;
-  padding-left: 12px;
-}
-
-.kpi-label {
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 600;
-}
-
-.kpi-value {
-  margin: 4px 0;
-  line-height: 1.2;
-}
-
-.kpi-subtitle {
-  margin: 4px 0 0;
 }
 </style>
