@@ -128,13 +128,32 @@ export interface RecommendationCriticalGapDTO {
   raison: string;
 }
 
-export interface SessionRecommendationAnalysisDTO {
+export interface PhaseStructureeDTO {
   studentProfile: RecommendationStudentProfileDTO;
   scoresByModule: RecommendationModuleScoreDTO[];
   progression: RecommendationProgressionDTO;
   blockingDependencies: Record<string, RecommendationBlockingDependencyDTO>;
   strengths: RecommendationStrengthDTO[];
   criticalGaps: RecommendationCriticalGapDTO[];
+}
+
+export interface AnalyseLLMDTO {
+  messagePersonnalise: string;
+  analysePrincipale: string;
+  priorites: Array<{
+    module: string;
+    urgence: string;
+    raison: string;
+    conseil: string;
+  }>;
+  parcourRecommande: string | null;
+  raisonParcours: string;
+  messageMotivation: string;
+}
+
+export interface SessionRecommendationAnalysisDTO {
+  phaseStructuree: PhaseStructureeDTO;
+  analyseLLM: AnalyseLLMDTO;
 }
 
 export interface CompetenceProgressDTO {

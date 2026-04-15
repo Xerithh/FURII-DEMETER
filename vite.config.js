@@ -50,7 +50,13 @@ export default defineConfig({
       '/api': {
         target: 'https://isisu-backend.onrender.com',
         changeOrigin: true,
-        secure: true,
+        secure: false, // Ignorer les erreurs SSL éventuelles du backend
+        configure: (proxy, _options) => {
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            // Empêcher les erreurs 502 causées par des connexions persistantes (keep-alive) interrompues brutalement par Render
+            proxyReq.setHeader('Connection', 'close');
+          });
+        }
       },
     },
   },

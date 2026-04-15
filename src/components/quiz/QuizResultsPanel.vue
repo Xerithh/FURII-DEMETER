@@ -121,14 +121,15 @@ const loadAiAnalysis = async () => {
 
         <v-btn
           size="large"
-          variant="flat"
-          color="info"
+          :variant="aiAnalysis ? 'flat' : 'flat'"
+          :color="aiAnalysis ? 'success' : 'info'"
           class="v-theme--light v-btn v-btn--density-default v-btn--size-default btn-commencer rounded text-none px-5 flex-grow-1 action-btn"
-          :disabled="!canAnalyze"
+          :disabled="aiAnalysis ? true : !canAnalyze"
           :loading="aiLoading"
           @click="loadAiAnalysis"
         >
-          Analyser par l'IA
+          <v-icon v-if="aiAnalysis" size="large">mdi-check</v-icon>
+          <span v-else>Analyser par l'IA</span>
         </v-btn>
       </div>
 
@@ -136,46 +137,214 @@ const loadAiAnalysis = async () => {
         {{ aiError }}
       </v-alert>
 
-      <v-card v-if="aiAnalysis" variant="tonal" class="pa-4 ai-panel">
-        <h3 class="text-h6 mb-3">Analyse IA personnalisée</h3>
-        <p class="text-body-2 mb-1">
-          Niveau:
-          <strong>{{ aiAnalysis.studentProfile?.niveau || "N/A" }}</strong>
-        </p>
-        <p class="text-body-2 mb-1">
-          Parcours:
-          <strong>{{ aiAnalysis.studentProfile?.parcours || "N/A" }}</strong>
-        </p>
-        <p class="text-body-2 mb-4">
-          Sessions analysées:
-          <strong>{{ aiAnalysis.studentProfile?.nbSessions ?? 0 }}</strong>
-        </p>
-
-        <div v-if="aiAnalysis.strengths?.length" class="mb-4">
-          <div class="text-subtitle-2 mb-2">Points forts</div>
-          <v-chip
-            v-for="item in aiAnalysis.strengths"
-            :key="`${item.module}-${item.score}`"
-            color="success"
-            variant="outlined"
-            size="small"
-            class="me-2 mb-2"
+      <v-card v-if="aiAnalysis" variant="elevated" class="pa-6 ai-panel">
+        <div class="d-flex align-center mb-6">
+          <v-icon color="info" size="x-large" class="mr-3"
+            >mdi-robot-outline</v-icon
           >
-            {{ item.module }} ({{ formatNumber(item.score) }})
-          </v-chip>
+          <h3 class="text-h4 font-weight-bold mb-0">
+            Analyse IA personnalisée
+          </h3>
         </div>
 
-        <div v-if="aiAnalysis.criticalGaps?.length" class="mb-2">
-          <div class="text-subtitle-2 mb-2">Lacunes critiques</div>
-          <div
-            v-for="gap in aiAnalysis.criticalGaps"
-            :key="`${gap.module}-${gap.raison}`"
-            class="text-body-2 mb-2"
-          >
-            <strong>{{ gap.module }}</strong
-            >: {{ gap.raison }} ({{ formatNumber(gap.score) }})
+        <template v-if="aiAnalysis.analyseLLM">
+          <!-- Message personnalisé -->
+          <div class="mb-6">
+            <p class="text-body-1 text-medium-emphasis">
+              <v-icon color="info" size="small" class="mr-2"
+                >mdi-chat-outline</v-icon
+              >
+              {{ aiAnalysis.analyseLLM.messagePersonnalise }}
+            </p>
           </div>
-        </div>
+
+          <!-- Analyse Principale -->
+          <div class="mb-6">
+            <h4 class="text-h6 font-weight-bold mb-3">Analyse Principale</h4>
+            <p class="text-body-1 text-on-surface">
+              {{ aiAnalysis.analyseLLM.analysePrincipale }}
+            </p>
+          </div>
+
+          <!-- Priorités / Actions -->
+          <div v-if="aiAnalysis.analyseLLM.priorites?.length" class="mb-6">
+            <h4 class="text-h6 font-weight-bold mb-3 text-error">
+              Priorités d'Action
+            </h4>
+            <div
+              v-for="(prio, i) in aiAnalysis.analyseLLM.priorites"
+              :key="i"
+              class="mb-4"
+            >
+              <div class="d-flex align-center mb-2">
+                <v-icon color="error" size="small" class="mr-2"
+                  >mdi-alert-circle-outline</v-icon
+                >
+                <strong class="text-error">{{ prio.module }}</strong>
+                <v-chip class="ml-2" color="error" size="small" label>
+                  {{ prio.urgence }}
+                </v-chip>
+              </div>
+              <p class="text-body-2 text-medium-emphasis ml-6 mb-2">
+                {{ prio.raison }}
+              </p>
+              <p class="text-body-2 ml-6">
+                <strong>💡 Conseil :</strong> {{ prio.conseil }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Recommandation de parcours -->
+          <div
+            v-if="
+              aiAnalysis.analyseLLM.parcourRecommande ||
+              aiAnalysis.analyseLLM.raisonParcours
+            "
+            class="mb-6"
+          >
+            <h4 class="text-h6 font-weight-bold mb-3">
+              <v-icon class="mr-1">mdi-map-marker-path</v-icon>
+              Recommandation
+            </h4>
+            <p class="text-body-1 text-on-surface">
+              {{ aiAnalysis.analyseLLM.raisonParcours }}
+            </p>
+            <p
+              v-if="aiAnalysis.analyseLLM.parcourRecommande"
+              class="text-body-2 mt-2"
+            >
+              <strong>Parcours recommandé :</strong>
+              {{ aiAnalysis.analyseLLM.parcourRecommande }}
+            </p>
+          </div>
+
+          <!-- Données techniques (optionnel, peu visible) -->
+          <v-expansion-panels class="mb-4" variant="accordion">
+            <v-expansion-panel title="Détails techniques">
+              <v-expansion-panel-text>
+                <div
+                  v-if="aiAnalysis.phaseStructuree?.studentProfile"
+                  class="mb-4"
+                >
+                  <p class="text-caption text-medium-emphasis uppercase mb-2">
+                    Profil
+                  </p>
+                  <p class="text-body-2">
+                    <strong>Niveau :</strong>
+                    {{
+                      aiAnalysis.phaseStructuree.studentProfile.niveau || "N/A"
+                    }}<br />
+                    <strong>Parcours :</strong>
+                    {{
+                      aiAnalysis.phaseStructuree.studentProfile.parcours ||
+                      "Non spécifié"
+                    }}<br />
+                    <strong>Sessions analysées :</strong>
+                    {{
+                      aiAnalysis.phaseStructuree.studentProfile.nbSessions ?? 0
+                    }}
+                  </p>
+                </div>
+
+                <div
+                  v-if="aiAnalysis.phaseStructuree?.strengths?.length"
+                  class="mb-4"
+                >
+                  <p class="text-caption text-medium-emphasis uppercase mb-2">
+                    Points forts
+                  </p>
+                  <v-chip
+                    v-for="item in aiAnalysis.phaseStructuree.strengths"
+                    :key="`${item.module}-${item.score}`"
+                    color="success"
+                    variant="outlined"
+                    size="small"
+                    class="me-2 mb-2"
+                  >
+                    {{ item.module }} ({{ formatNumber(item.score) }})
+                  </v-chip>
+                </div>
+
+                <div v-if="aiAnalysis.phaseStructuree?.blockingDependencies">
+                  <p class="text-caption text-medium-emphasis uppercase mb-2">
+                    Dépendances bloquantes
+                  </p>
+                  <template
+                    v-for="(dep, module) in aiAnalysis.phaseStructuree
+                      .blockingDependencies"
+                    :key="module"
+                  >
+                    <p v-if="dep.bloque?.length" class="text-body-2 mb-2">
+                      <strong>{{ module }}</strong> bloque :
+                      {{ dep.bloque.join(", ") }}
+                      <v-chip
+                        size="x-small"
+                        :color="
+                          dep.severite === 'CRITIQUE' ? 'error' : 'warning'
+                        "
+                        class="ml-2"
+                        label
+                        >{{ dep.severite }}</v-chip
+                      >
+                    </p>
+                  </template>
+                </div>
+              </v-expansion-panel-text>
+            </v-expansion-panel>
+          </v-expansion-panels>
+
+          <!-- Mot de motivation -->
+          <div
+            class="text-center italic text-body-2 mt-8 pt-4 border-t border-opacity-20"
+          >
+            <p class="text-medium-emphasis">
+              "{{ aiAnalysis.analyseLLM.messageMotivation }}"
+            </p>
+          </div>
+        </template>
+
+        <template v-else>
+          <!-- Contenu par défaut si l'API ne renvoie pas le format LLM imbriqué -->
+          <p class="text-body-2 mb-2">
+            <strong>Niveau :</strong>
+            {{ (aiAnalysis as any).studentProfile?.niveau || "N/A" }}
+          </p>
+          <p class="text-body-2 mb-2">
+            <strong>Parcours :</strong>
+            {{ (aiAnalysis as any).studentProfile?.parcours || "N/A" }}
+          </p>
+          <p class="text-body-2 mb-4">
+            <strong>Sessions analysées :</strong>
+            {{ (aiAnalysis as any).studentProfile?.nbSessions ?? 0 }}
+          </p>
+
+          <div v-if="(aiAnalysis as any).strengths?.length" class="mb-4">
+            <p class="text-subtitle-2 mb-2">Points forts</p>
+            <v-chip
+              v-for="item in (aiAnalysis as any).strengths"
+              :key="`${item.module}-${item.score}`"
+              color="success"
+              variant="outlined"
+              size="small"
+              class="me-2 mb-2"
+            >
+              {{ item.module }} ({{ formatNumber(item.score) }})
+            </v-chip>
+          </div>
+
+          <div v-if="(aiAnalysis as any).criticalGaps?.length" class="mb-2">
+            <p class="text-subtitle-2 mb-2">Lacunes critiques</p>
+            <p
+              v-for="gap in (aiAnalysis as any).criticalGaps"
+              :key="`${gap.module}-${gap.raison}`"
+              class="text-body-2 mb-2"
+            >
+              <strong>{{ gap.module }}</strong> : {{ gap.raison }} ({{
+                formatNumber(gap.score)
+              }})
+            </p>
+          </div>
+        </template>
       </v-card>
     </div>
   </v-card>
@@ -185,11 +354,7 @@ const loadAiAnalysis = async () => {
 .results-card {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    rgba(var(--v-theme-surface), 1) 0%,
-    rgba(var(--v-theme-primary), 0.03) 100%
-  );
+  background: white;
 }
 
 .hero-image {
@@ -256,7 +421,13 @@ const loadAiAnalysis = async () => {
 }
 
 .ai-panel {
-  border: 1px solid rgba(var(--v-theme-info), 0.22);
+  border: none !important;
+  background: white;
+  box-shadow: none !important;
+}
+
+.border-t {
+  border-top: 1px solid currentColor !important;
 }
 
 .gap-3 {

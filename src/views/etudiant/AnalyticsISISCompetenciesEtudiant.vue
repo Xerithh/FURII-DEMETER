@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { hexToRgb } from "@core/utils/colorConverter";
 import { useDashboardStore } from "@/stores/dashboard";
+import { hexToRgb } from "@core/utils/colorConverter";
+import { computed } from "vue";
 import { useTheme } from "vuetify";
 
 const vuetifyTheme = useTheme();
@@ -10,7 +11,16 @@ const dashboardStore = useDashboardStore();
 
 const competenceLabels = computed(() => dashboardStore.competenceLabels);
 const competenceScores = computed(() => dashboardStore.competenceScores);
-const progressionPercent = computed(() => dashboardStore.progressionPercent);
+const progressionPercent = computed(() => {
+  const scores =
+    dashboardStore.data?.competences?.map((competence) => competence.score) ??
+    [];
+
+  if (!scores.length) return 0;
+
+  const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+  return Math.round(Math.max(0, Math.min(100, average)));
+});
 
 // Niveau requis fixé à 60% (seuil pédagogique)
 const SEUIL = 60;
@@ -138,7 +148,9 @@ const chartOptions = computed(() => {
           endAngle: 150,
           startAngle: -140,
           hollow: { size: "55%" },
-          track: { background: "transparent" },
+          track: {
+            background: `rgba(${hexToRgb(String(currentTheme["on-surface"]))}, 0.04)`,
+          },
           dataLabels: {
             name: {
               offsetY: 25,
@@ -161,12 +173,6 @@ const chartOptions = computed(() => {
     },
   };
 });
-
-const moreList = [
-  { title: "Exporter", value: "Export" },
-  { title: "Actualiser", value: "Refresh" },
-  { title: "Rapport Détaillé", value: "Details" },
-];
 </script>
 
 <template>
@@ -180,10 +186,7 @@ const moreList = [
         :class="$vuetify.display.smAndUp ? 'border-e' : 'border-b'"
       >
         <VCardItem class="pb-0">
-          <VCardTitle>Compétences ISIS</VCardTitle>
-          <template #append>
-            <MoreBtn :menu-list="moreList" />
-          </template>
+          <VCardTitle>Référentiel ISIS</VCardTitle>
         </VCardItem>
 
         <VCardText class="pb-0">

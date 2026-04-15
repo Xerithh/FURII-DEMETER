@@ -5,7 +5,7 @@ import { useToastStore } from "@/stores/toast";
 import { Award, Brain, Calendar, Check, Star } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const undrawSvgModules = import.meta.glob("/public/images/svg/*.svg", {
   eager: true,
@@ -25,13 +25,13 @@ const undrawMap: Record<string, string> = {
 
 const historyStore = useHistoryStore();
 const toastStore = useToastStore();
+const router = useRouter();
+const route = useRoute();
 const { events, isLoading, isLoadingDetails, sessionDrawerDetail } =
   storeToRefs(historyStore);
 
 const isDrawerOpen = ref(false);
 const activeItem = ref<any>(null);
-
-const router = useRouter();
 
 const eventTypeLabel: Record<HistoryEventType, string> = {
   SESSION: "Session",
@@ -98,8 +98,37 @@ const fetchHistory = async () => {
   }
 };
 
+const openAutoDetailsFromQuery = () => {
+  const searchParam = route.query.search as string | undefined;
+  const typeParam = route.query.type as string | undefined;
+
+  if (!searchParam) return;
+
+  // Chercher le premier élément correspondant
+  const matchingItem = historique.value.find((item) => {
+    const titleMatch = item.action
+      .toLowerCase()
+      .includes(searchParam.toLowerCase());
+    const typeMatch =
+      !typeParam || item.type.toLowerCase().includes(typeParam.toLowerCase());
+    return titleMatch && typeMatch;
+  });
+
+  if (matchingItem) {
+    openDrawer(matchingItem);
+    recherche.value = searchParam;
+    if (typeParam) {
+      filtreType.value = matchingItem.type;
+    }
+  }
+};
+
 onMounted(() => {
   fetchHistory();
+  // Ouvrir la modale automatiquement si des query params sont présents
+  setTimeout(() => {
+    openAutoDetailsFromQuery();
+  }, 300);
 });
 
 const continueToModules = (item: any) => {

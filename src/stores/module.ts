@@ -35,19 +35,16 @@ export const useModuleStore = defineStore('module', {
           return;
         }
 
-        const enrichedModules = await Promise.all(
-          moduleIds.map(async (moduleId) => {
-            const [moduleDetails, competences] = await Promise.all([
-              referentielService.getModuleById(moduleId),
-              referentielService.getModuleCompetences(moduleId),
-            ]);
+        const enrichedModules = [];
+        for (const moduleId of moduleIds) {
+          const moduleDetails = await referentielService.getModuleById(moduleId);
+          const competences = await referentielService.getModuleCompetences(moduleId);
 
-            return {
-              ...moduleDetails,
-              competences: competences ?? [],
-            };
-          }),
-        );
+          enrichedModules.push({
+            ...moduleDetails,
+            competences: competences ?? [],
+          });
+        }
 
         this.modules = enrichedModules;
         this.hasFetched = true;
