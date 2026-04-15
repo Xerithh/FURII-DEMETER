@@ -1,10 +1,14 @@
 import { useAuthStore } from '@/stores/auth';
 import axios from 'axios';
 
+const DEFAULT_PROD_API_BASE_URL = 'https://isisu-backend.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+  || (import.meta.env.PROD ? DEFAULT_PROD_API_BASE_URL : '/');
+
 const api = axios.create({
   // In local dev, keep relative URLs so Vite proxy can bypass CORS.
   // For deployment, VITE_API_BASE_URL can point to a full backend URL.
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/',
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
