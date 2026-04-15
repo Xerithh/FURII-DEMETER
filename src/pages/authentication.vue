@@ -31,7 +31,11 @@ const handleLogin = async () => {
       type: "success",
     });
     try {
-      await router.push("/student/dashboard");
+      // Redirection basée sur le rôle de l'utilisateur
+      const targetRoute = authStore.user?.role === 'ADMIN' 
+        ? '/admin' 
+        : '/student/dashboard';
+      await router.push(targetRoute);
     } catch (navigationError) {
       console.error("login navigation error", navigationError);
     }
