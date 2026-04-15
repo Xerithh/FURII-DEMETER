@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import type { QuestionDisplayDTO, ChoiceDTO } from "@/types/quiz";
+import type { ChoiceDTO, QuestionDisplayDTO } from "@/types/quiz";
 import { QuestionType } from "@/types/quiz";
+import { computed, ref, watch } from "vue";
 
 const props = defineProps<{
   question: QuestionDisplayDTO;
@@ -19,6 +19,7 @@ const textInput = ref<string>("");
 const matchingSelections = ref<Record<number, number | null>>({});
 const orderedChoices = ref<ChoiceDTO[]>([]);
 const draggedChoiceId = ref<number | null>(null);
+const selectedVraiFaux = ref<boolean | null>(null);
 
 const normalizeSide = (raw: unknown): string => {
   const side = String(raw || "").toUpperCase();
@@ -88,6 +89,7 @@ watch(
       ...choice,
     }));
     draggedChoiceId.value = null;
+    selectedVraiFaux.value = null;
   },
   { immediate: true },
 );
@@ -171,6 +173,7 @@ const handleSubmit = (overridePayload?: any) => {
 };
 
 const handleVraiFaux = (val: boolean) => {
+  selectedVraiFaux.value = val;
   // Usually for Vrai/Faux, if we don't have choices, we send explicit text or boolean
   // If we have specific choices mapping to Vrai and Faux we could use their IDs.
   // For generic case, let's send text "true" / "false" or "vrai" / "faux"
@@ -282,7 +285,10 @@ const onOrderDragEnd = () => {
       <v-btn
         size="x-large"
         variant="outlined"
-        class="vrai-btn flex-grow-1"
+        :class="[
+          'vrai-btn flex-grow-1 vf-btn',
+          selectedVraiFaux === true ? 'vf-btn-selected' : '',
+        ]"
         prepend-icon="bx-check-circle"
         :loading="isLoading"
         @click="handleVraiFaux(true)"
@@ -292,7 +298,10 @@ const onOrderDragEnd = () => {
       <v-btn
         size="x-large"
         variant="outlined"
-        class="faux-btn flex-grow-1"
+        :class="[
+          'faux-btn flex-grow-1 vf-btn',
+          selectedVraiFaux === false ? 'vf-btn-selected' : '',
+        ]"
         prepend-icon="bx-x-circle"
         :loading="isLoading"
         @click="handleVraiFaux(false)"
@@ -438,6 +447,15 @@ const onOrderDragEnd = () => {
   margin: 0 auto;
 }
 
+.qcm-simple-wrapper .choice-content {
+  width: 100%;
+  text-align: left;
+}
+
+.qcm-simple-wrapper :deep(.v-selection-control__wrapper) {
+  margin-inline-end: 0.5rem;
+}
+
 .hover-card {
   transition: all 0.3s ease;
   border-color: rgba(var(--v-theme-on-surface), 0.12);
@@ -460,11 +478,28 @@ const onOrderDragEnd = () => {
   font-size: 1.25rem;
   font-weight: 600;
   border-radius: 12px;
-  transition: transform 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+
+  color: rgba(var(--v-theme-on-surface), 0.86);
+  border-color: rgba(var(--v-theme-on-surface), 0.2);
+  background-color: rgba(var(--v-theme-on-surface), 0.03);
 
   &:hover {
     transform: translateY(-2px);
+    color: rgb(var(--v-theme-primary));
+    border-color: rgba(var(--v-theme-primary), 0.65);
+    background-color: rgba(var(--v-theme-primary), 0.07);
   }
+}
+
+.vf-btn-selected {
+  color: rgb(var(--v-theme-on-primary)) !important;
+  border-color: rgb(var(--v-theme-primary)) !important;
+  background-color: rgb(var(--v-theme-primary)) !important;
 }
 
 .gap-4 {

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from "vue";
-import { useRouter } from "vue-router";
-import { useQuizStore } from "@/stores/quizStore";
 import QuestionRenderer from "@/components/quiz/QuestionRenderer.vue";
+import { useQuizStore } from "@/stores/quizStore";
 import { useToastStore } from "@/stores/toast";
+import { onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const quizStore = useQuizStore();
@@ -147,27 +147,29 @@ const onSubmitAnswer = async (payload: any) => {
         {{ quizStore.error }}
       </v-alert>
 
-      <!-- Loading layer between two questions -->
-      <v-fade-transition>
-        <div v-if="showFeedback" class="feedback-overlay">
-          <v-progress-circular
-            indeterminate
-            color="primary"
-            size="72"
-            width="6"
-          />
-        </div>
-      </v-fade-transition>
+      <div class="question-host">
+        <!-- Loading layer between two questions -->
+        <v-fade-transition>
+          <div v-if="showFeedback" class="feedback-overlay">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+              size="72"
+              width="6"
+            />
+          </div>
+        </v-fade-transition>
 
-      <!-- Question Renderer -->
-      <v-slide-y-transition leave-absolute>
-        <QuestionRenderer
-          v-if="!showFeedback"
-          :question="quizStore.currentQuestion"
-          :is-loading="quizStore.isLoading"
-          @submit="onSubmitAnswer"
-        />
-      </v-slide-y-transition>
+        <!-- Question Renderer -->
+        <v-slide-y-transition leave-absolute>
+          <QuestionRenderer
+            v-if="!showFeedback"
+            :question="quizStore.currentQuestion"
+            :is-loading="quizStore.isLoading"
+            @submit="onSubmitAnswer"
+          />
+        </v-slide-y-transition>
+      </div>
     </v-col>
 
     <!-- Dialog Quitter -->
@@ -200,6 +202,11 @@ const onSubmitAnswer = async (payload: any) => {
 <style scoped>
 .gap-2 {
   gap: 0.5rem;
+}
+
+.question-host {
+  position: relative;
+  min-height: 320px;
 }
 
 .feedback-overlay {
