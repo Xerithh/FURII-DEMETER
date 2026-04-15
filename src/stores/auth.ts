@@ -132,7 +132,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.error = null;
       try {
-        const response = await api.post('/api/v1/auth/login', payload);
+        const response = await api.post('/v1/auth/login', payload);
         const data = response.data.data;
         
         this.token = data.accessToken;
@@ -165,7 +165,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.error = null;
       try {
-        await api.post('/api/v1/auth/inscription/fie3', payload);
+        await api.post('/v1/auth/inscription/fie3', payload);
         // Save the email securely in `user` so OTP can read it without passing via url params
         this.user = { email: payload.email };
         return true;
@@ -189,7 +189,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.error = null;
       try {
-        await api.post('/api/v1/auth/inscription/vae', payload);
+        await api.post('/v1/auth/inscription/vae', payload);
         // Save the email securely in `user` so OTP can read it without passing via url params
         this.user = { email: payload.email };
         return true;
@@ -213,7 +213,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.error = null;
       try {
-        await api.post('/api/v1/auth/otp/verifier', payload);
+        await api.post('/v1/auth/otp/verifier', payload);
         return true;
       } catch (err: any) {
         console.error('auth.verifyOtp error', {
@@ -235,7 +235,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.error = null;
       try {
-        await api.post('/api/v1/auth/otp/renvoyer', payload);
+        await api.post('/v1/auth/otp/renvoyer', payload);
         return true;
       } catch (err: any) {
         console.error('auth.resendOtp error', {
@@ -258,7 +258,7 @@ export const useAuthStore = defineStore('auth', {
       
       this.isLoading = true;
       try {
-        const response = await api.get('/api/v1/auth/me');
+        const response = await api.get('/v1/auth/me');
         const data = response.data.data;
         this.mergeUser({
           userId: data.userId,
@@ -284,7 +284,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async fetchDashboardLearner() {
-      const response = await api.get('/api/v1/dashboard/apprenant');
+      const response = await api.get('/v1/dashboard/apprenant');
       const data = response?.data?.data;
       const utilisateur = data?.utilisateur || {};
 
@@ -299,7 +299,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async fetchLearnerSessions() {
-      const response = await api.get('/api/v1/dashboard/apprenant/sessions');
+      const response = await api.get('/v1/dashboard/apprenant/sessions');
       const sessions = response?.data?.data;
       if (!Array.isArray(sessions) || sessions.length === 0) return null;
 
@@ -327,7 +327,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     async fetchProfileMe() {
-      const response = await api.get('/api/v1/profil/me');
+      const response = await api.get('/v1/profil/me');
       const data = response?.data?.data || response?.data || {};
 
       const promotionRaw = (this.user as any)?.promotion;
@@ -399,7 +399,7 @@ export const useAuthStore = defineStore('auth', {
         // avoid triggering the global 401 error handler in axios interceptor for this request
         const response = await api.request({
           method: 'put',
-          url: '/api/v1/profil/me',
+          url: '/v1/profil/me',
           data: body,
           validateStatus: (status) => status < 500, // treat 4xx as resolved so we can handle them here
         });
@@ -468,7 +468,7 @@ export const useAuthStore = defineStore('auth', {
       this.isLoading = true;
       this.error = null;
       try {
-        const response = await api.post('/api/v1/profil/me/password', payload, {
+        const response = await api.post('/v1/profil/me/password', payload, {
           validateStatus: (status) => status < 500,
         });
 

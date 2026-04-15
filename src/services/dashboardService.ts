@@ -157,7 +157,7 @@ export const dashboardService = {
    * Retourne utilisateur, progression, scores, compétences et activité récente
    */
   async getDashboard(): Promise<ApprenantDashboardDTO> {
-    const response = await api.get('/api/v1/dashboard/apprenant');
+    const response = await api.get('/v1/dashboard/apprenant');
     // Le backend enveloppe dans { data: { ... } } selon la spec Swagger
     return response.data.data ?? response.data;
   },
@@ -166,7 +166,7 @@ export const dashboardService = {
    * Récupère la liste des sessions pour l'historique
    */
   async getSessions(): Promise<SessionTest[]> {
-    const response = await api.get('/api/v1/dashboard/apprenant/sessions');
+    const response = await api.get('/v1/dashboard/apprenant/sessions');
     return response.data.data ?? response.data;
   },
 
@@ -174,7 +174,7 @@ export const dashboardService = {
    * Récupère le flux d'activité des 7 derniers jours
    */
   async getRecentActivity7Days(): Promise<Activite7JoursDTO[]> {
-    const response = await api.get('/api/v1/dashboard/apprenant/activite/7-jours');
+    const response = await api.get('/v1/dashboard/apprenant/activite/7-jours');
     return response.data.data ?? response.data;
   },
 
@@ -182,7 +182,7 @@ export const dashboardService = {
    * Récupère le détail complet d'une session (pour le drawer)
    */
   async getSessionDetails(sessionId: number): Promise<SessionDetailDTO> {
-    const response = await api.get(`/api/v1/dashboard/apprenant/sessions/${sessionId}`);
+    const response = await api.get(`/v1/dashboard/apprenant/sessions/${sessionId}`);
     return response.data.data ?? response.data;
   },
 
@@ -190,7 +190,7 @@ export const dashboardService = {
    * Récupère les recommandations pour une session
    */
   async getSessionRecommendations(sessionId: number): Promise<SessionRecommendationAnalysisDTO> {
-    const response = await api.get(`/api/v1/eval/sessions/${sessionId}/recommendations-llm`);
+    const response = await api.get(`/v1/eval/sessions/${sessionId}/recommendations-llm`);
     return response.data.data ?? response.data;
   },
 
@@ -198,7 +198,7 @@ export const dashboardService = {
    * Récupère la progression de l'apprenant par compétence (endpoint Legacy)
    */
   async getCompetenceProgress(): Promise<CompetenceProgressDTO[]> {
-    const response = await api.get('/api/v1/dashboard/apprenant/competences');
+    const response = await api.get('/v1/dashboard/apprenant/competences');
     return response.data.data ?? response.data;
   }
 };
