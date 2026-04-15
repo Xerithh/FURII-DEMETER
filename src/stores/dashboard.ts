@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
 import { dashboardService, type ApprenantDashboardDTO } from '@/services/dashboardService';
+import { defineStore } from 'pinia';
 
 interface DashboardState {
   data: ApprenantDashboardDTO | null;
@@ -55,7 +55,13 @@ export const useDashboardStore = defineStore('dashboard', {
       this.isLoading = true;
       this.error = null;
       try {
-        this.data = await dashboardService.getDashboard();
+        const dashboard = await dashboardService.getDashboard();
+        const competences = await dashboardService.getCompetenceProgress();
+
+        this.data = {
+          ...dashboard,
+          competences: competences ?? dashboard.competences ?? [],
+        };
       } catch (err: any) {
         this.error = err.response?.data?.message || 'Impossible de charger le tableau de bord';
         console.error('[DashboardStore] fetchDashboard error:', err);

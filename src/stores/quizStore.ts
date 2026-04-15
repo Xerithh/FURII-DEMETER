@@ -112,7 +112,7 @@ export const useQuizStore = defineStore('quiz', () => {
     if (currentSessionId.value !== null) return currentSessionId.value
 
     try {
-      const current = await api.get('/api/v1/eval/sessions/current')
+      const current = await api.get('/v1/eval/sessions/current')
       const fromCurrent = extractSessionId(current.data)
       if (fromCurrent !== null) return fromCurrent
     } catch {
@@ -161,7 +161,7 @@ export const useQuizStore = defineStore('quiz', () => {
     try {
       isLoading.value = true
       error.value = null
-      const response = await api.get('/api/v1/eval/sessions/current')
+      const response = await api.get('/v1/eval/sessions/current')
       // Assuming 200 means active session, 204 or 404 means no active session
       if (response.status === 200 && response.data) {
         sessionActive.value = true
@@ -208,7 +208,7 @@ export const useQuizStore = defineStore('quiz', () => {
       // Start endpoints must not call recommendation APIs.
       // Call the main session creation endpoint.
       const startEndpoints = [
-        '/api/v1/eval/sessions'
+        '/v1/eval/sessions'
       ]
 
       let sessionStarted = false
@@ -261,7 +261,7 @@ export const useQuizStore = defineStore('quiz', () => {
       isLoading.value = true
       error.value = null
       answerFeedback.value = null // reset feedback
-      const response = await api.get('/api/v1/eval/sessions/current/question')
+      const response = await api.get('/v1/eval/sessions/current/question')
       
       if (response.status === 204 || (!response.data || !response.data.questionId)) {
         // No more questions -> end of session
@@ -299,7 +299,7 @@ export const useQuizStore = defineStore('quiz', () => {
     try {
       isLoading.value = true
       error.value = null
-      const response = await api.post('/api/v1/eval/sessions/current/answer', payload)
+      const response = await api.post('/v1/eval/sessions/current/answer', payload)
       updateCurrentSessionId(response.data)
       
       answerFeedback.value = response.data as AnswerResponseDTO
@@ -310,7 +310,7 @@ export const useQuizStore = defineStore('quiz', () => {
         pourcentageAvancement.value = answerProgress
       } else {
         try {
-          const currentSession = await api.get('/api/v1/eval/sessions/current')
+          const currentSession = await api.get('/v1/eval/sessions/current')
           const sessionProgress = extractProgress(currentSession.data)
           if (sessionProgress !== null) {
             pourcentageAvancement.value = sessionProgress
@@ -336,7 +336,7 @@ export const useQuizStore = defineStore('quiz', () => {
       isLoading.value = true
       stopTimer()
       try {
-        const response = await api.post('/api/v1/eval/sessions/current/terminate')
+        const response = await api.post('/v1/eval/sessions/current/terminate')
         updateCurrentSessionId(response.data)
         await handleSessionEnd(response.data)
       } catch (terminateErr: any) {
@@ -383,7 +383,7 @@ export const useQuizStore = defineStore('quiz', () => {
 
       // Final fallback if backend returns no immediate payload.
       try {
-        const res = await api.get('/api/v1/eval/sessions/current/results')
+        const res = await api.get('/v1/eval/sessions/current/results')
         const payload = res.data?.data ?? res.data
         results.value = {
           sessionId: currentSessionId.value || undefined,

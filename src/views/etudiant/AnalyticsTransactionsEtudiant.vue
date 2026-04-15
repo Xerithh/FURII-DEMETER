@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { useDashboardStore } from "@/stores/dashboard";
 import type { ActiviteRecenteDTO } from "@/services/dashboardService";
+import { useDashboardStore } from "@/stores/dashboard";
+import { computed } from "vue";
+import { useRouter } from "vue-router";
 
 const dashboardStore = useDashboardStore();
+const router = useRouter();
 
 // Mapping type API → icône + couleur visuelle
 const getActivityVisuals = (type: string): { icon: string; color: string } => {
@@ -26,11 +29,13 @@ const activities = computed(() => {
   }));
 });
 
-const moreList = [
-  { title: "Voir Tout", value: "ViewAll" },
-  { title: "Actualiser", value: "Refresh" },
-  { title: "Filtrer", value: "Filter" },
-];
+const navigateToHistoryDetail = (item: ActiviteRecenteDTO) => {
+  const query: Record<string, string> = {
+    search: item.titre,
+    type: item.type,
+  };
+  router.push({ path: "/historique", query });
+};
 </script>
 
 <template>
@@ -38,10 +43,6 @@ const moreList = [
     title="Activités d'Apprentissage"
     class="h-100 flex-grow-1 d-flex flex-column"
   >
-    <template #append>
-      <MoreBtn :menu-list="moreList" />
-    </template>
-
     <VCardText>
       <!-- LOADING -->
       <div v-if="dashboardStore.isLoading" class="py-4">
@@ -64,7 +65,12 @@ const moreList = [
 
       <!-- LISTE RÉELLE -->
       <VList v-else class="card-list">
-        <VListItem v-for="item in activities" :key="item.titre + item.date">
+        <VListItem
+          v-for="item in activities"
+          :key="item.titre + item.date"
+          class="cursor-pointer"
+          @click="navigateToHistoryDetail(item)"
+        >
           <template #prepend>
             <VAvatar
               rounded
@@ -94,5 +100,14 @@ const moreList = [
 <style lang="scss" scoped>
 .card-list {
   --v-card-list-gap: 1.5rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(var(--v-theme-primary-rgb), 0.05);
+  }
 }
 </style>

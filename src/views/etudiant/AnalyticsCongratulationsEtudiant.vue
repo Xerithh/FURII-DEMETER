@@ -1,22 +1,24 @@
 <script setup lang="ts">
-import illustrationJohnDark from '@images/cards/illustration-john-dark.png';
-import illustrationJohnLight from '@images/cards/illustration-john-light.png';
-import { useDashboardStore } from '@/stores/dashboard';
-import { useTheme } from 'vuetify';
+import { useDashboardStore } from "@/stores/dashboard";
+import illustrationJohnDark from "@images/cards/illustration-john-dark.png";
+import illustrationJohnLight from "@images/cards/illustration-john-light.png";
+import { useTheme } from "vuetify";
 
 const { global } = useTheme();
 const dashboardStore = useDashboardStore();
 
 const illustrationJohn = computed(() =>
-  global.name.value === 'dark' ? illustrationJohnDark : illustrationJohnLight,
+  global.name.value === "dark" ? illustrationJohnDark : illustrationJohnLight,
 );
 
-const completedModules = computed(() =>
-  dashboardStore.data?.competences?.filter(c => c.niveau === 'ACQUIS').length ?? 0,
+const completedModules = computed(
+  () =>
+    dashboardStore.data?.competences?.filter((c) => c.niveau === "ACQUIS")
+      .length ?? 0,
 );
 
-const totalModules = computed(() =>
-  dashboardStore.data?.competences?.length ?? 0,
+const totalModules = computed(
+  () => dashboardStore.data?.competences?.length ?? 0,
 );
 
 const remainingRecommendations = computed(() =>
@@ -25,17 +27,20 @@ const remainingRecommendations = computed(() =>
 
 const userName = computed(() => {
   const u = dashboardStore.data?.utilisateur;
-  return u ? u.prenom || u.nom || '' : '';
+  return u ? u.prenom || u.nom || "" : "";
 });
 
-const showEmptyState = computed(() =>
-  !dashboardStore.isLoading && dashboardStore.isEmpty,
+const showEmptyState = computed(
+  () => !dashboardStore.isLoading && dashboardStore.isEmpty,
 );
 </script>
 
 <template>
   <VCard class="text-center text-sm-start">
-    <VCardText v-if="showEmptyState" class="d-flex flex-column align-center text-center py-10">
+    <VCardText
+      v-if="showEmptyState"
+      class="d-flex flex-column align-center text-center py-10"
+    >
       <p class="text-body-1 mb-6" style="max-width: 640px">
         Vous n'avez pas encore d'historique. Lancez une première évaluation pour
         commencer à suivre votre progression.
@@ -46,7 +51,12 @@ const showEmptyState = computed(() =>
         class="mb-6"
         style="max-width: 320px; width: 100%; height: auto"
       />
-      <VBtn color="primary" size="large" prepend-icon="bx-play" to="/student/my-modules">
+      <VBtn
+        color="primary"
+        size="large"
+        prepend-icon="bx-play"
+        to="/student/my-modules"
+      >
         Accéder à mes modules
       </VBtn>
     </VCardText>
@@ -57,7 +67,8 @@ const showEmptyState = computed(() =>
           <VCardTitle class="text-primary">
             <template v-if="dashboardStore.isLoading">Chargement...</template>
             <template v-else>
-              Bonjour{{ userName ? `, ${userName}` : '' }} ! Prêt à apprendre aujourd'hui ? 📚
+              Bonjour{{ userName ? `, ${userName}` : "" }} ! Prêt à apprendre
+              aujourd'hui ? 📚
             </template>
           </VCardTitle>
         </VCardItem>
@@ -70,9 +81,10 @@ const showEmptyState = computed(() =>
           <template v-else>
             Vous avez acquis
             <strong>{{ completedModules }}</strong> compétences sur
-            <strong>{{ totalModules }}</strong> ce semestre !
+            <strong>{{ totalModules }}</strong> cette année !
             <br />
-            <strong>{{ remainingRecommendations }}</strong> compétences à améliorer selon vos résultats.
+            <strong>{{ remainingRecommendations }}</strong> compétences à
+            améliorer selon vos résultats.
           </template>
 
           <br />
@@ -80,7 +92,12 @@ const showEmptyState = computed(() =>
             <VBtn variant="tonal" size="small" to="/student/my-modules">
               Voir les Modules
             </VBtn>
-            <VBtn variant="outlined" size="small" color="primary" to="/student/random-quiz">
+            <VBtn
+              variant="outlined"
+              size="small"
+              color="primary"
+              to="/student/random-quiz"
+            >
               <VIcon icon="bx-brain" start />
               Lancer un Quiz Global
             </VBtn>
