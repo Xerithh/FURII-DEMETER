@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import type { SessionRecommendationAnalysisDTO } from "@/services/dashboardService";
+import type {
+  SessionRecommendationAnalysisDTO,
+  SessionStructuredRecommendationsDTO,
+} from "@/services/dashboardService";
 import { dashboardService } from "@/services/dashboardService";
 import type { SessionResultsDTO } from "@/types/quiz";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 
 const props = defineProps<{
   results: SessionResultsDTO;
@@ -16,6 +19,9 @@ const emit = defineEmits<{
 const aiLoading = ref(false);
 const aiError = ref<string | null>(null);
 const aiAnalysis = ref<SessionRecommendationAnalysisDTO | null>(null);
+const recommendationsLoading = ref(false);
+const recommendationsError = ref<string | null>(null);
+const recommendations = ref<SessionStructuredRecommendationsDTO | null>(null);
 
 const formatNumber = (value: unknown) => {
   const numberValue = typeof value === "number" ? value : Number(value);
@@ -36,6 +42,9 @@ const hasCompetenceEvolution = computed(
 );
 
 const canAnalyze = computed(() => typeof props.results.sessionId === "number");
+const canLoadRecommendations = computed(
+  () => typeof props.results.sessionId === "number",
+);
 
 const loadAiAnalysis = async () => {
   if (!props.results.sessionId || aiLoading.value) return;
@@ -52,6 +61,36 @@ const loadAiAnalysis = async () => {
     aiLoading.value = false;
   }
 };
+
+const loadStructuredRecommendations = async () => {
+  if (!props.results.sessionId || recommendationsLoading.value) return;
+
+  recommendationsLoading.value = true;
+  recommendationsError.value = null;
+
+  try {
+    recommendations.value =
+      await dashboardService.getSessionStructuredRecommendations(
+        props.results.sessionId,
+      );
+  } catch {
+    recommendationsError.value =
+      "Impossible de récupérer les recommandations pour le moment.";
+  } finally {
+    recommendationsLoading.value = false;
+  }
+};
+
+onMounted(() => {
+  if (!canLoadRecommendations.value) {
+    recommendationsError.value =
+      "Session introuvable: recommandations indisponibles.";
+
+    return;
+  }
+
+  void loadStructuredRecommendations();
+});
 </script>
 
 <template>
@@ -121,17 +160,227 @@ const loadAiAnalysis = async () => {
 
         <v-btn
           size="large"
-          :variant="aiAnalysis ? 'flat' : 'flat'"
-          :color="aiAnalysis ? 'success' : 'info'"
+          :variant="aiAnalysis ? 'outlined' : 'flat'"
+          :color="aiAnalysis ? undefined : 'info'"
+          :style="
+            aiAnalysis
+              ? { border: '1px solid rgba(var(--v-theme-surface), 1)' }
+              : {}
+          "
           class="v-theme--light v-btn v-btn--density-default v-btn--size-default btn-commencer rounded text-none px-5 flex-grow-1 action-btn"
           :disabled="aiAnalysis ? true : !canAnalyze"
           :loading="aiLoading"
           @click="loadAiAnalysis"
         >
-          <v-icon v-if="aiAnalysis" size="large">mdi-check</v-icon>
+          <v-icon v-if="aiAnalysis" size="large" color="primary"
+            >mdi-check</v-icon
+          >
           <span v-else>Analyser par l'IA</span>
         </v-btn>
       </div>
+
+      <v-card
+        v-if="recommendations"
+        variant="elevated"
+        class="pa-6 mb-4 recommendations-panel"
+      >
+        <div class="d-flex align-center mb-6">
+          <v-icon color="primary" size="x-large" class="mr-3"
+            >mdi-compass-outline</v-icon
+          >
+          <h3 class="text-h4 font-weight-bold mb-0">
+            Recommandations personnalisées
+          </h3>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="text-h6 font-weight-bold mb-3">Profil étudiant</h4>
+          <p class="text-body-2 mb-1">
+            <strong>Niveau :</strong>
+            {{ recommendations.studentProfile?.niveau || "N/A" }}
+          </p>
+          <p class="text-body-2 mb-1">
+            <strong>Parcours :</strong>
+            {{ recommendations.studentProfile?.parcours || "Non spécifié" }}
+          </p>
+          <p class="text-body-2 mb-0">
+            <strong>Sessions :</strong>
+            {{ recommendations.studentProfile?.nbSessions ?? 0 }}
+          </p>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="text-h6 font-weight-bold mb-3">Scores par module</h4>
+          <div
+            v-if="recommendations.scoresByModule?.length"
+            class="d-flex flex-column gap-2"
+          >
+            <div
+              v-for="moduleScore in recommendations.scoresByModule"
+              :key="`${moduleScore.module}-${moduleScore.status}`"
+              class="d-flex align-center justify-space-between competence-row py-2"
+            >
+              <span class="text-body-2 font-weight-medium">{{
+                moduleScore.module
+              }}</span>
+              <div class="d-flex align-center gap-2">
+                <v-chip size="small" label variant="outlined">
+                  {{ formatNumber(moduleScore.score) }}
+                </v-chip>
+                <v-chip size="small" color="primary" label>
+                  {{ moduleScore.status || "N/A" }}
+                </v-chip>
+              </div>
+            </div>
+          </div>
+          <p v-else class="text-body-2 text-medium-emphasis mb-0">
+            Aucun score module disponible.
+          </p>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="text-h6 font-weight-bold mb-3">Progression</h4>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <v-chip color="info" label>
+              Tendance: {{ recommendations.progression?.tendance || "N/A" }}
+            </v-chip>
+            <v-chip color="secondary" label>
+              Vélocité: {{ recommendations.progression?.velocite || "N/A" }}
+            </v-chip>
+          </div>
+          <div
+            v-if="recommendations.progression?.sessions?.length"
+            class="d-flex flex-column gap-2"
+          >
+            <div
+              v-for="session in recommendations.progression.sessions"
+              :key="`${session.sessionNum}-${session.date}`"
+              class="d-flex align-center justify-space-between competence-row py-2"
+            >
+              <span class="text-body-2">
+                Session #{{ session.sessionNum }}
+              </span>
+              <div class="d-flex align-center gap-2">
+                <span class="text-caption text-medium-emphasis">{{
+                  new Date(session.date).toLocaleDateString("fr-FR")
+                }}</span>
+                <v-chip size="small" label variant="outlined">
+                  {{ formatNumber(session.scoreGlobal) }}
+                </v-chip>
+              </div>
+            </div>
+          </div>
+          <p v-else class="text-body-2 text-medium-emphasis mb-0">
+            Historique de progression indisponible.
+          </p>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="text-h6 font-weight-bold mb-3">Dépendances bloquantes</h4>
+          <div
+            v-if="recommendations.blockingDependencies"
+            class="d-flex flex-column gap-3"
+          >
+            <div
+              v-for="(
+                dependency, module
+              ) in recommendations.blockingDependencies"
+              :key="module"
+              class="dependency-card"
+            >
+              <div class="d-flex align-center justify-space-between mb-2">
+                <strong class="text-body-2">{{ module }}</strong>
+                <v-chip
+                  size="small"
+                  :color="
+                    dependency.severite === 'CRITIQUE' ? 'error' : 'warning'
+                  "
+                  label
+                >
+                  {{ dependency.severite || "N/A" }}
+                </v-chip>
+              </div>
+              <p class="text-body-2 mb-0 text-medium-emphasis">
+                {{
+                  dependency.bloque?.length
+                    ? dependency.bloque.join(", ")
+                    : "Aucun blocage listé."
+                }}
+              </p>
+            </div>
+          </div>
+          <p v-else class="text-body-2 text-medium-emphasis mb-0">
+            Aucune dépendance bloquante détectée.
+          </p>
+        </div>
+
+        <div class="mb-6">
+          <h4 class="text-h6 font-weight-bold mb-3">Points forts</h4>
+          <div
+            v-if="recommendations.strengths?.length"
+            class="d-flex flex-wrap"
+          >
+            <v-chip
+              v-for="item in recommendations.strengths"
+              :key="`${item.module}-${item.score}`"
+              color="success"
+              variant="outlined"
+              size="small"
+              class="me-2 mb-2"
+            >
+              {{ item.module }} ({{ formatNumber(item.score) }})
+            </v-chip>
+          </div>
+          <p v-else class="text-body-2 text-medium-emphasis mb-0">
+            Aucun point fort identifié.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-h6 font-weight-bold mb-3">Lacunes critiques</h4>
+          <div
+            v-if="recommendations.criticalGaps?.length"
+            class="d-flex flex-column gap-3"
+          >
+            <div
+              v-for="gap in recommendations.criticalGaps"
+              :key="`${gap.module}-${gap.raison}`"
+              class="dependency-card"
+            >
+              <div class="d-flex align-center justify-space-between mb-2">
+                <strong class="text-body-2">{{ gap.module }}</strong>
+                <v-chip color="error" size="small" label>
+                  {{ formatNumber(gap.score) }}
+                </v-chip>
+              </div>
+              <p class="text-body-2 mb-0 text-medium-emphasis">
+                {{ gap.raison || "Aucune raison fournie." }}
+              </p>
+            </div>
+          </div>
+          <p v-else class="text-body-2 text-medium-emphasis mb-0">
+            Aucune lacune critique identifiée.
+          </p>
+        </div>
+      </v-card>
+
+      <v-alert
+        v-if="recommendationsLoading"
+        type="info"
+        variant="tonal"
+        class="mb-4"
+      >
+        Chargement des recommandations...
+      </v-alert>
+
+      <v-alert
+        v-if="recommendationsError"
+        type="warning"
+        variant="tonal"
+        class="mb-4"
+      >
+        {{ recommendationsError }}
+      </v-alert>
 
       <v-alert v-if="aiError" type="error" variant="tonal" class="mb-4">
         {{ aiError }}
@@ -424,6 +673,18 @@ const loadAiAnalysis = async () => {
   border: none !important;
   background: white;
   box-shadow: none !important;
+}
+
+.recommendations-panel {
+  border: none !important;
+  background: white;
+  box-shadow: none !important;
+}
+
+.dependency-card {
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+  border-radius: 10px;
+  padding: 0.85rem;
 }
 
 .border-t {

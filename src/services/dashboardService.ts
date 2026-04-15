@@ -156,6 +156,8 @@ export interface SessionRecommendationAnalysisDTO {
   analyseLLM: AnalyseLLMDTO;
 }
 
+export type SessionStructuredRecommendationsDTO = PhaseStructureeDTO;
+
 export interface CompetenceProgressDTO {
   id: number;
   nom: string;
@@ -211,6 +213,17 @@ export const dashboardService = {
   async getSessionRecommendations(sessionId: number): Promise<SessionRecommendationAnalysisDTO> {
     const response = await api.get(`/v1/eval/sessions/${sessionId}/recommendations-llm`);
     return response.data.data ?? response.data;
+  },
+
+  /**
+   * Récupère les recommandations structurées d'une session (non-LLM)
+   */
+  async getSessionStructuredRecommendations(sessionId: number): Promise<SessionStructuredRecommendationsDTO> {
+    const response = await api.get(`/v1/eval/sessions/${sessionId}/recommendations`);
+    const payload = response.data.data ?? response.data;
+
+    // Tolère les deux formes de payload selon l'implémentation backend.
+    return payload.phaseStructuree ?? payload;
   },
 
   /**
